@@ -30,7 +30,7 @@ class SignUpController extends Controller
             // Create a new user
             $user = $this->createUser($validated);
 
-            dd($validated);
+            //dd($validated);
 
             // Check dealership option and handle accordingly
             if ($validated['dealership_option'] === 'use_dealership') {
