@@ -30,6 +30,8 @@ class SignUpController extends Controller
             // Create a new user
             $user = $this->createUser($validated);
 
+            dd($validated);
+
             // Check dealership option and handle accordingly
             if ($validated['dealership_option'] === 'use_dealership') {
                 // Find an existing dealership
@@ -131,8 +133,8 @@ class SignUpController extends Controller
                 "city" => $validated["new_dealership_city"],
                 "state" => $validated["new_dealership_state"],
                 "zip" => $validated["new_dealership_zip"],
-                "dealership_id" => $dealership->id,
-                "is_primary" => true,
+                "morph_type" => Dealership::class,
+                "morph_id" => $dealership->id,
             ]);
         }
 

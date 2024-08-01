@@ -16,7 +16,7 @@ class Address extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['address_line_1','address_line_2','city', 'state', 'zip', 'country', 'is_primary', 'dealership_id'];
+    protected $fillable = ['address_line_1','address_line_2','city', 'state', 'zip', 'country', 'morph_id', 'morph_type'];
 
     /**
      * The attributes that should be mutated to dates.
