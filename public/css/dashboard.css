@@ -1,0 +1,79 @@
+body {
+  font-size: 0.875rem;
+}
+
+.feather {
+  width: 32px;
+  height: 32px;
+}
+
+.position-sticky {
+  position: fixed !important;
+  display: inline-block !important;
+  white-space: nowrap !important;
+  top: 0;
+  /* rtl:raw:
+    right: 0;
+    */
+  bottom: 0;
+  /* rtl:remove */
+  left: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 48px 0 0; /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar-heading {
+  font-size: 0.75rem;
+}
+.navbar-brand {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
+}
+
+.sidebar-sticky {
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.position-sticky .nav-link {
+  font-weight: 500;
+  color: #333;
+}
+
+.position-sticky .nav-link .feather {
+  margin-right: 4px;
+  color: #727272;
+}
+
+.position-sticky .nav-link.active {
+    color:#fb4f14 !important;
+}
+
+
+.position-sticky .nav-link.ho {
+    color:#fb4f14 !important;
+}
+.position-sticky .nav-link:hover .feather,
+.position-sticky .nav-link.active .feather {
+  color: inherit;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    text-decoration: underline !important;
+    font-weight: bold;
+}
+
+
+.nav-tabs .nav-link {
+	color: inherit !important;
+}
+
+.w-30 {
+    width: 30% !important;
+  }

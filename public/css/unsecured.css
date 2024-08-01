@@ -1,0 +1,159 @@
+.bc-orange {
+    background-color:#fb4f14 !important;
+}
+
+.text-orange {
+    color:#fb4f14 !important;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.underline-orange {
+  text-decoration: underline;
+  text-decoration-color: #fb4f14; /* Bengals orange color */
+}
+
+.text-bg-orange {
+  color: #fff !important;
+  background-color: RGBA(251, 79, 20, var(--bs-bg-opacity, 1)) !important;
+}
+
+.form-check-input-orange[type=checkbox] {
+  border-radius: 0.25em !important;
+}
+
+.form-check-input-orange:active {
+  filter: brightness(90%) !important;
+}
+
+.form-check-input-orange:focus {
+  border-color: #fb4f14 !important;
+  outline: 0 !important; 
+  box-shadow: 0 0 0 0.25rem rgba(251, 79, 20, 0.25) !important;
+}
+
+input:focus, select:focus, textarea:focus, button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(251, 79, 20, 0.25) !important;
+    border-color: rgba(251, 79, 20, 0.25) !important;
+}
+
+.form-check-input-orange:checked {
+  background-color: #fb4f14 !important;
+  border-color: #fb4f14 !important;
+}
+
+.form-check-input-orange:checked[type=checkbox] {
+  background-color: #fb4f14 !important;
+}
+
+.form-check-input-orange:disabled {
+  pointer-events: none !important;
+  filter: none !important;
+  opacity: 0.5 !important;
+}
+
+.form-check-input-orange[disabled] ~ .form-check-label, .form-check-input-orange:disabled ~ .form-check-label {
+  cursor: default !important;
+  opacity: 0.5 !important;
+}
+
+.form-check-input-orange[type=checkbox]:indeterminate {
+  background-color: #fb4f14;
+  border-color: #fb4f14;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
+}
+
+
+.custom-checkbox {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+}
+.custom-checkbox:checked {
+  background-color: #fb4f14;
+  border-color: #fb4f14 !important;
+  box-shadow: 0 0 0 0.25rem rgba(251, 79, 20, 0.25) !important;
+}
+.custom-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 7px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.custom-radio {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    border-radius: 50%; /* Make it round */
+    position: relative;
+    cursor: pointer;
+  }
+  .custom-radio:checked {
+    background-color: #fb4f14;
+    border-color: #fb4f14 !important;
+    box-shadow: 0 0 0 0.25rem rgba(251, 79, 20, 0.25) !important;
+  }
+  .custom-radio:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: white;
+    transform: translate(-50%, -50%);
+  }
+
+.btn-orange {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #fb4f14;
+    --bs-btn-border-color: #fb4f14;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #e64712;
+    --bs-btn-hover-border-color: #d13f10;
+    --bs-btn-focus-shadow-rgb: 251, 79, 20;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #d13f10;
+    --bs-btn-active-border-color: #bc3a0e;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #fb4f14;
+    --bs-btn-disabled-border-color: #fb4f14;
+  }
+
+
+  .btn-outline-orange {
+    --bs-btn-color: #fb4f14;
+    --bs-btn-border-color: #fb4f14;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #fb4f14;
+    --bs-btn-hover-border-color: #fb4f14;
+    --bs-btn-focus-shadow-rgb: 251, 79, 20;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #fb4f14;
+    --bs-btn-active-border-color: #fb4f14;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fb4f14;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: #fb4f14;
+    --bs-gradient: none;
+  }
+
+  .text-orange {
+    --bs-text-opacity: 1;
+    color: rgba(251, 79, 20, var(--bs-text-opacity)) !important;
+  }
