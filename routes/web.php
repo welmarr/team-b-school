@@ -10,6 +10,7 @@ use App\Http\Controllers\Secured\Admin\ToolController;
 use App\Http\Controllers\Secured\Admin\UserController;
 use App\Http\Controllers\Secured\Admin\DealerController;
 use App\Http\Controllers\Secured\Admin\ToolTypeController;
+use App\Http\Controllers\Secured\Admin\FileDownloadController;
 use App\Http\Controllers\Secured\Admin\ToolInventoryMovementController;
 use App\Http\Controllers\Secured\Admin\RequestController as AdminRequestController;
 use App\Http\Controllers\Secured\Dealer\DealerController as DealerProfileController;
@@ -123,8 +124,14 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.'], function () {
          * Define a route for the admin dashboard
          */
         Route::get('dashboard', function () {
-            return view('secured.pages.admin.dashboard',  ['activeMenu' => 'dashboard']);
+
+            $activeMenu = 'dashboard';
+            $countUser = \App\Models\User::count();
+            $countRequest = \App\Models\Request::count();
+            return view('secured.pages.admin.dashboard',  compact("activeMenu", "countUser", "countRequest"));
         })->name('dashboard');
+
+        Route::get('/download/file/{public_uri}', FileDownloadController::class);
 
         /**
          * Define resource routes for users

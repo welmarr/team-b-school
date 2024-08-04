@@ -18,7 +18,6 @@ return new class extends Migration
             $table->longText('note')->nullable();
 
             $table->foreignId('tool_id')->constrained('tools')->nullable()->cascadeOnDelete();
-            $table->foreignId('file_id')->constrained('files')->nullable()->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });
