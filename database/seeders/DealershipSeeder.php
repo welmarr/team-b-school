@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Dealership;
+use App\Models\TDealership;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,6 +13,6 @@ class DealershipSeeder extends Seeder
      */
     public function run(): void
     {
-        Dealership::factory()->count(5)->create();
+        TDealership::factory()->count(5)->create();
     }
 }

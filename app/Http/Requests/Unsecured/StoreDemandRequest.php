@@ -31,11 +31,11 @@ class StoreDemandRequest extends FormRequest
             'state' => 'required|string|max:255',
             'city' => 'nullable|string|max:255',
             'zipcode' => 'required|numeric',
-            'brand' => 'required|string|max:255|exists:car_makes,id',
+            'brand' => 'required|string|max:255|exists:t_car_brands,id',
             'year' => 'required|numeric|digits:4',
-            'model' => 'nullable|string|max:255|exists:car_models,id',
+            'model' => 'required|string|max:255|exists:t_car_models,id',
             'filepond' => 'required|array',
-            'filepond.*' => 'exists:temporary_files,folder', // Check each element in the array
+            'filepond.*' => 'exists:t_temporary_files,folder', // Check each element in the array
             'memo' => 'nullable|string|max:1000',
         ];
     }

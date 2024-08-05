@@ -30,7 +30,7 @@
 
 .form-check-input-orange:focus {
   border-color: #fb4f14 !important;
-  outline: 0 !important; 
+  outline: 0 !important;
   box-shadow: 0 0 0 0.25rem rgba(251, 79, 20, 0.25) !important;
 }
 

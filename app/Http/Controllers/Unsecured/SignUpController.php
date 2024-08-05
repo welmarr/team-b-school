@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Unsecured;
 
 use App\Models\User;
-use App\Models\Address;
-use App\Models\Dealership;
+use App\Models\TAddress;
+use App\Models\TDealership;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Unsecured\SignupRequest;
@@ -86,12 +86,12 @@ class SignUpController extends Controller
      * Find an existing dealership.
      *
      * @param array $validated
-     * @return Dealership
+     * @return TDealership
      */
     private function findExistingDealership($validated)
     {
         // Find and return an existing dealership by code
-        return Dealership::where('code', $validated['dealership_code'])->first();
+        return TDealership::where('code', $validated['dealership_code'])->first();
     }
 
     /**
@@ -99,7 +99,7 @@ class SignUpController extends Controller
      *
      * @param User $user
      * @param array $validated
-     * @return Dealership
+     * @return TDealership
      */
     private function createNewDealership($user, $validated)
     {
@@ -107,7 +107,7 @@ class SignUpController extends Controller
         $code = date('H') . date('i') . '-' . $this->generateRandomAlphanumericCode(rand(2, 4));
 
         // Create and return a new dealership
-        return Dealership::create([
+        return TDealership::create([
             "name" => $validated["new_dealership_name"],
             "phone" => $validated["new_dealership_phone"],
             "code" => $code,
@@ -118,22 +118,22 @@ class SignUpController extends Controller
     /**
      * Create a new address for the dealership.
      *
-     * @param Dealership $dealership
+     * @param TDealership $dealership
      * @param array $validated
-     * @return Address|null
+     * @return TAddress|null
      */
     private function createDealershipAddress($dealership, $validated)
     {
         // Check if the new dealership address line 1 is provided
         if ($validated['new_dealership_address_line_1'] != null) {
             // Create and return a new address for the dealership
-            return Address::create([
+            return TAddress::create([
                 "address_line_1" => $validated["new_dealership_address_line_1"],
                 "address_line_2" => $validated["new_dealership_address_line_2"],
                 "city" => $validated["new_dealership_city"],
                 "state" => $validated["new_dealership_state"],
                 "zip" => $validated["new_dealership_zip"],
-                "morph_type" => Dealership::class,
+                "morph_type" => TDealership::class,
                 "morph_id" => $dealership->id,
             ]);
         }
@@ -147,8 +147,8 @@ class SignUpController extends Controller
      *
      * @param \Exception $e
      * @param User|null $user
-     * @param Dealership|null $dealership
-     * @param Address|null $address
+     * @param TDealership|null $dealership
+     * @param TAddress|null $address
      * @param array $validated
      */
     private function deleteRowAlreadyCreated($e, $user, $dealership, $address, $validated)
@@ -160,12 +160,12 @@ class SignUpController extends Controller
         if ($validated['dealership_option'] === 'create_dealership') {
             // Delete the address if it was created
             if ($validated['new_dealership_address_line_1'] != null && $address != null) {
-                Address::where('dealership_id', $dealership->id)->forceDelete();
+                TAddress::where('dealership_id', $dealership->id)->forceDelete();
             }
 
             // Delete the dealership if it was created
             if ($dealership != null) {
-                Dealership::where('id', $dealership->id)->forceDelete();
+                TDealership::where('id', $dealership->id)->forceDelete();
             }
         }
 

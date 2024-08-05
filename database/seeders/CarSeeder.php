@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Car;
-use App\Models\CarMake;
-use App\Models\CarModel;
+use App\Models\TCar;
+use App\Models\TCarBrand;
+use App\Models\TCarModel;
 use League\Csv\Reader;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
@@ -43,16 +43,16 @@ class CarSeeder extends Seeder
         $records = $csv->getRecords();
 
         foreach ($records as $record) {
-            Log::info($record['model'] . " " . $record['make'] . " " . $record['year']);
+            error_log("Creation of ===> ". $record['model'] . " " . $record['make'] . " " . $record['year']);
 
             // Get or create the make
-            $make = CarMake::firstOrCreate(['name' => $record['make']]);
+            $make = TCarBrand::firstOrCreate(['name' => $record['make']]);
 
             // Get or create the model
-            $model = CarModel::firstOrCreate(['name' => $record['model']]);
+            $model = TCarModel::firstOrCreate(['name' => $record['model']]);
 
             // Create the car entry
-            Car::create([
+            TCar::create([
                 'year' => $record['year'],
                 'make_id' => $make->id,
                 'model_id' => $model->id,

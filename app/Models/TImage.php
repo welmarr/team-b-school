@@ -16,9 +16,9 @@ class TImage extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'path', 'mime_type', 'size', 'extension', 'folder', 'public_uri', 'take_when', 't_request_id'];
+    protected $fillable = ['name', 'path', 'mime_type', 'size', 'extension', 'folder', 'public_uri', 'take_when', 'request_id'];
 
     public function request(){
-        return $this->belongsTo(TRequest::class, "t_request_id");
+        return $this->belongsTo(TRequest::class, "request_id");
     }
 }

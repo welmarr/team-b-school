@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Unsecured;
 
 use Carbon\Carbon;
-use App\Models\File;
+use App\Models\TImage;
+use App\Models\TAddress;
 use Illuminate\Support\Str;
-use App\Models\TemporaryFile;
-use App\Models\Request as Demand;
+use App\Models\TTemporaryFile;
+use App\Models\TRequest as TDemand;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Unsecured\StoreDemandRequest;
+use App\Models\TCar;
+use App\Models\TClient;
 
 class RequestController extends Controller
 {
@@ -21,33 +24,55 @@ class RequestController extends Controller
 
         $validated = $request->validated();
         $demand = null;
+        $address = null;
+        $client = null;
         $files = [];
 
         //dd($validated['year'], $validated['brand'], $validated['model'], $validated['memo'], $validated);
 
         try {
-            $demand = Demand::create([
-                'first_name' => $validated['firstname'],
-                'last_name' => $validated['lastname'],
-                'email' => $validated['email'],
-                'phone' => $validated['phonenumber'],
-                'memo' => $validated['memo'],
+            $car = TCar::where([
+                'year' => $validated['year'],
+                'make_id' => $validated['brand'],
+                'model_id' => $validated['model']
+            ])->first();
+
+            if ($car == null) {
+                return redirect()->back()->with('error', 'Oups! Something wrong with the car information.');
+            }
+
+            $address = TAddress::create([
                 'address_line_1' => $validated['address1'],
                 'address_line_2' => $validated['address2'],
                 'city' => $validated['city'],
                 'state' => $validated['state'],
-                'reference' => Carbon::now()->format('md') . Str::random(rand(3,5)),
                 'zip' => $validated['zipcode'],
-                'year' => $validated['year'],
-                'make_id' => $validated['brand'],
-                'model_id' => $validated['model'],
+            ]);
+
+
+
+            $client = TClient::create([
+                'first_name' => $validated['firstname'],
+                'last_name' => $validated['lastname'],
+                'email' => $validated['email'],
+                'phone' => $validated['phonenumber'],
+                'address_id' => $address->id,
+            ]);
+
+
+            $demand = TDemand::create([
+                'memo' => $validated['memo'],
+                'reference' => Carbon::now()->format('md') . Str::random(rand(3, 5)),
+                'car_id' => $car->id,
+                'created_by_id' => $client->id,
+                'created_by_type' => TClient::class
             ]);
 
 
             $tmp_images = null;
 
             if ($request->has('filepond') && count($request->filepond) > 0) {
-                $tmp_images = TemporaryFile::whereIn('folder', $request->input('filepond'))->get();
+                $tmp_images = TTemporaryFile::whereIn('folder', $request->input('filepond'))->get();
             }
             if ($demand && $tmp_images) {
                 foreach ($tmp_images as $image) {
@@ -57,7 +82,7 @@ class RequestController extends Controller
 
                     Storage::copy($temp_folder . '/' . $image->file, $destination_folder . '/' . $filename);
 
-                    $file = File::create([
+                    $file = TImage::create([
                         'name' => $filename,
                         'path' => Storage::disk("public")->path($destination_folder . '/' . $filename),
                         'mime_type' => Storage::disk("public")->mimeType($destination_folder . '/' . $filename),
@@ -65,8 +90,7 @@ class RequestController extends Controller
                         'extension' => pathinfo("/public" . $destination_folder . '/' . $filename, PATHINFO_EXTENSION),
                         'folder' => $destination_folder,
                         'public_uri' => (string) Str::uuid(),
-                        'morph_type' => Demand::class,
-                        'morph_id' => $demand->id
+                        'request_id' => $demand->id
                     ]);
 
                     array_push($files, $file);
@@ -78,13 +102,22 @@ class RequestController extends Controller
             return redirect()->back()->with('success', 'Demand created successfully!');
         } catch (\Exception $e) {
 
+            if($address){
+                $address->forceDelete();
+            }
+
+            if($client){
+                $client->forceDelete();
+            }
+
             if ($demand) {
+                TImage::where('request_id', $demand->id)->forceDelete();
+
                 $demand->forceDelete();
-                File::where('morph_id', $demand->id)->where('morph_type', Demand::class)->forceDelete();
             }
 
             if ($request->has('filepond') && count($request->filepond) > 0) {
-                $tmp_images = TemporaryFile::whereIn('folder', $request->input('filepond'))->get();
+                $tmp_images = TTemporaryFile::whereIn('folder', $request->input('filepond'))->get();
                 if ($tmp_images) {
                     foreach ($tmp_images as $image) {
                         $temp_folder = 'requests/tmp/' . $image->folder;

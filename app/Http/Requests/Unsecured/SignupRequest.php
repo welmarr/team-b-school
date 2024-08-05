@@ -29,12 +29,12 @@ class SignupRequest extends FormRequest
             'phone' => ['required', 'string', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10', 'unique:users'],
             'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()->uncompromised()],
 
-            'dealership_code' => ['nullable', 'required_if:dealership_option,use_dealership', 'string', 'max:255', 'exists:dealerships,code'],
+            'dealership_code' => ['nullable', 'required_if:dealership_option,use_dealership', 'string', 'max:255', 'exists:t_dealerships,code'],
 
             'dealership_option' => ['required', 'string', 'in:use_dealership,create_dealership'],
 
             'new_dealership_name' => ['nullable', 'required_if:dealership_option,create_dealership', 'string', 'max:255'],
-            'new_dealership_phone' => ['nullable', 'required_if:dealership_option,create_dealership', 'string', 'min:10', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'unique:dealerships,phone'],
+            'new_dealership_phone' => ['nullable', 'required_if:dealership_option,create_dealership', 'string', 'min:10', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'unique:t_dealerships,phone'],
             'new_dealership_address_line_1' => ['nullable', 'required_with_all:new_dealership_city,new_dealership_state,new_dealership_zip', 'string', 'max:255'],
             'new_dealership_address_line_2' => ['nullable', 'string', 'max:255'],
             'new_dealership_city' => ['nullable', 'required_with_all:new_dealership_address_line_1,new_dealership_state,new_dealership_zip', 'string', 'max:255'],

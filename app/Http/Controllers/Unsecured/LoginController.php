@@ -14,7 +14,7 @@ class LoginController extends Controller
     public function core(LoginRequest $request)
     {
         $validated = $request->validated();
-        dd($validated);
+        //dd($validated);
         return view('unsecured.login.store');
     }
 }

@@ -13,6 +13,6 @@ class TCarModel extends Model
 
     public function cars()
     {
-        return $this->hasMany(Car::class, 'car_model_id');
+        return $this->hasMany(TCar::class, 'model_id');
     }
 }

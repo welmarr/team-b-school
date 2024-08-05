@@ -14,6 +14,8 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte/css/adminlte.css') }}">
 
+
+
     <link rel="stylesheet" href="{{ asset('css/sharing.css') }}">
 
     <style>
@@ -65,6 +67,7 @@
             content: "✓";
             color: inherit;
         }
+
     </style>
 @endsection
 
@@ -90,10 +93,31 @@
 @section('content')
     <!-- Main content -->
     <section class="content">
+
+        <div class="modal fade" id="modal-enable-disable">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to <strong id="modal-enable-disable-action"> </strong> <span id="modal-enable-disable-user-name"> </span> account?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-orange">Yes</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-
                     <div class="card">
                         <div class="card-header">
                             <h3 class="m-0 card-title">Users</h3>
@@ -171,6 +195,13 @@
 @section('js-after-adminlte')
     <script>
         $(function() {
+
+            $(document).on('click', '.btn-disable-or-enable', function(e) {
+                $('#modal-enable-disable').modal('toggle')
+                e.stopPropagation();
+            })
+
+
             // Initialize DataTable with server-side processing
             $("#example1").DataTable({
                 "processing": true, // Enable processing indicator
@@ -242,15 +273,23 @@
                         "data": null,
                         "orderable": false, // Disable sorting
                         "render": function(value, type, full, meta) {
+
+                            let enableDisableUrl =
+                                '{{ route('api.secure.users.disable.or.enable', ['user' => ':user']) }}';
+                            enableDisableUrl = enableDisableUrl.replace(':user', full.id);
                             let actionsTags = '<div class="d-flex justify-content-center">';
 
                             if (typeof value === 'object') {
                                 if (value.is_active === 1) {
                                     actionsTags +=
-                                        '<button type="button" class="btn btn-outline-dark mr-2 btn-sm">Disable</button> '; // Display 'Enable' badge
+                                        '<button type="button" class="btn btn-outline-dark mr-2 btn-sm btn-disable-or-enable " call-url ="' +
+                                        enableDisableUrl +
+                                        '">Disable</button> '; // Display 'Enable' badge
                                 } else {
                                     actionsTags +=
-                                        '<button type="button" class="btn btn-outline-dark mr-2 btn-sm">Enable</button> '; // Display 'Enable' badge
+                                        '<button type="button" class="btn btn-outline-dark mr-2 btn-sm btn-disable-or-enable " call-url ="' +
+                                        enableDisableUrl +
+                                        '">Enable</button> '; // Display 'Enable' badge
                                 }
                             }
                             actionsTags +=
@@ -271,6 +310,7 @@
             // Select all buttons with class 'buttons-html5', remove 'btn-secondary' and add 'btn-dark'
             /* $('.buttons-html5').removeClass('btn-secondary').addClass('btn-dark'); */
             $('.dt-buttons .btn').removeClass('btn-secondary').addClass('btn-dark');
+
         });
     </script>
 @endsection

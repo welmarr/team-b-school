@@ -75,8 +75,8 @@ Route::group(['as' => 'unsecured.'], function () {
      * Define a route for the get-estimate page with an active tab parameter
      */
     Route::get('get-estimate', function () {
-        $brands = \App\Models\CarMake::all();
-        $years = \App\Models\Car::select('year')->distinct()->orderBy('year', 'desc')->get()->pluck('year');
+        $brands = \App\Models\TCarBrand::all();
+        $years = \App\Models\TCar::select('year')->distinct()->orderBy('year', 'desc')->get()->pluck('year');
         $states = USA_states();
         $activeMenu = 'get-estimate';
         return view('unsecured.pages.get-estimate', compact('brands', 'years', 'activeMenu', 'states'));
@@ -127,7 +127,7 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.'], function () {
 
             $activeMenu = 'dashboard';
             $countUser = \App\Models\User::count();
-            $countRequest = \App\Models\Request::count();
+            $countRequest = \App\Models\TRequest::count();
             return view('secured.pages.admin.dashboard',  compact("activeMenu", "countUser", "countRequest"));
         })->name('dashboard');
 

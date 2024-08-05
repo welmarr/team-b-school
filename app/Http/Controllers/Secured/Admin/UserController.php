@@ -11,6 +11,20 @@ use App\Http\Requests\Secured\UpdateUserRequest;
 
 class UserController extends Controller
 {
+
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function enableDisable(User $user)
+    {
+        $user_status = $user->is_active;
+
+        $user->update(["is_active"=> !$user_status]);
+
+        return response()->json(["data"=> $user]);
+    }
+
     /**
      * Display a listing of the resource.
      */

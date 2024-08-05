@@ -115,7 +115,8 @@
                                     <label for="email" class="form-label">Email <span
                                             class="text-orange">*</span></label>
                                     <input type="email" class="form-control" id="email"
-                                        placeholder="example@example.com" value="" name="email" required {{ old('email') }}>
+                                        placeholder="example@example.com" value="" name="email" required
+                                        {{ old('email') }}>
 
                                     @error('email')
                                         <div class="text-danger mb-3">
@@ -127,8 +128,8 @@
                                 <div class="col-sm-12 col-md-6">
                                     <label for="phonenumber" class="form-label">Phone <span
                                             class="text-orange">*</span></label>
-                                    <input type="text" class="form-control" id="phonenumber" placeholder="123456789" {{ old('phonenumber') }}
-                                        value="" name="phonenumber" required>
+                                    <input type="text" class="form-control" id="phonenumber" placeholder="123456789"
+                                        {{ old('phonenumber') }} value="" name="phonenumber" required>
 
                                     @error('phone')
                                         <div class="text-danger mb-3">
@@ -226,7 +227,8 @@
 
 
                                 <div class="col-sm-12 col-md-4 mt-sm-0 mt-md-4">
-                                    <label for="vehicle-model" class="form-label">Vehicle Model</label>
+                                    <label for="vehicle-model" class="form-label">Vehicle Model <span
+                                            class="text-orange">*</span></label>
                                     <select class="form-select my-select" aria-label="" id="vehicle-model"
                                         data-live-search="true" name="model" id="car-model">
                                         <option selected value="">Select the vehicle model</option>
@@ -241,7 +243,8 @@
                                 <div class="col-12 mt-4">
                                     <label for="filepond" class="form-label">Add photos of impacted areas <span
                                             class="text-orange">*</span></label>
-                                    <input type="file" class="filepond" name="filepond[]" multiple id="filepond" required/>
+                                    <input type="file" class="filepond" name="filepond[]" multiple id="filepond"
+                                        required />
 
 
                                     @error('filepond')
