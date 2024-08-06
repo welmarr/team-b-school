@@ -11,8 +11,11 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte/css/adminlte.css') }}">
+
 
 
 
@@ -68,6 +71,9 @@
             color: inherit;
         }
 
+        .highlight {
+            background-color: rgba(0, 0, 0, 0.075) !important;
+        }
     </style>
 @endsection
 
@@ -104,11 +110,13 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to <strong id="modal-enable-disable-action"> </strong> <span id="modal-enable-disable-user-name"> </span> account?</p>
+                        <p>Are you sure you want to <span id="modal-enable-disable-action" class="badge badge-success">
+                            </span> <strong id="modal-enable-disable-user-name"> </strong> account?</p>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" id="modal-content-yes" attr-call-url=""
+                            attr-call-by="">Yes</button>
                         <button type="button" class="btn btn-dark" data-dismiss="modal">No</button>
-                        <button type="button" class="btn btn-orange">Yes</button>
                     </div>
                 </div>
             </div>
@@ -124,7 +132,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered">
+                            <table id="example1" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -190,126 +198,185 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
 @endsection
 
 @section('js-after-adminlte')
     <script>
+        /**
+         * jQuery document ready function
+         */
         $(function() {
+            /**
+             * Configure SweetAlert2 toast
+             * @type {Object}
+             */
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
 
-            $(document).on('click', '.btn-disable-or-enable', function(e) {
-                $('#modal-enable-disable').modal('toggle')
-                e.stopPropagation();
-            })
-
-
-            // Initialize DataTable with server-side processing
-            $("#example1").DataTable({
-                "processing": true, // Enable processing indicator
-                "serverSide": true, // Enable server-side processing
-                "ajax": "{{ route('api.secure.users') }}", // Set AJAX source URL
+            /**
+             * Initialize DataTable with server-side processing
+             * @type {Object}
+             */
+            var tableSaved = $("#example1").DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ route('api.secure.users') }}",
                 language: {
                     "processing": '<div class="d-flex justify-content-center"><div class="spinner-border text-orange" role="status"><span class="sr-only">Loading...</span></div></div>'
                 },
-                "columns": [{
+                "columns": [
+                    {
                         "data": null,
-                        "orderable": false, // Disable sorting
+                        "orderable": false,
                         "render": function(data, type, full, meta) {
-                            return meta.row + 1; // Row numbering
+                            return meta.row + 1;
                         }
                     },
+                    { "data": "first_name" },
+                    { "data": "last_name" },
+                    { "data": "phone" },
                     {
-                        "data": "first_name" // First name column
-                    },
-                    {
-                        "data": "last_name" // Last name column
-                    },
-                    {
-                        "data": "phone" // Phone column
-                    },
-                    {
-                        "data": "role", // Updated at column
-                        "orderable": true, // Enable sorting
+                        "data": "role",
+                        "orderable": true,
                         "render": function(value, type, full) {
                             if (type === 'display') {
-                                if (value == "admin") {
-                                    return '<strong>' + value + '</strong>';
-                                }
-                                return '<em>' + value + '</em>';
+                                return value == "admin" ? '<strong>' + value + '</strong>' : '<em>' + value + '</em>';
                             }
-                            return value; // Return data for other types
+                            return value;
                         }
                     },
                     {
-                        "data": 'is_active', // Activated status column
-                        "orderable": true, // Enable sorting
+                        "data": 'is_active',
+                        "orderable": true,
                         "render": function(value, type, full) {
                             if (type === 'display') {
-                                // Render display for 'display' type
                                 if (typeof value !== 'object') {
-                                    if (value == 1) {
-                                        return '<span class="text-success d-flex justify-content-center"><i class="fas fa-user"></i></span>'; // Display 'Enable' badge
-                                    } else {
-                                        return '<span class="text-danger d-flex  justify-content-center"><i class="fas fa-user-slash"></i></span>'; // Display 'Disable' badge
-                                    }
-                                } else {
-                                    return '<span class="text-secondary">Error</span>'; // Display 'Error' badge
+                                    return value == 1 ?
+                                        '<span class="text-success d-flex justify-content-center"><i class="fas fa-user"></i></span>' :
+                                        '<span class="text-danger d-flex  justify-content-center"><i class="fas fa-user-slash"></i></span>';
                                 }
+                                return '<span class="text-secondary">Error</span>';
                             }
-                            return value; // Return data for other types
+                            return value;
                         }
                     },
                     {
-                        "data": "updated_at", // Updated at column
-                        "orderable": true, // Enable sorting
+                        "data": "updated_at",
+                        "orderable": true,
                         "render": function(value, type, full) {
-                            if (type === 'display') {
-                                console.log(value);
-                                return moment(value).format('Do MMM YYYY');
-                            }
-                            return value; // Return data for other types
+                            return type === 'display' ? moment(value).format('Do MMM YYYY') : value;
                         }
                     },
                     {
                         "data": null,
-                        "orderable": false, // Disable sorting
+                        "orderable": false,
                         "render": function(value, type, full, meta) {
-
-                            let enableDisableUrl =
-                                '{{ route('api.secure.users.disable.or.enable', ['user' => ':user']) }}';
-                            enableDisableUrl = enableDisableUrl.replace(':user', full.id);
+                            let enableDisableUrl = '{{ route('api.secure.users.disable.or.enable', ['user' => ':user']) }}'.replace(':user', full.id);
                             let actionsTags = '<div class="d-flex justify-content-center">';
+                            let callLabel = full.is_active ? "disable" : "enable";
 
                             if (typeof value === 'object') {
-                                if (value.is_active === 1) {
-                                    actionsTags +=
-                                        '<button type="button" class="btn btn-outline-dark mr-2 btn-sm btn-disable-or-enable " call-url ="' +
-                                        enableDisableUrl +
-                                        '">Disable</button> '; // Display 'Enable' badge
-                                } else {
-                                    actionsTags +=
-                                        '<button type="button" class="btn btn-outline-dark mr-2 btn-sm btn-disable-or-enable " call-url ="' +
-                                        enableDisableUrl +
-                                        '">Enable</button> '; // Display 'Enable' badge
-                                }
+                                actionsTags += '<button type="button" class="btn btn-outline-dark mr-2 btn-sm btn-disable-or-enable" ' +
+                                    'id="enable-disable-id-' + full.id + '" ' +
+                                    'call-label="' + callLabel + '" ' +
+                                    'call-name="' + full.first_name + " " + full.last_name + '" ' +
+                                    'call-url="' + enableDisableUrl + '">' +
+                                    (value.is_active === 1 ? 'Disable' : 'Enable') + '</button> ';
                             }
-                            actionsTags +=
-                                '<button type="button" class="btn btn-dark btn-sm">Details</button> </div>';
+                            actionsTags += '<button type="button" class="btn btn-dark btn-sm">Details</button> </div>';
 
                             return actionsTags;
                         }
                     },
                 ],
-                "responsive": true, // Enable responsive design
-                "lengthChange": false, // Disable length change
-                "autoWidth": false, // Disable auto width
-                "dom": 'Bfrtip', // Define the table control elements to appear
-                "buttons": [
-                    'copy', 'csv', 'excel', 'pdf', 'print', 'pageLength'
-                ] // Add buttons
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)'); // Append buttons to container
-            // Select all buttons with class 'buttons-html5', remove 'btn-secondary' and add 'btn-dark'
-            /* $('.buttons-html5').removeClass('btn-secondary').addClass('btn-dark'); */
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "dom": 'Bfrtip',
+                "buttons": ['copy', 'csv', 'excel', 'pdf', 'print', 'pageLength']
+            });
+
+            tableSaved.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             $('.dt-buttons .btn').removeClass('btn-secondary').addClass('btn-dark');
+
+            /**
+             * Event listener for enabling/disabling button click
+             */
+            $(document).on('click', '.btn-disable-or-enable', function(e) {
+                const $this = $(this);
+                $('#modal-enable-disable-action').text($this.attr('call-label'));
+                $('#modal-enable-disable-user-name').text($this.attr('call-name'));
+
+                if ($this.attr('call-label') == 'enable') {
+                    $('#modal-enable-disable-action').removeClass("badge-danger badge-dark").addClass('badge-success');
+                    $('#modal-content-yes').removeClass("btn-danger btn-dark").addClass('btn-success');
+                } else {
+                    $('#modal-enable-disable-action').removeClass("badge-success badge-dark").addClass('badge-danger');
+                    $('#modal-content-yes').removeClass("btn-success btn-dark").addClass('btn-danger');
+                }
+
+                $('#modal-content-yes')
+                    .attr('attr-call-url', $this.attr('call-url'))
+                    .attr('attr-call-by', $this.attr('id'));
+                $('#' + $this.attr('id')).parents('tr').toggleClass('highlight');
+
+                $('#modal-enable-disable').modal('toggle');
+                e.stopPropagation();
+            });
+
+            /**
+             * Event listener for confirmation button click in the modal
+             */
+            $(document).on('click', '#modal-content-yes', function(e) {
+                const $this = $(this);
+                const callUrl = $this.attr('attr-call-url');
+                const callBy = $this.attr('attr-call-by');
+
+                $.ajax({
+                    url: callUrl,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    success: function(response) {
+                        var rowIndex = tableSaved.row($('#' + $(this).attr('attr-call-by')).parents('tr')).index();
+
+                        tableSaved.cell({ row: rowIndex, column: 6 }).data(1).draw(false);
+                        tableSaved.cell({ row: rowIndex, column: 8 }).data(1).draw(false);
+
+                        const isActive = response.data != null && response.data.is_active;
+                        const userName = response.data.first_name + " " + response.data.last_name;
+                        const message = isActive ?
+                            `${userName} account is successfully enabled.` :
+                            `${userName} account is successfully disabled.`;
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: message
+                        });
+                    },
+                    error: function(error) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Oups! Something wrong during the execution of the action. Try later.'
+                        })
+                    }
+                });
+
+                $('#modal-enable-disable').modal('toggle');
+                e.stopPropagation();
+            });
+
+            /**
+             * Event listener for modal hide
+             */
+            $(document).on('hide.bs.modal', '#modal-enable-disable', function() {
+                $('#example1 tr').removeClass('highlight');
+            });
 
         });
     </script>

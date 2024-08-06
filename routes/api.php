@@ -18,7 +18,7 @@ Route::get('/user', function (Request $request) {
 Route::group(['as' => 'api.'], function () {
     Route::group(['prefix' => 'secure', 'as' => 'secure.'], function () {
         Route::get('/users', [AdminUserController::class, 'indexDataTableApi'])->name('users');
-        Route::get('/users/{user}/disable-or-enable', [AdminUserController::class,'enableDisable'])->name('users.disable.or.enable');
+        Route::post('/users/{user}/disable-or-enable', [AdminUserController::class,'enableDisable'])->name('users.disable.or.enable');
         Route::get('/requests', [AdminRequestController::class, 'indexDataTableApi'])->name('requests');
 
     });
