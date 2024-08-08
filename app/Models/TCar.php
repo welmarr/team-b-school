@@ -14,11 +14,11 @@ class TCar extends Model
 
     public function brand()
     {
-        return $this->belongsTo(TCarBrand::class, 'car_brand_id');
+        return $this->belongsTo(TCarBrand::class, 'make_id');
     }
 
     public function model()
     {
-        return $this->belongsTo(TCarModel::class, 'car_model_id');
+        return $this->belongsTo(TCarModel::class, 'model_id');
     }
 }

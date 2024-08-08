@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Unsecured\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Car;
-use App\Models\CarModel;
+use App\Models\TCarModel;
 
 class CarController extends Controller
 {
@@ -13,7 +12,7 @@ class CarController extends Controller
      */
     public function getModelByBrandAndYear($brand, $year)
     {
-        $carModels = CarModel::whereHas('cars', function ($query) use ($year, $brand) {
+        $carModels = TCarModel::whereHas('cars', function ($query) use ($year, $brand) {
             $query->where('year', $year)->where('make_id', $brand);
         })->select('id', 'name')->get();
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Secured\Admin;
 
 
 use Illuminate\Http\Request;
-use App\Models\Request as Demand;
+use App\Models\TRequest as Demand;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -24,7 +24,8 @@ class RequestController extends Controller
      */
     public function indexDataTableApi(Request $request)
     {
-        return DataTables::eloquent(Demand::with(['make', 'model'])->select())
+        return DataTables::eloquent(Demand::with(['car.brand', 'car.model', 'createdBy'])->select())
+        ->escapeColumns(['created_by_id'])
         ->toJson();
     }
 
@@ -36,6 +37,7 @@ class RequestController extends Controller
     public function show(Demand $demand)
     {
         $activeMenu = "requests";
+        $demand->with(['car.brand', 'car.model', 'createdBy']);
         return view('secured.pages.admin.requests.treatment', compact("demand", "activeMenu"));
     }
 }

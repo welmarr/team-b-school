@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Unsecured\Api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\TemporaryFile;
+use App\Models\TTemporaryFile;
 use Illuminate\Support\Facades\Storage;
 
 class DeleteTemporaryImageController extends Controller
@@ -14,7 +13,7 @@ class DeleteTemporaryImageController extends Controller
      */
     public function __invoke()
     {
-        $temporaryImage = TemporaryFile::where("folder", request()->getContent())->first();
+        $temporaryImage = TTemporaryFile::where("folder", request()->getContent())->first();
         if ($temporaryImage) {
             Storage::deleteDirectory("requests/tmp/" .$temporaryImage->folder);
             $temporaryImage->delete();
