@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Secured\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Tool;
+use App\Models\TTool;
 use App\Http\Requests\Secured\StoreToolRequest;
 use App\Http\Requests\Secured\UpdateToolRequest;
 
@@ -15,7 +15,16 @@ class ToolController extends Controller
      */
     public function index()
     {
-        //
+        return view('secured.pages.admin.tools',  ['activeMenu' => 'tools']);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function indexDataTableApi(Request $request)
+    {
+        return DataTables::eloquent(TTools::select())
+        ->toJson();
     }
 
     /**
@@ -23,7 +32,7 @@ class ToolController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**

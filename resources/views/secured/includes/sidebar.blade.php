@@ -29,8 +29,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="{{ route('secured.admin.dashboard') }}"
-                        class="nav-link  {{ isset($activeMenu) && $activeMenu == 'dashboard' ? 'active' : '' }}">
+                    <a href="{{ route('secured.admin.dashboard') }}" class="nav-link  {{ isset($activeMenu) && $activeMenu == 'dashboard' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -38,8 +37,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('secured.admin.users.index') }}"
-                        class="nav-link {{ isset($activeMenu) && $activeMenu == 'users' ? 'active' : '' }}">
+                    <a href="{{ route('secured.admin.users.index') }}" class="nav-link {{ isset($activeMenu) && $activeMenu == 'users' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Users
@@ -56,7 +54,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('secured.admin.tools.index') }}" class="nav-link {{ isset($activeMenu) && $activeMenu == 'tools' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tools"></i>
                         <p>
                             Tools
