@@ -533,7 +533,7 @@
                     type: 'POST',
                     data: form.serialize(),
                     success: function(response) {
-                        // Prepare new row data
+                        /*// Prepare new row data
                         let newRowData = {
                             "first_name": response.data.first_name,
                             "last_name": response.data.last_name,
@@ -553,7 +553,7 @@
                         tableSaved.rows().every(function(rowIdx, tableLoop, rowLoop) {
                             this.data().DT_RowIndex = rowIdx + 1;
                             this.invalidate();
-                        });
+                        });*/
 
                         // Redraw the table to show updated row numbers
                         tableSaved.draw(false);

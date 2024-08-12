@@ -44,7 +44,7 @@ class LoginController extends Controller
 
                 //dd( $user->role);
                 // Redirect based on role
-                $redirectRoute = $user->role === 'admin' ? 'secured.admin.dashboard' : 'unsecured.not-found';
+                $redirectRoute = $user->role === 'admin' ? 'secured.admin.dashboard' : 'secured.dealers.dashboard';
 
                 // Regenerate session and redirect
                 $request->session()->regenerate();

@@ -352,7 +352,7 @@
                     <div class="row">
                         <div class="col-12">
                             <button class="w-100 btn btn-orange btn-lg" type="submit">Create</button>
-                            <p class="mt-2">Already have an account? <a href="{{ route('unsecured.login') }}"
+                            <p class="mt-2">Already have an account? <a href="{{ route('login') }}"
                                     class="text-orange">Login</a></p>
                         </div>
                     </div>

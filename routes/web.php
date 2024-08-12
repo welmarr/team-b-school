@@ -3,8 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Middleware\ShareDataMiddleware;
+use Illuminate\Auth\Middleware\Authenticate;
 use App\Http\Controllers\Secured\ProfileController;
 use App\Http\Controllers\Unsecured\LoginController;
+use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Controllers\Unsecured\LogoutController;
 use App\Http\Controllers\Unsecured\SignUpController;
 use App\Http\Controllers\Unsecured\RequestController;
 use App\Http\Controllers\Secured\Admin\ToolController;
@@ -37,12 +40,17 @@ Route::get('/', function () {
  *
  * These routes are accessible without authentication.
  */
+
+
+ Route::get('unsecured/login', function () {
+    return view('unsecured.pages.login');
+})->name('login');
+
 Route::group(['as' => 'unsecured.'], function () {
 
     // Authentication routes
-    Route::get('login', function () {
-        return view('unsecured.pages.login');
-    })->name('login');
+
+    Route::get('logout', LogoutController::class)->name('logout')->middleware(['auth']);
 
     Route::get('sign-up', function () {
         return view('unsecured.pages.sign-up');
@@ -91,7 +99,7 @@ Route::group(['as' => 'unsecured.'], function () {
  *
  * These routes require authentication to access.
  */
-Route::group(['prefix' => 'secured', 'as' => 'secured.'], function () {
+Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => 'auth'], function () {
 
     /**
      * Admin Routes
@@ -141,6 +149,11 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.'], function () {
      * Routes for dealer functionalities.
      */
     Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
+        Route::get('dashboard', function () {
+            $activeMenu = 'dashboard';
+            $countRequest = \App\Models\TRequest::count();
+            return view('secured.pages.admin.dashboard',  compact("activeMenu",  "countRequest", ));
+        })->name('dashboard');
         Route::singleton('profile', ProfileController::class);
         Route::resource('requests', DealerRequestController::class);
         Route::resource('entity/profile', DealerProfileController::class);
