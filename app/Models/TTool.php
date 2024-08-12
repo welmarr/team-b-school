@@ -2,69 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\TTool as Authenticatable;
 
-class TTool extends Authenticatable
+class TTool extends Model
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, SoftDeletes;
+    protected $fillable = ['name', 'description', 'track_usage', 'condition', 'tool_type_id', 'unit_id', 'enable_tracking_at'];
 
-
-     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name', 
-        'description', 
-        'track_usage', 
-        'condition', 
-        'tool_type_id', 
-        'unit_id'
-    ];
-
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function unit()
     {
-        return [
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
+        return $this->belongsTo(TUnit::class, 'unit_id');
     }
 
-    /**
-     * Get the tool type associated with the tool.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function tooltype(): HasOne
+    public function type()
     {
-        return $this->hasOne(TToolType::class);
+        return $this->belongsTo(TToolType::class, 'tool_type_id');
     }
-
-    /**
-     * Get the units associated with the tool.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function unitid(): HasOne
+    public function inventories ()
     {
-        return $this->hasOne(TUnit::class);
+        return $this->hasMany(TToolInventoryMovement::class, 'tool_id');
     }
-
-
-
-
-
 
 }

@@ -11,7 +11,7 @@
     </a>
 
     <div class="col-md-3 text-end">
-      <a href="{{ route('unsecured.login') }}" class="btn btn-outline-orange me-2">Login</a>
+      <a href="{{ route('login') }}" class="btn btn-outline-orange me-2">Login</a>
       <a href="{{ route('unsecured.sign-up') }}" class="btn btn-orange">Sign-up</a>
     </div>
   </header>

@@ -28,64 +28,109 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                <li class="nav-item">
-                    <a href="{{ route('secured.admin.dashboard') }}" class="nav-link  {{ isset($activeMenu) && $activeMenu == 'dashboard' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('secured.admin.users.index') }}" class="nav-link {{ isset($activeMenu) && $activeMenu == 'users' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Users
-                            <span class="right badge badge-dark"> 10 New</span>
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('secured.admin.requests.index') }}" class="nav-link {{ isset($activeMenu) && $activeMenu == 'requests' ? 'active' : '' }}">
-                        <i class="nav-icon fab fa-wpforms"></i>
-                        <p>
-                            Requests
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('secured.admin.tools.index') }}" class="nav-link {{ isset($activeMenu) && $activeMenu == 'tools' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-tools"></i>
-                        <p>
-                            Tools
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="pages/calendar.html" class="nav-link">
-                        <i class="nav-icon far fa-calendar-alt"></i>
-                        <p>
-                            Calendar
-                            <span class="badge badge-dark right">2</span>
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book"></i>
-                        <p>
-                            Pages
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
+                @if (auth()->check() && auth()->user()->role === 'admin')
+                    <li class="nav-item">
+                        <a href="{{ route('secured.admin.dashboard') }}"
+                            class="nav-link  {{ isset($activeMenu) && $activeMenu == 'dashboard' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Dashboard
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('secured.admin.users.index') }}"
+                            class="nav-link {{ isset($activeMenu) && $activeMenu == 'users' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Users
+                                <span class="right badge badge-dark"> {{ isset($newUser) ? $newUser . ' New' : '' }}
+                                </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('secured.admin.requests.index') }}"
+                            class="nav-link {{ isset($activeMenu) && $activeMenu == 'requests' ? 'active' : '' }}">
+                            <i class="nav-icon fab fa-wpforms"></i>
+                            <p>
+                                Requests
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('secured.admin.tools.index') }}"
+                            class="nav-link {{ isset($activeMenu) && $activeMenu == 'tools' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-tools"></i>
+                            <p>
+                                Tools
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('secured.admin.tool-types.index') }}"
+                            class="nav-link {{ isset($activeMenu) && $activeMenu == 'tool-types' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-tenge"></i>
+                            <p>
+                                Tool types
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('secured.admin.units.index') }}"
+                            class="nav-link {{ isset($activeMenu) && $activeMenu == 'units' ? 'active' : '' }}">
+                            <i class="nav-icon fab fa-uniregistry"></i>
+                            <p>
+                                Units
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="pages/calendar.html" class="nav-link">
+                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <p>
+                                Calendar
+                                <span class="badge badge-dark right">2</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon far fa-newspaper"></i>
+                            <p>
+                                Pages
+                            </p>
+                        </a>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a href=""
+                            class="nav-link  {{ isset($activeMenu) && $activeMenu == 'dashboard' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Dashboard
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href=""
+                            class="nav-link {{ isset($activeMenu) && $activeMenu == 'requests' ? 'active' : '' }}">
+                            <i class="nav-icon fab fa-wpforms"></i>
+                            <p>
+                                Requests
+                            </p>
+                        </a>
+                    </li>
+                @endif
+
+                {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
                             Setting
                         </p>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

@@ -127,41 +127,44 @@ a.text-orange:hover {
     background-color: white;
     transform: translate(-50%, -50%);
   }
+  .btn-orange {
+    color: #fff;
+    background-color: #fb4f14;
+    border-color: #fb4f14;
+    box-shadow: none;
+}
 
-.btn-orange {
-    --bs-btn-color: #fff;
-    --bs-btn-bg: #fb4f14;
-    --bs-btn-border-color: #fb4f14;
-    --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #e64712;
-    --bs-btn-hover-border-color: #d13f10;
-    --bs-btn-focus-shadow-rgb: 251, 79, 20;
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: #d13f10;
-    --bs-btn-active-border-color: #bc3a0e;
-    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #fff;
-    --bs-btn-disabled-bg: #fb4f14;
-    --bs-btn-disabled-border-color: #fb4f14;
-  }
+.btn-orange:hover {
+    color: #fff;
+    background-color: #c64538;
+    border-color: #d13f10;
+}
 
+.btn-orange:focus, .btn-orange.focus {
+    color: #fff;
+    background-color: #e64712;
+    border-color: #d13f10;
+    box-shadow: 0 0 0 0.2rem rgba(251, 79, 20, 0.5);
+}
 
-  .btn-outline-orange {
-    --bs-btn-color: #fb4f14;
-    --bs-btn-border-color: #fb4f14;
-    --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #fb4f14;
-    --bs-btn-hover-border-color: #fb4f14;
-    --bs-btn-focus-shadow-rgb: 251, 79, 20;
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: #fb4f14;
-    --bs-btn-active-border-color: #fb4f14;
-    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #fb4f14;
-    --bs-btn-disabled-bg: transparent;
-    --bs-btn-disabled-border-color: #fb4f14;
-    --bs-gradient: none;
-  }
+.btn-orange.disabled, .btn-orange:disabled {
+    color: #fff;
+    background-color: #fb4f14;
+    border-color: #fb4f14;
+}
+
+.btn-orange:not(:disabled):not(.disabled):active, .btn-orange:not(:disabled):not(.disabled).active,
+.show > .btn-orange.dropdown-toggle {
+    color: #fff;
+    background-color: #d13f10;
+    border-color: #bc3a0e;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+.btn-orange:not(:disabled):not(.disabled):active:focus, .btn-orange:not(:disabled):not(.disabled).active:focus,
+.show > .btn-orange.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(251, 79, 20, 0.5);
+}
 
   .text-orange {
     --bs-text-opacity: 1;

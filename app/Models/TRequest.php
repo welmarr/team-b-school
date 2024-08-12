@@ -32,4 +32,9 @@ class TRequest extends Model
         return $this->belongsTo(TCar::class, 'car_id');
     }
 
+    public function createdBy()
+    {
+        return $this->morphTo();
+    }
+
 }

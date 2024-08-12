@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Unsecured\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\TemporaryFile;
+use App\Models\TTemporaryFile;
 
 class UploadTemporaryImageController extends Controller
 {
@@ -20,7 +20,7 @@ class UploadTemporaryImageController extends Controller
 
             $image->storeAs("requests/tmp/".$folder, $filename);
 
-            TemporaryFile::create(['folder' => $folder, 'file' => $filename]);
+            TTemporaryFile::create(['folder' => $folder, 'file' => $filename]);
 
             return $folder;
         }

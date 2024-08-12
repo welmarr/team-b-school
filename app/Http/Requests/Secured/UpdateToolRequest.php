@@ -11,7 +11,7 @@ class UpdateToolRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,20 @@ class UpdateToolRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        $id = "";
+        if($this->route('tool')){
+            $id = $this->route('tool')->id;
+        }
+        //dd($id);
+
         return [
-            //
+            "name" => ["required","string", "min:2", "max:225", "unique:t_tools,name," . $id],
+            "alert" => ["required","integer"],
+            "description" => ["nullable","string", "min:2", "max:225"],
+            "type" => ["required", "exists:t_tool_types,id"],
+            "unit" => ["required", "exists:t_units,id"],
+            "tracked" => ["sometimes","in:on"],
         ];
     }
 }
