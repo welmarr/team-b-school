@@ -1,7 +1,9 @@
 <footer  style="margin-top: 100px !important;">
     <div class="row">
         <div class="col-2 mb-3">
+          <a href="#">
             <img class="img-fluid" src="{{ asset('img/cincy-transparent.png') }}"  />
+          </a>
         </div>
 
         <div class="col-1 mb-3 offset-md-2">
@@ -37,15 +39,14 @@
               <button class="btn text-white btn-orange" type="button" style="">Subscribe</button>
             </div>
           </form>
-        </div>
       </div>
 
       <div class="d-flex flex-column flex-sm-row justify-content-between py-2 my-4" style="border-top: 1px solid #eb4034 !important">
         <p>&copy; 2024 Team B, Inc. All rights reserved.</p>
         <ul class="list-unstyled d-flex">
-          <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="16" height="16"><use xlink:href="#twitter"/></svg></a></li>
-          <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="16" height="16"><use xlink:href="#instagram"/></svg></a></li>
-          <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="16" height="16"><use xlink:href="#facebook"/></svg></a></li>
+          <li class="ms-3"><a class="link-dark" href="https://x.com/"><svg class="bi" width="16" height="16"><use xlink:href="#twitter"/></svg></a></li>
+          <li class="ms-3"><a class="link-dark" href="https://www.instagram.com/"><svg class="bi" width="16" height="16"><use xlink:href="#instagram"/></svg></a></li>
+          <li class="ms-3"><a class="link-dark" href="https://www.facebook.com/"><svg class="bi" width="16" height="16"><use xlink:href="#facebook"/></svg></a></li>
         </ul>
       </div>
 </footer>

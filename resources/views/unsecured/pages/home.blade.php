@@ -20,7 +20,7 @@
             <div class="col-5">
                 <h1 class="my-3 fw-bold">Welcome to Cincy Dent Repair Expert Dent Removal Services</h1>
                 <p class="card-text mb-auto my-3 lh-lg">At Cincy Dent Repair, we specialize in providing top-notch, mobile dent repair solutions tailored to your needs. Whether you’re an individual car owner or a dealership.</p>
-                <a class="btn text-white btn-orange my-4" href="" style="">Get a quote</a>
+                <a class="btn text-white btn-orange my-4" href="/get-estimate" style="">Get a quote</a>
             </div>
             <div class="col-7 d-flex justify-content-end">
                 <img class="img-fluid" src="{{ asset('img/home-img-01.jpg') }}" style="width: 85%; height: auto" />
@@ -40,13 +40,13 @@
                         <h6 class="fw-bold">For Customers</h6>
                         <p class="card-text mb-auto lh-lg">Enter your personal information and vehicle details for accurate estimates.</p>
 
-                        <a class="btn btn-sm text-white btn-orange my-4" href="" style="">Get estimate</a>
+                        <a class="btn btn-sm text-white btn-orange my-4" href="/get-estimate" style="">Get estimate</a>
                     </div>
                     <div class="col-6">
                         <h6 class="fw-bold">For Dealerships</h6>
                         <p class="card-text mb-auto lh-lg">Effortlessly submit multiple vehicle details and damage photos for estimates.</p>
 
-                        <a class="btn btn-sm text-white btn-orange my-4" href="" style="">Create account</a>
+                        <a class="btn btn-sm text-white btn-orange my-4" href="/sign-up" style="">Create account</a>
                     </div>
                 </div>
             </div>
@@ -94,7 +94,7 @@
                   <div class="">
                     <h1>Get a Free Repair Estimate</h1>
                     <p>Contact us today for a fast and reliable repair estimate.</p>
-                    <p><a class="btn btn-orange" href="#">Estimate</a> <a class="btn btn-outline-orange" href="#">Contact</a></p>
+                    <p><a class="btn btn-orange" href="/get-estimate">Estimate</a> <a class="btn btn-outline-orange" href="/about">Contact</a></p>
                   </div>
               </div>
         </div>
