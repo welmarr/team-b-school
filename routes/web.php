@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Middleware\ShareDataMiddleware;
 use Illuminate\Auth\Middleware\Authenticate;
-use App\Http\Controllers\Secured\ProfileController;
+use App\Http\Controllers\Secured\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Unsecured\LoginController;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Controllers\Unsecured\LogoutController;
@@ -140,7 +140,9 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => 'auth']
         ]);
 
         // Admin profile
-        Route::singleton('profile', ProfileController::class)->except(['show']);
+
+        Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile.index');
+        Route::put('/profile/update', [AdminProfileController::class, 'update'])->name('profile.update');
     });
 
     /**
@@ -154,7 +156,7 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => 'auth']
             $countRequest = \App\Models\TRequest::count();
             return view('secured.pages.admin.dashboard',  compact("activeMenu",  "countRequest", ));
         })->name('dashboard');
-        Route::singleton('profile', ProfileController::class);
+        Route::singleton('profile', DealerProfileController::class);
         Route::resource('requests', DealerRequestController::class);
         Route::resource('entity/profile', DealerProfileController::class);
     });

@@ -14,7 +14,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link"  href="#" role="button">
+            <a class="nav-link"  href="{{ route('secured.admin.profile.index')}}" role="button">
                 <i class="fas fa-user-circle"></i>
             </a>
         </li>
