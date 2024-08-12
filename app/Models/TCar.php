@@ -10,15 +10,15 @@ class TCar extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['year', 'car_brand_id', 'car_model_id', 'body_style'];
+    protected $fillable = ['year', 'brand_id', 'model_id', 'body_style'];
 
     public function brand()
     {
-        return $this->belongsTo(TCarBrand::class, 'car_brand_id');
+        return $this->belongsTo(TCarBrand::class, 'make_id');
     }
 
     public function model()
     {
-        return $this->belongsTo(TCarModel::class, 'car_model_id');
+        return $this->belongsTo(TCarModel::class, 'model_id');
     }
 }

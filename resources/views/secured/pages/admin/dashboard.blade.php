@@ -47,66 +47,78 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>{{ $countRequest }}</h3>
-
-                            <p>Request</p>
+                <div class="col-sm-12 col-md-2">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-warning elevation-1"><i class="fab fa-wpforms"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Requests</span>
+                            <span class="info-box-number">
+                                {{ $countRequest }}
+                            </span>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="{{ route("secured.admin.requests.index")}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3><sup style="font-size: 20px">$</sup>53 000</h3>
 
-                            <p>Finance</p>
+                <div class="col-sm-12 col-md-2">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Users</span>
+                            <span class="info-box-number">
+                                {{ $countUser }}
+                            </span>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>{{$countUser}}</h3>
 
-                            <p>Users</p>
+                <div class="col-sm-12 col-md-2">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-tools"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Tools</span>
+                            <span class="info-box-number">
+                                {{ $countTool }}
+                            </span>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="{{ route("secured.admin.users.index") }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3>65</h3>
 
-                            <p>Unique Visitors</p>
+                <div class="col-sm-12 col-md-2">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-dark elevation-1"><i class="fas fa-tenge"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Tool types</span>
+                            <span class="info-box-number">
+                                {{ $countToolType }}
+                            </span>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+
+                <div class="col-sm-12 col-md-2">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fab fa-uniregistry"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">units</span>
+                            <span class="info-box-number">
+                                {{ $countUnit }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-2">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-primary elevation-1"><i class="far fa-newspaper"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Pages</span>
+                            <span class="info-box-number">
+                                10
+                                <small>%</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- /.row -->
             <!-- Main row -->
@@ -332,6 +344,6 @@
 @endsection
 
 @section('js-after-adminlte')
-        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-        <script src="{{ asset('adminlte/js/pages/dashboard.js') }}"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{{ asset('adminlte/js/pages/dashboard.js') }}"></script>
 @endsection

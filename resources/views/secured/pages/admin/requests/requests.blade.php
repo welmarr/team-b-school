@@ -103,8 +103,8 @@
                                     <tr>
                                         <th># No</th>
                                         <th>Reference</th>
-                                        <th>First name</th>
-                                        <th>Last name</th>
+                                        <th>Car</th>
+                                        <th>Create by</th>
                                         <th>Phone</th>
                                         <th>Email</th>
                                         <th>Created at</th>
@@ -118,8 +118,8 @@
                                     <tr>
                                         <th># No</th>
                                         <th>Reference</th>
-                                        <th>First name</th>
-                                        <th>Last name</th>
+                                        <th>Car</th>
+                                        <th>Create by</th>
                                         <th>Phone</th>
                                         <th>Email</th>
                                         <th>Created at</th>
@@ -175,33 +175,51 @@
             var table = $("#example1").DataTable({
                 "processing": true, // Enable processing indicator
                 "serverSide": true, // Enable server-side processing
-                "ajax": "{{ route('api.secure.requests') }}", // Set AJAX source URL
+                "ajax": {
+                    "url": "{{ route('api.secure.requests.index') }}", // Set AJAX source URL
+                    "type": "GET",
+                    "data": function(d){
+                        console.log(d)
+                    }
+                },
                 language: {
                     "processing": '<div class="d-flex justify-content-center"><div class="spinner-border text-orange" role="status"><span class="sr-only">Loading...</span></div></div>'
                 },
                 "columns": [{
                         "data": null,
                         "orderable": false, // Disable sorting
-                        "render": function(data, type, full, meta) {
+                        "render": function(value, type, full, meta) {
                             return meta.row + 1; // Row numbering
                         }
                     },
                     {
                         "data": "reference", // First name column
-                        "orderable": true, // Enable sorting
                     },
                     {
-                        "data": "first_name" // First name column
+                        "data": "car.brand.name", // First name column
+                        "orderable": true, // Disable sorting
+                        "render": function(value, type, full, meta) {
+                           if(type ==  "display"){
+                            return '<strong>' + full.car.brand.name + " " + full.car.model.name + '</strong>';
+                           }
+                           return value;
+                        }
                     },
                     {
-                        "data": "last_name" // Last name column
+                        "data": "created_by.first_name", // First name column
+                        "orderable": true, // Disable sorting
+                        "render": function(value, type, full, meta) {
+                           if(type ==  "display"){
+                            return full.created_by.first_name + " " + full.created_by.last_name;
+                           }
+                           return value;
+                        }
                     },
                     {
-                        "data": "phone" // Phone column
+                        "data": "created_by.phone" // Phone column
                     },
                     {
-                        "data": "email", // Phone column
-                        "orderable": true, // Enable sorting
+                        "data": "created_by.email", // Phone column
                         "visible": false,
                     },
                     {
@@ -209,7 +227,6 @@
                         "orderable": true, // Enable sorting
                         "render": function(value, type, full) {
                             if (type === 'display') {
-                                console.log(value);
                                 return moment(value).format('Do MMM YYYY');
                             }
                             return value; // Return data for other types
@@ -221,7 +238,6 @@
                         "visible": false,
                         "render": function(value, type, full) {
                             if (type === 'display') {
-                                console.log(value);
                                 return moment(value).format('Do MMM YYYY');
                             }
                             return value; // Return data for other types

@@ -11,7 +11,7 @@ class StoreToolRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,14 @@ class StoreToolRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            //
+            "name" => ["required","string", "min:2", "max:225"],
+            "alert" => ["required","integer"],
+            "description" => ["nullable","string", "min:2", "max:225"],
+            "type" => ["required", "exists:t_tool_types,id"],
+            "unit" => ["required", "exists:t_units,id"],
+            "tracked" => ["sometimes","in:on"],
         ];
     }
 }

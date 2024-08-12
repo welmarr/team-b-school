@@ -22,15 +22,16 @@ class RequestController extends Controller
     public function __invoke(StoreDemandRequest $request)
     {
 
+
         $validated = $request->validated();
         $demand = null;
         $address = null;
         $client = null;
         $files = [];
 
-        //dd($validated['year'], $validated['brand'], $validated['model'], $validated['memo'], $validated);
 
         try {
+
             $car = TCar::where([
                 'year' => $validated['year'],
                 'make_id' => $validated['brand'],
@@ -102,11 +103,12 @@ class RequestController extends Controller
             return redirect()->back()->with('success', 'Demand created successfully!');
         } catch (\Exception $e) {
 
-            if($address){
+
+            if ($address) {
                 $address->forceDelete();
             }
 
-            if($client){
+            if ($client) {
                 $client->forceDelete();
             }
 
@@ -126,6 +128,8 @@ class RequestController extends Controller
                     }
                 }
             }
+
+            dd($e->getMessage(), $e);
 
             return redirect()->back()->withInput()->with('error', 'Failed to create demand: ' . $e->getMessage());
         }

@@ -29,6 +29,8 @@
         svg.feather {
             width: 16px !important;
         }
+
+
     </style>
 @endsection
 

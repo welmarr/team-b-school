@@ -16,6 +16,9 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte/css/adminlte.css') }}">
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+
 
 
 
@@ -123,6 +126,80 @@
 
         </div>
 
+
+        <div class="modal fade" id="modal-add-new-admin">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add admin</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="modal-add-new-admin-form" method="POST" action="{{ route('api.secure.users.store') }}">
+                        <div class="modal-body">
+                            <p class="badge badge-dark my-0"> Field with <span class="text-orange">*</span> is mandatory.
+                            </p>
+
+                            @csrf
+                            <div class="row my-2">
+                                <div class="col-6">
+                                    <label for="first-name" class="form-label">First name <span
+                                            class="text-orange">*</span></label>
+                                    <input type="text" class="form-control" id="first-name" name="first_name"
+                                        placeholder="John" required>
+
+                                    <div class="text-danger mb-3  d-none modal-add-new-admin-form-input-error"
+                                        id="first_name-error">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="last-name" class="form-label">Last name <span
+                                            class="text-orange">*</span></label>
+                                    <input type="text" class="form-control" id="last-name" name="last_name"
+                                        placeholder="Doe" required>
+
+                                    <div class="text-danger mb-3 d-none modal-add-new-admin-form-input-error"
+                                        id="last_name-error">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row my-2">
+                                <div class="col-6">
+                                    <label for="email" class="form-label">Email <span
+                                            class="text-orange">*</span></label>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        placeholder="you@example.com" required>
+
+                                    <div class="text-danger mb-3  d-none modal-add-new-admin-form-input-error"
+                                        id="email-error">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="phonenumber" class="form-label">Phone <span
+                                            class="text-orange">*</span></label>
+                                    <input type="text" class="form-control" id="phonenumber" name="phone"
+                                        placeholder="123456789" required>
+
+                                    <div class="text-danger mb-3 d-none modal-add-new-admin-form-input-error"
+                                        id="phone-error">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" form="modal-add-new-admin-form" class="btn btn-success"
+                                id="modal-add-new-admin-submit" attr-call-url="" attr-call-by="">Add</button>
+                            <button type="button" class="btn btn-orange" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
@@ -132,16 +209,18 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered table-hover">
+                            <table id="user-list-table" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>First name</th>
                                         <th>Last name</th>
+                                        <th>Email</th>
                                         <th>Phone</th>
                                         <th>Type</th>
                                         <th class="d-flex justify-content-center">Status</th>
                                         <th>Created at</th>
+                                        <th>First connexion</th>
                                         <th class="d-flex justify-content-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -152,10 +231,12 @@
                                         <th>#</th>
                                         <th>First name</th>
                                         <th>Last name</th>
+                                        <th>Email</th>
                                         <th>Phone</th>
                                         <th>Type</th>
                                         <th class="d-flex justify-content-center">Status</th>
                                         <th>Created at</th>
+                                        <th>First connexion</th>
                                         <th class="d-flex justify-content-center">Actions</th>
                                     </tr>
                                 </tfoot>
@@ -223,30 +304,45 @@
              * Initialize DataTable with server-side processing
              * @type {Object}
              */
-            var tableSaved = $("#example1").DataTable({
+            var tableSaved = $("#user-list-table").DataTable({
                 "processing": true,
                 "serverSide": true,
                 "ajax": "{{ route('api.secure.users') }}",
                 language: {
                     "processing": '<div class="d-flex justify-content-center"><div class="spinner-border text-orange" role="status"><span class="sr-only">Loading...</span></div></div>'
                 },
-                "columns": [
-                    {
-                        "data": null,
-                        "orderable": false,
-                        "render": function(data, type, full, meta) {
-                            return meta.row + 1;
+                "columns": [{
+                        "data": "id",
+                        "orderable": true,
+                        "render": function(value, type, full, meta) {
+                            // Display row number instead of ID
+                            if (type === 'display') {
+                                return meta.row + 1;
+                            }
+                            return value;
                         }
                     },
-                    { "data": "first_name" },
-                    { "data": "last_name" },
-                    { "data": "phone" },
+                    {
+                        "data": "first_name"
+                    },
+                    {
+                        "data": "last_name"
+                    },
+                    {
+                        "data": "email",
+                        "visibility": false,
+                    },
+                    {
+                        "data": "phone"
+                    },
                     {
                         "data": "role",
                         "orderable": true,
                         "render": function(value, type, full) {
+                            // Style the role differently for admin and non-admin
                             if (type === 'display') {
-                                return value == "admin" ? '<strong>' + value + '</strong>' : '<em>' + value + '</em>';
+                                return value == "admin" ? '<strong>' + value + '</strong>' :
+                                    '<em>' + value + '</em>';
                             }
                             return value;
                         }
@@ -255,6 +351,7 @@
                         "data": 'is_active',
                         "orderable": true,
                         "render": function(value, type, full) {
+                            // Display user icon based on active status
                             if (type === 'display') {
                                 if (typeof value !== 'object') {
                                     return value == 1 ?
@@ -270,39 +367,65 @@
                         "data": "updated_at",
                         "orderable": true,
                         "render": function(value, type, full) {
-                            return type === 'display' ? moment(value).format('Do MMM YYYY') : value;
+                            // Format the date
+                            return type === 'display' ? (value == null ? "" : moment(value).format(
+                                'Do MMM YYYY')) : value;
+                        }
+                    },
+                    {
+                        "data": "first_connect_at",
+                        "orderable": true,
+                        "render": function(value, type, full) {
+                            // Format the date
+                            return type === 'display' ? (value == null ? "" : moment(value).format(
+                                'Do MMM YYYY')) : value;
                         }
                     },
                     {
                         "data": null,
                         "orderable": false,
                         "render": function(value, type, full, meta) {
-                            let enableDisableUrl = '{{ route('api.secure.users.disable.or.enable', ['user' => ':user']) }}'.replace(':user', full.id);
+                            // Generate action buttons for each row
+                            let enableDisableUrl =
+                                '{{ route('api.secure.users.disable.or.enable', ['user' => ':user']) }}'
+                                .replace(':user', full.id);
                             let actionsTags = '<div class="d-flex justify-content-center">';
                             let callLabel = full.is_active ? "disable" : "enable";
 
                             if (typeof value === 'object') {
-                                actionsTags += '<button type="button" class="btn btn-outline-dark mr-2 btn-sm btn-disable-or-enable" ' +
+                                actionsTags +=
+                                    '<button type="button" class="btn btn-outline-dark mr-2 btn-sm btn-disable-or-enable" ' +
                                     'id="enable-disable-id-' + full.id + '" ' +
                                     'call-label="' + callLabel + '" ' +
                                     'call-name="' + full.first_name + " " + full.last_name + '" ' +
                                     'call-url="' + enableDisableUrl + '">' +
                                     (value.is_active === 1 ? 'Disable' : 'Enable') + '</button> ';
                             }
-                            actionsTags += '<button type="button" class="btn btn-dark btn-sm">Details</button> </div>';
+                            actionsTags +=
+                                '<button type="button" class="btn btn-dark btn-sm">Details</button> </div>';
 
                             return actionsTags;
                         }
                     },
                 ],
+                'order': [
+                    [0, 'desc']
+                ],
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,
                 "dom": 'Bfrtip',
-                "buttons": ['copy', 'csv', 'excel', 'pdf', 'print', 'pageLength']
+                "buttons": [{
+                    text: '<i class="fas fa-plus" id="user-list-table-add-user"></i> New Admin',
+                    action: function(e, dt, node, config) {
+                        // Open modal for adding new admin
+                        $('#modal-add-new-admin').modal('toggle');
+                    }
+                }, 'copy', 'csv', 'excel', 'pdf', 'print', 'pageLength'],
             });
 
-            tableSaved.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            // Append DataTable buttons to the wrapper and style them
+            tableSaved.buttons().container().appendTo('#user-list-table_wrapper .col-md-6:eq(0)');
             $('.dt-buttons .btn').removeClass('btn-secondary').addClass('btn-dark');
 
             /**
@@ -310,23 +433,30 @@
              */
             $(document).on('click', '.btn-disable-or-enable', function(e) {
                 const $this = $(this);
+                // Update modal content based on the clicked button
                 $('#modal-enable-disable-action').text($this.attr('call-label'));
                 $('#modal-enable-disable-user-name').text($this.attr('call-name'));
 
+                // Style the modal based on the action (enable/disable)
                 if ($this.attr('call-label') == 'enable') {
-                    $('#modal-enable-disable-action').removeClass("badge-danger badge-dark").addClass('badge-success');
+                    $('#modal-enable-disable-action').removeClass("badge-danger badge-dark").addClass(
+                        'badge-success');
                     $('#modal-content-yes').removeClass("btn-danger btn-dark").addClass('btn-success');
                 } else {
-                    $('#modal-enable-disable-action').removeClass("badge-success badge-dark").addClass('badge-danger');
+                    $('#modal-enable-disable-action').removeClass("badge-success badge-dark").addClass(
+                        'badge-danger');
                     $('#modal-content-yes').removeClass("btn-success btn-dark").addClass('btn-danger');
                 }
 
+                // Set attributes for the confirmation button
                 $('#modal-content-yes')
                     .attr('attr-call-url', $this.attr('call-url'))
                     .attr('attr-call-by', $this.attr('id'));
                 $('#' + $this.attr('id')).parents('tr').toggleClass('highlight');
 
+                // Show the modal
                 $('#modal-enable-disable').modal('toggle');
+
                 e.stopPropagation();
             });
 
@@ -338,28 +468,41 @@
                 const callUrl = $this.attr('attr-call-url');
                 const callBy = $this.attr('attr-call-by');
 
+                // Send AJAX request to enable/disable user
                 $.ajax({
                     url: callUrl,
                     type: 'POST',
                     contentType: 'application/json',
                     success: function(response) {
-                        var rowIndex = tableSaved.row($('#' + $(this).attr('attr-call-by')).parents('tr')).index();
+                        // Update the table row
+                        var rowIndex = tableSaved.row($('#' + $(this).attr('attr-call-by'))
+                            .parents('tr')).index();
 
-                        tableSaved.cell({ row: rowIndex, column: 6 }).data(1).draw(false);
-                        tableSaved.cell({ row: rowIndex, column: 8 }).data(1).draw(false);
+                        tableSaved.cell({
+                            row: rowIndex,
+                            column: 6
+                        }).data(1).draw(false);
+                        tableSaved.cell({
+                            row: rowIndex,
+                            column: 8
+                        }).data(1).draw(false);
 
+                        // Prepare success message
                         const isActive = response.data != null && response.data.is_active;
-                        const userName = response.data.first_name + " " + response.data.last_name;
+                        const userName = response.data.first_name + " " + response.data
+                            .last_name;
                         const message = isActive ?
                             `${userName} account is successfully enabled.` :
                             `${userName} account is successfully disabled.`;
 
+                        // Show success toast
                         Toast.fire({
                             icon: 'success',
                             title: message
                         });
                     },
                     error: function(error) {
+                        // Show error toast
                         Toast.fire({
                             icon: 'error',
                             title: 'Oups! Something wrong during the execution of the action. Try later.'
@@ -367,16 +510,123 @@
                     }
                 });
 
+                // Close the modal
                 $('#modal-enable-disable').modal('toggle');
                 e.stopPropagation();
+            });
+
+            /**
+             * Event listener for submitting the new admin form
+             */
+            $('#modal-add-new-admin-form').submit(function(e) {
+                e.preventDefault();
+                // Clear error messages before submitting the form
+                $('span.modal-add-new-admin-form-input-error').text('');
+                $('span.modal-add-new-admin-form-input-error').addClass('d-none');
+
+                let form = $(this);
+                let url = form.attr('action')
+
+                // Send AJAX request to add new admin
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(response) {
+                        // Prepare new row data
+                        let newRowData = {
+                            "first_name": response.data.first_name,
+                            "last_name": response.data.last_name,
+                            "phone": response.data.phone,
+                            "role": response.data.role,
+                            "email": response.data.email,
+                            "is_active": 0,
+                            "updated_at": response.data.updated_at,
+                            "id": response.data.id,
+                            "first_connect_at": response.data.first_connect_at
+                        };
+
+                        // Add the new row to the table
+                        let rowNode = tableSaved.row.add(newRowData).draw(false)
+
+                        // Update the row number
+                        tableSaved.rows().every(function(rowIdx, tableLoop, rowLoop) {
+                            this.data().DT_RowIndex = rowIdx + 1;
+                            this.invalidate();
+                        });
+
+                        // Redraw the table to show updated row numbers
+                        tableSaved.draw(false);
+
+                        // Show success toast notification
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.msg
+                        });
+
+                        // Reset the form
+                        form.trigger("reset");
+
+                        // Close the modal
+                        $('#modal-add-new-admin').modal('toggle');
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            // Handle validation errors
+                            var errors = xhr.responseJSON.errors;
+                            var errorMessages = '';
+
+                            $.each(errors, function(key, value) {
+                                // Concatenate each error message
+                                errorMessages += (key + ": " + value[0] + '\n');
+
+                                // Display error message for each field
+                                $('#' + key + "-error").text(value[0]);
+                                $('#' + key + "-error").removeClass('d-none');
+                            });
+
+                            // Display validation errors in a toast notification
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'There are some validation error.' + '\n' +
+                                    errorMessages
+                            });
+                        } else {
+                            // Handle other errors
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Oups! Something went wrong during the execution of the action. Try later.'
+                            });
+                        }
+                    }
+                });
             });
 
             /**
              * Event listener for modal hide
              */
             $(document).on('hide.bs.modal', '#modal-enable-disable', function() {
-                $('#example1 tr').removeClass('highlight');
+                // Remove highlight class from table rows when modal is hidden
+                $('#user-list-table tr').removeClass('highlight');
             });
+
+
+            $(document).on('hide.bs.modal', '#modal-add-new-admin', function() {
+                // Clear error messages before submitting the form
+                $('span.modal-add-new-admin-form-input-error').text('');
+                $('span.modal-add-new-admin-form-input-error').addClass('d-none');
+            });
+
+
+
+
+            // Select the button that contains the span with id modal-add-user
+            var buttonContainingSpan = $('#user-list-table-add-user').closest('button');
+
+            console.log(buttonContainingSpan)
+
+            // Remove the class btn-dark and add btn-outline-success
+            buttonContainingSpan.removeClass('btn-dark').addClass('btn-success');
 
         });
     </script>

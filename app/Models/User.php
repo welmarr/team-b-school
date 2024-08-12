@@ -26,7 +26,8 @@ class User extends Authenticatable
         'role',
         'is_active',
         'phone',
-        'dealership_id'
+        'dealership_id',
+        'first_connect_at'
     ];
 
     /**
