@@ -43,7 +43,7 @@
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Users
-                            <span class="right badge badge-dark"> 10 New</span>
+                            <span class="right badge badge-dark"> {{ isset($newUser) ? $newUser . " New" : "" }} </span>
                         </p>
                     </a>
                 </li>
@@ -56,10 +56,26 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('secured.admin.tools.index') }}" class="nav-link {{ isset($activeMenu) && $activeMenu == 'tools' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tools"></i>
                         <p>
                             Tools
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a  href="{{ route('secured.admin.tool-types.index') }}" class="nav-link {{ isset($activeMenu) && $activeMenu == 'tool-types' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-tenge"></i>
+                        <p>
+                            Tool types
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a  href="{{ route('secured.admin.units.index') }}" class="nav-link {{ isset($activeMenu) && $activeMenu == 'units' ? 'active' : '' }}">
+                        <i class="nav-icon fab fa-uniregistry"></i>
+                        <p>
+                            Units
                         </p>
                     </a>
                 </li>
@@ -74,20 +90,20 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book"></i>
+                        <i class="nav-icon far fa-newspaper"></i>
                         <p>
                             Pages
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
                             Setting
                         </p>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

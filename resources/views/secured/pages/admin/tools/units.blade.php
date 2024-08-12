@@ -2,7 +2,7 @@
 
 
 @section('title')
-    Users - Admin
+    Units - Admin
 @endsection
 
 @section('css')
@@ -85,11 +85,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Users</h1>
+                    <h1 class="m-0">Units</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item text-orange">Users</li>
+                        <li class="breadcrumb-item text-orange">Units</li>
                         <li class="breadcrumb-item active">List</li>
                     </ol>
                 </div><!-- /.col -->
@@ -103,6 +103,7 @@
     <!-- Main content -->
     <section class="content">
 
+        <!-- Modal for enabling/disabling units -->
         <div class="modal fade" id="modal-enable-disable">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -114,7 +115,7 @@
                     </div>
                     <div class="modal-body">
                         <p>Are you sure you want to <span id="modal-enable-disable-action" class="badge badge-success">
-                            </span> <strong id="modal-enable-disable-user-name"> </strong> account?</p>
+                            </span> <strong id="modal-enable-disable-unit-name"> </strong> account?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-dark" id="modal-content-yes" attr-call-url=""
@@ -127,71 +128,127 @@
         </div>
 
 
-        <div class="modal fade" id="modal-add-new-admin">
-            <div class="modal-dialog modal-lg">
+        <!-- Modal for adding a new unit -->
+        <div class="modal fade" id="modal-add-new-unit">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add admin</h5>
+                        <h5 class="modal-title">New unit</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="modal-add-new-admin-form" method="POST" action="{{ route('api.secure.users.store') }}">
+                    <form id="modal-add-new-unit-form" method="POST" action="{{ route('api.secure.units.store') }}" autocomplete="off" >
                         <div class="modal-body">
                             <p class="badge badge-dark my-0"> Field with <span class="text-orange">*</span> is mandatory.
                             </p>
 
                             @csrf
                             <div class="row my-2">
-                                <div class="col-6">
-                                    <label for="first-name" class="form-label">First name <span
+                                <div class="col-12 form-group">
+                                    <label for="modal-add-new-unit-form-name" class="form-label">Designation <span
                                             class="text-orange">*</span></label>
-                                    <input type="text" class="form-control" id="first-name" name="first_name"
-                                        placeholder="John" required>
+                                    <input type="text" class="form-control" id="modal-add-new-unit-form-name" name="name" placeholder=""
+                                        required autocomplete="off" >
 
-                                    <div class="text-danger mb-3  d-none modal-add-new-admin-form-input-error"
-                                        id="first_name-error">
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <label for="last-name" class="form-label">Last name <span
-                                            class="text-orange">*</span></label>
-                                    <input type="text" class="form-control" id="last-name" name="last_name"
-                                        placeholder="Doe" required>
-
-                                    <div class="text-danger mb-3 d-none modal-add-new-admin-form-input-error"
-                                        id="last_name-error">
+                                    <div class="text-danger mb-3  d-none modal-add-new-unit-form-input-error"
+                                        id="name-error">
                                     </div>
                                 </div>
                             </div>
 
-
                             <div class="row my-2">
-                                <div class="col-6">
-                                    <label for="email" class="form-label">Email <span
+                                <div class="col-12 form-group">
+                                    <label for="modal-add-new-unit-form-abbreviation" class="form-label">Abbreviation <span
                                             class="text-orange">*</span></label>
-                                    <input type="email" class="form-control" id="email" name="email"
-                                        placeholder="you@example.com" required>
+                                    <input type="text" class="form-control" id="modal-add-new-unit-form-abbreviation" name="abbreviation"
+                                        placeholder="" required autocomplete="off" >
 
-                                    <div class="text-danger mb-3  d-none modal-add-new-admin-form-input-error"
-                                        id="email-error">
+                                    <div class="text-danger mb-3  d-none modal-add-new-unit-form-input-error"
+                                        id="abbreviation-error">
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <label for="phonenumber" class="form-label">Phone <span
-                                            class="text-orange">*</span></label>
-                                    <input type="text" class="form-control" id="phonenumber" name="phone"
-                                        placeholder="123456789" required>
+                            </div>
 
-                                    <div class="text-danger mb-3 d-none modal-add-new-admin-form-input-error"
-                                        id="phone-error">
+                            <div class="row my-2">
+                                <div class="col-12 form-group">
+                                    <label for="modal-add-new-unit-form-description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="modal-add-new-unit-form-description" rows="3" name="description"></textarea>
+
+                                    <div class="text-danger mb-3 d-none modal-add-new-unit-form-input-error"
+                                        id="description-error">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" form="modal-add-new-admin-form" class="btn btn-success"
-                                id="modal-add-new-admin-submit" attr-call-url="" attr-call-by="">Add</button>
+                            <button type="submit" form="modal-add-new-unit-form" class="btn btn-success"
+                                id="modal-add-new-unit-submit" attr-call-url="" attr-call-by="">Add</button>
+                            <button type="button" class="btn btn-orange" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Modal for updating a unit -->
+        <div class="modal fade" id="modal-update-unit">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update unit</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="modal-update-unit-form" method="POST" action="" autocomplete="off" >
+                        <div class="modal-body">
+                            <p class="badge badge-dark my-0"> Field with <span class="text-orange">*</span> is mandatory.
+                            </p>
+
+                            @method('PUT')
+                            @csrf
+                            <div class="row my-2">
+                                <div class="col-12 form-group">
+                                    <label for="modal-update-unit-form-name" class="form-label">Designation <span
+                                            class="text-orange">*</span></label>
+                                    <input type="text" class="form-control" id="modal-update-unit-form-name"
+                                        name="name" placeholder="" required autocomplete="off" >
+
+                                    <div class="text-danger mb-3  d-none modal-update-unit-form-input-error"
+                                        id="name-error">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-12 form-group">
+                                    <label for="modal-update-unit-form-abbreviation" class="form-label">Abbreviation <span
+                                            class="text-orange">*</span></label>
+                                    <input type="text" class="form-control" id="modal-update-unit-form-abbreviation" name="abbreviation" placeholder=""
+                                        required autocomplete="off" >
+
+                                    <div class="text-danger mb-3  d-none modal-update-unit-form-input-error"
+                                        id="abbreviation-error">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-12 form-group">
+                                    <label for="modal-update-unit-form-description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="modal-update-unit-form-description" name="description" rows="3"></textarea>
+
+                                    <div class="text-danger mb-3 d-none modal-update-unit-form-input-error"
+                                        id="description-error">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" form="modal-update-unit-form" class="btn btn-success"
+                                id="modal-update-unit-submit" attr-call-url="" attr-call-by="">Update</button>
                             <button type="button" class="btn btn-orange" data-dismiss="modal">Cancel</button>
                         </div>
                     </form>
@@ -202,25 +259,20 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12" id="unit-table">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="m-0 card-title">Users</h3>
+                            <h3 class="m-0 card-title">Units</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="user-list-table" class="table table-bordered table-hover">
+                            <table id="unit-list-table" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>First name</th>
-                                        <th>Last name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Type</th>
-                                        <th class="d-flex justify-content-center">Status</th>
+                                        <th>Designation</th>
+                                        <th>Abbreviation</th>
                                         <th>Created at</th>
-                                        <th>First connexion</th>
                                         <th class="d-flex justify-content-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -229,14 +281,9 @@
                                 <tfoot>
                                     <tr>
                                         <th>#</th>
-                                        <th>First name</th>
-                                        <th>Last name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Type</th>
-                                        <th class="d-flex justify-content-center">Status</th>
+                                        <th>Designation</th>
+                                        <th>Abbreviation</th>
                                         <th>Created at</th>
-                                        <th>First connexion</th>
                                         <th class="d-flex justify-content-center">Actions</th>
                                     </tr>
                                 </tfoot>
@@ -246,6 +293,8 @@
                     </div>
                     <!-- /.card -->
                 </div>
+
+                <div class="d-none" id="unit-tools-associated-table"></div>
             </div>
         </div>
     </section>
@@ -304,10 +353,10 @@
              * Initialize DataTable with server-side processing
              * @type {Object}
              */
-            var tableSaved = $("#user-list-table").DataTable({
+            var tableSaved = $("#unit-list-table").DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ route('api.secure.users') }}",
+                "ajax": "{{ route('api.secure.units.index') }}",
                 language: {
                     "processing": '<div class="d-flex justify-content-center"><div class="spinner-border text-orange" role="status"><span class="sr-only">Loading...</span></div></div>'
                 },
@@ -323,62 +372,17 @@
                         }
                     },
                     {
-                        "data": "first_name"
+                        "data": "name"
                     },
                     {
-                        "data": "last_name"
-                    },
-                    {
-                        "data": "email",
-                        "visibility": false,
-                    },
-                    {
-                        "data": "phone"
-                    },
-                    {
-                        "data": "role",
-                        "orderable": true,
-                        "render": function(value, type, full) {
-                            // Style the role differently for admin and non-admin
-                            if (type === 'display') {
-                                return value == "admin" ? '<strong>' + value + '</strong>' :
-                                    '<em>' + value + '</em>';
-                            }
-                            return value;
-                        }
-                    },
-                    {
-                        "data": 'is_active',
-                        "orderable": true,
-                        "render": function(value, type, full) {
-                            // Display user icon based on active status
-                            if (type === 'display') {
-                                if (typeof value !== 'object') {
-                                    return value == 1 ?
-                                        '<span class="text-success d-flex justify-content-center"><i class="fas fa-user"></i></span>' :
-                                        '<span class="text-danger d-flex  justify-content-center"><i class="fas fa-user-slash"></i></span>';
-                                }
-                                return '<span class="text-secondary">Error</span>';
-                            }
-                            return value;
-                        }
+                        "data": "abbreviation"
                     },
                     {
                         "data": "updated_at",
                         "orderable": true,
                         "render": function(value, type, full) {
                             // Format the date
-                            return type === 'display' ? (value == null ? "" : moment(value).format(
-                                'Do MMM YYYY')) : value;
-                        }
-                    },
-                    {
-                        "data": "first_connect_at",
-                        "orderable": true,
-                        "render": function(value, type, full) {
-                            // Format the date
-                            return type === 'display' ? (value == null ? "" : moment(value).format(
-                                'Do MMM YYYY')) : value;
+                            return type === 'display' ? moment(value).format('Do MMM YYYY') : value;
                         }
                     },
                     {
@@ -386,25 +390,14 @@
                         "orderable": false,
                         "render": function(value, type, full, meta) {
                             // Generate action buttons for each row
-                            let enableDisableUrl =
-                                '{{ route('api.secure.users.disable.or.enable', ['user' => ':user']) }}'
-                                .replace(':user', full.id);
-                            let actionsTags = '<div class="d-flex justify-content-center">';
-                            let callLabel = full.is_active ? "disable" : "enable";
-
-                            if (typeof value === 'object') {
-                                actionsTags +=
-                                    '<button type="button" class="btn btn-outline-dark mr-2 btn-sm btn-disable-or-enable" ' +
-                                    'id="enable-disable-id-' + full.id + '" ' +
-                                    'call-label="' + callLabel + '" ' +
-                                    'call-name="' + full.first_name + " " + full.last_name + '" ' +
-                                    'call-url="' + enableDisableUrl + '">' +
-                                    (value.is_active === 1 ? 'Disable' : 'Enable') + '</button> ';
-                            }
-                            actionsTags +=
-                                '<button type="button" class="btn btn-dark btn-sm">Details</button> </div>';
-
-                            return actionsTags;
+                            let updateUrl =
+                                '{{ route('api.secure.units.update', ['unit' => ':unit']) }}'
+                                .replace(':unit', full.id);
+                            return `
+                            <div class="d-flex justify-content-center">
+                                <button type="button" class="btn btn-dark btn-sm mr-2 btn-tools">Tools</button>
+                                <button type="button" class="btn btn-outline-dark btn-sm btn-update" id="unit-list-table-update-${full.id}" call-url="${updateUrl}" call-name="${full.name}" call-abbreviation="${full.abbreviation}" call-description="${full.description || ''}">Update</button>
+                            </div>`;
                         }
                     },
                 ],
@@ -416,144 +409,94 @@
                 "autoWidth": false,
                 "dom": 'Bfrtip',
                 "buttons": [{
-                    text: '<i class="fas fa-plus" id="user-list-table-add-user"></i> New Admin',
-                    action: function(e, dt, node, config) {
-                        // Open modal for adding new admin
-                        $('#modal-add-new-admin').modal('toggle');
-                    }
-                }, 'copy', 'csv', 'excel', 'pdf', 'print', 'pageLength'],
+                        text: '<i class="fas fa-plus" id="unit-list-table-add-unit"></i> Unit',
+                        action: function(e, dt, node, config) {
+                            // Open modal for adding new admin
+                            $('#modal-add-new-unit').modal('toggle');
+                        }
+                    },
+                    'copy', 'csv', 'excel', 'pdf', 'print', 'pageLength'
+                ],
             });
 
-            // Append DataTable buttons to the wrapper and style them
-            tableSaved.buttons().container().appendTo('#user-list-table_wrapper .col-md-6:eq(0)');
-            $('.dt-buttons .btn').removeClass('btn-secondary').addClass('btn-dark');
-
             /**
-             * Event listener for enabling/disabling button click
+             * Event listener for update button click
              */
-            $(document).on('click', '.btn-disable-or-enable', function(e) {
+            $(document).on('click', '.btn-update', function(e) {
                 const $this = $(this);
                 // Update modal content based on the clicked button
-                $('#modal-enable-disable-action').text($this.attr('call-label'));
-                $('#modal-enable-disable-user-name').text($this.attr('call-name'));
-
-                // Style the modal based on the action (enable/disable)
-                if ($this.attr('call-label') == 'enable') {
-                    $('#modal-enable-disable-action').removeClass("badge-danger badge-dark").addClass(
-                        'badge-success');
-                    $('#modal-content-yes').removeClass("btn-danger btn-dark").addClass('btn-success');
-                } else {
-                    $('#modal-enable-disable-action').removeClass("badge-success badge-dark").addClass(
-                        'badge-danger');
-                    $('#modal-content-yes').removeClass("btn-success btn-dark").addClass('btn-danger');
-                }
+                $('#modal-update-unit-form-name').val($this.attr('call-name'));
+                $('#modal-update-unit-form-abbreviation').val($this.attr('call-abbreviation'));
+                $('#modal-update-unit-form-description').text($this.attr('call-description'));
 
                 // Set attributes for the confirmation button
-                $('#modal-content-yes')
-                    .attr('attr-call-url', $this.attr('call-url'))
-                    .attr('attr-call-by', $this.attr('id'));
+                $('#modal-update-unit-form').attr('action', $this.attr('call-url'));
                 $('#' + $this.attr('id')).parents('tr').toggleClass('highlight');
 
                 // Show the modal
-                $('#modal-enable-disable').modal('toggle');
+                $('#modal-update-unit').modal('toggle');
 
                 e.stopPropagation();
             });
 
             /**
-             * Event listener for confirmation button click in the modal
+             * Event listener for tools button click
              */
-            $(document).on('click', '#modal-content-yes', function(e) {
+            $(document).on('click', '.btn-tools', function(e) {
                 const $this = $(this);
-                const callUrl = $this.attr('attr-call-url');
-                const callBy = $this.attr('attr-call-by');
+                // Toggle table column sizes
+                if ($('#unit-table').hasClass("col-12")) {
+                    $('#unit-table').removeClass("col-12").addClass("col-8");
+                } else if ($('#unit-table').hasClass("col-8")) {
+                    $('#unit-table').removeClass("col-8").addClass("col-12");
+                }
 
-                // Send AJAX request to enable/disable user
-                $.ajax({
-                    url: callUrl,
-                    type: 'POST',
-                    contentType: 'application/json',
-                    success: function(response) {
-                        // Update the table row
-                        var rowIndex = tableSaved.row($('#' + $(this).attr('attr-call-by'))
-                            .parents('tr')).index();
+                // Toggle associated tools table visibility
+                if ($('#unit-tools-associated-table').hasClass("d-none")) {
+                    $('#unit-tools-associated-table').removeClass("d-none").addClass("col-4");
+                } else {
+                    $('#unit-tools-associated-table').removeClass("col-4").addClass("d-none");
+                }
 
-                        tableSaved.cell({
-                            row: rowIndex,
-                            column: 6
-                        }).data(1).draw(false);
-                        tableSaved.cell({
-                            row: rowIndex,
-                            column: 8
-                        }).data(1).draw(false);
-
-                        // Prepare success message
-                        const isActive = response.data != null && response.data.is_active;
-                        const userName = response.data.first_name + " " + response.data
-                            .last_name;
-                        const message = isActive ?
-                            `${userName} account is successfully enabled.` :
-                            `${userName} account is successfully disabled.`;
-
-                        // Show success toast
-                        Toast.fire({
-                            icon: 'success',
-                            title: message
-                        });
-                    },
-                    error: function(error) {
-                        // Show error toast
-                        Toast.fire({
-                            icon: 'error',
-                            title: 'Oups! Something wrong during the execution of the action. Try later.'
-                        })
-                    }
-                });
-
-                // Close the modal
-                $('#modal-enable-disable').modal('toggle');
                 e.stopPropagation();
             });
 
             /**
-             * Event listener for submitting the new admin form
+             * Handle form submission
+             * @param {jQuery} form - The form element
+             * @param {string} formMethod - The HTTP method for the form submission
+             * @param {string} modalID - The ID of the modal
              */
-            $('#modal-add-new-admin-form').submit(function(e) {
-                e.preventDefault();
+            function handleFormSubmit(form, formMethod, modalID) {
                 // Clear error messages before submitting the form
-                $('span.modal-add-new-admin-form-input-error').text('');
-                $('span.modal-add-new-admin-form-input-error').addClass('d-none');
+                $('span.' + modalID + '-form-input-error').text('');
+                $('span.' + modalID + '-form-input-error').addClass('d-none');
 
-                let form = $(this);
-                let url = form.attr('action')
+                let url = form.attr('action');
 
-                // Send AJAX request to add new admin
+                // Send AJAX request to add new unit
                 $.ajax({
                     url: url,
-                    type: 'POST',
+                    type: formMethod,
                     data: form.serialize(),
                     success: function(response) {
-                        // Prepare new row data
+                        /*// Prepare new row data
                         let newRowData = {
-                            "first_name": response.data.first_name,
-                            "last_name": response.data.last_name,
-                            "phone": response.data.phone,
-                            "role": response.data.role,
-                            "email": response.data.email,
-                            "is_active": 0,
+                            "name": response.data.name,
+                            "description": response.data.description,
+                            "abbreviation": response.data.abbreviation,
                             "updated_at": response.data.updated_at,
-                            "id": response.data.id,
-                            "first_connect_at": response.data.first_connect_at
+                            "id": response.data.id
                         };
 
                         // Add the new row to the table
-                        let rowNode = tableSaved.row.add(newRowData).draw(false)
+                        let rowNode = tableSaved.row.add(newRowData).draw(false);
 
                         // Update the row number
                         tableSaved.rows().every(function(rowIdx, tableLoop, rowLoop) {
                             this.data().DT_RowIndex = rowIdx + 1;
                             this.invalidate();
-                        });
+                        });*/
 
                         // Redraw the table to show updated row numbers
                         tableSaved.draw(false);
@@ -568,7 +511,7 @@
                         form.trigger("reset");
 
                         // Close the modal
-                        $('#modal-add-new-admin').modal('toggle');
+                        $('#' + modalID).modal('toggle');
                     },
                     error: function(xhr) {
                         if (xhr.status === 422) {
@@ -578,56 +521,80 @@
 
                             $.each(errors, function(key, value) {
                                 // Concatenate each error message
-                                errorMessages += (key + ": " + value[0] + '\n');
+                                errorMessages += `${key}: ${value[0]}\n`;
 
                                 // Display error message for each field
-                                $('#' + key + "-error").text(value[0]);
-                                $('#' + key + "-error").removeClass('d-none');
+                                $(`#${key}-error`).text(value[0]).removeClass('d-none');
+
                             });
 
                             // Display validation errors in a toast notification
                             Toast.fire({
                                 icon: 'error',
-                                title: 'There are some validation error.' + '\n' +
-                                    errorMessages
+                                title: `There are some validation errors.\n${errorMessages}`
                             });
                         } else {
                             // Handle other errors
                             Toast.fire({
                                 icon: 'error',
-                                title: 'Oups! Something went wrong during the execution of the action. Try later.'
+                                title: 'Oops! Something went wrong during the execution of the action. Try later.'
                             });
                         }
                     }
                 });
+            }
+
+            /**
+             * Event listener for submitting the new unit form
+             */
+            $('#modal-add-new-unit-form').submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                handleFormSubmit(form, "POST", "modal-add-new-unit");
             });
 
             /**
-             * Event listener for modal hide
+             * Event listener for submitting the update unit form
              */
-            $(document).on('hide.bs.modal', '#modal-enable-disable', function() {
-                // Remove highlight class from table rows when modal is hidden
-                $('#user-list-table tr').removeClass('highlight');
+            $('#modal-update-unit-form').submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                handleFormSubmit(form, "PUT", "modal-update-unit");
             });
 
-
-            $(document).on('hide.bs.modal', '#modal-add-new-admin', function() {
+            /**
+             * Event listener for hiding the update unit modal
+             */
+            $(document).on('hide.bs.modal', '#modal-update-unit', function() {
                 // Clear error messages before submitting the form
-                $('span.modal-add-new-admin-form-input-error').text('');
-                $('span.modal-add-new-admin-form-input-error').addClass('d-none');
+                $('span.modal-update-unit-form-input-error').text('');
+                $('span.modal-update-unit-form-input-error').addClass('d-none');
+                // Remove highlight class from table rows when modal is hidden
+                $('#unit-list-table tr').removeClass('highlight');
             });
 
+            /**
+             * Event listener for hiding the add new unit modal
+             */
+            $(document).on('hide.bs.modal', '#modal-add-new-unit', function() {
+                // Clear error messages before submitting the form
+                $('span.modal-add-new-unit-form-input-error').text('');
+                $('span.modal-add-new-unit-form-input-error').addClass('d-none');
+            });
+
+            // Select the button that contains the span with id modal-add-unit
+            var buttonContainingSpan = $('#unit-list-table-add-unit').closest('button');
 
 
-
-            // Select the button that contains the span with id modal-add-user
-            var buttonContainingSpan = $('#user-list-table-add-user').closest('button');
-
-            console.log(buttonContainingSpan)
+            // Append DataTable buttons to the wrapper and style them
+            tableSaved.buttons().container().appendTo('#unit-list-table_wrapper .col-md-6:eq(0)');
+            $('.dt-buttons .btn').removeClass('btn-secondary').addClass('btn-dark');
 
             // Remove the class btn-dark and add btn-outline-success
             buttonContainingSpan.removeClass('btn-dark').addClass('btn-success');
 
+
+            $('[data-toggle="tooltip"]').tooltip()
         });
     </script>
 @endsection

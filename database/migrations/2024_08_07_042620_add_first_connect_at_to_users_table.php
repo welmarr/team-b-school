@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('t_units', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('description')->nullable();
-            $table->string('abbreviation')->nullable()->unique();
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->timestamp('first_connect_at')->nullable();
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('t_units');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['first_connect_at']);
+        });
     }
 };

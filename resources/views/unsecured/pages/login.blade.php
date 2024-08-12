@@ -40,15 +40,33 @@
                 @csrf
                 <h4 class="my-4 fw-bold text-orange">Welcome to Cincy Dent Repair !</h4>
 
+
+                <div class="row">
+                    <div class="col-12">
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-12">
                         <label for="email" class="form-label">Email <span class="text-orange">*</span></label>
-                        <input type="email" class="form-control" id="email" placeholder="you@example.com" name="email" spellcheck="false" autocapitalize="none" badinput="false" autocomplete="off" required>
+                        <input type="email" class="form-control" id="email" placeholder="you@example.com"
+                            name="email" spellcheck="false" autocapitalize="none" badinput="false" autocomplete="off"
+                            required>
 
                         @error('email')
-                        <div class="text-danger mb-3">
-                            {{ $message }}
-                        </div>
+                            <div class="text-danger mb-3">
+                                {{ $message }}
+                            </div>
                         @enderror
                     </div>
                 </div>
@@ -57,7 +75,9 @@
                     <div class="col-12">
                         <label for="password" class="form-label">Password <span class="text-orange">*</span></label>
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="" spellcheck="false" autocapitalize="none" badinput="false" autocomplete="off" name="password" id="password" required>
+                            <input type="text" class="form-control" placeholder="" spellcheck="false"
+                                autocapitalize="none" badinput="false" autocomplete="off" name="password" id="password"
+                                required>
                             <button class="btn btn-outline-orange" type="button" id="toggle-password"><i
                                     class="toggle-password-icon" data-feather="eye-off"></i></button>
                         </div>

@@ -176,7 +176,7 @@
                 "processing": true, // Enable processing indicator
                 "serverSide": true, // Enable server-side processing
                 "ajax": {
-                    "url": "{{ route('api.secure.requests') }}", // Set AJAX source URL
+                    "url": "{{ route('api.secure.requests.index') }}", // Set AJAX source URL
                     "type": "GET",
                     "data": function(d){
                         console.log(d)

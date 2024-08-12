@@ -4,7 +4,7 @@ namespace App\Http\Requests\Secured;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreToolTypeRequest extends FormRequest
+class UpdateUnitRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,9 +21,12 @@ class StoreToolTypeRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('unit');
+
         return [
-            "name" => ["required","string", "min:2", "max:225", "unique:t_tool_types,name"],
+            "name" => ["required","string", "min:2", "max:225", "unique:t_units,name," . $id],
             "description" => ["nullable","string", "max:225",],
+            "abbreviation" => ["required","string", "max:225",],
         ];
     }
 }

@@ -15,7 +15,7 @@ class RequestController extends Controller
      */
     public function index()
     {
-        return view('secured.pages.admin.requests.index',  ['activeMenu' => 'requests']);
+        return view('secured.pages.admin.requests.requests',  ['activeMenu' => 'requests']);
     }
 
 
@@ -34,10 +34,11 @@ class RequestController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Demand $demand)
+    public function show(int $id)
     {
         $activeMenu = "requests";
-        $demand->with(['car.brand', 'car.model', 'createdBy']);
+        $demand = Demand::where('id', $id)->with(['car.brand', 'car.model', 'createdBy'])->first();
+        //dd($demand->car->brand->name);
         return view('secured.pages.admin.requests.treatment', compact("demand", "activeMenu"));
     }
 }

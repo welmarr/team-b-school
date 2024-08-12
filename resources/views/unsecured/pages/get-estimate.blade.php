@@ -65,7 +65,7 @@
                     <br />Fields with <span class="fw-bold text-orange">*</span> are mandatory.</span>
 
                 <form class="needs-validation" enctype="multipart/form-data" method="POST"
-                    action="{{ route('unsecured.get-estimate.post') }}">
+                    action="{{ route('unsecured.get-estimate.post') }}"> 
                     @csrf
 
                     <div class="row">

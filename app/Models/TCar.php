@@ -10,7 +10,7 @@ class TCar extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['year', 'car_brand_id', 'car_model_id', 'body_style'];
+    protected $fillable = ['year', 'brand_id', 'model_id', 'body_style'];
 
     public function brand()
     {

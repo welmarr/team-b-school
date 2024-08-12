@@ -38,6 +38,26 @@
         svg.feather {
             width: 16px !important;
         }
+        ul.dropdown-menu {
+            --bs-dropdown-link-active-bg: #fb4f14;
+        }
+
+        /* Style for dropdown toggle button */
+        button.dropdown-toggle {
+            background-clip: padding-box !important;
+            border: 1px solid #ced4da !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+            --bs-btn-bg: white !important;
+        }
+
+        /* Style for dropdown container */
+        div.dropdown.bootstrap-select.form-select {
+            display: block !important;
+            width: 100% !important;
+            padding: 0px !important;
+        }
     </style>
 @endsection
 
@@ -234,7 +254,7 @@
                             <div class="row my-2">
                                 <div class="col-md-4">
                                     <label for="state" class="form-label">State</label>
-                                    <select class="form-select" {{-- class="selectpicker" data-live-search="true" --}} id="state"
+                                    <select class="form-select my-select" data-live-search="true" id="state"
                                         name="new_dealership_state">
                                         <option value="">Choose...</option>
                                         <option value="AL">Alabama</option>

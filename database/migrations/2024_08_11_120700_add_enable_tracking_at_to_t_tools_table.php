@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('t_units', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('description')->nullable();
-            $table->string('abbreviation')->nullable()->unique();
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::table('t_tools', function (Blueprint $table) {
+
+            $table->timestamp('enable_tracking_at')->nullable();
         });
     }
 
@@ -26,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('t_units');
+        Schema::table('t_tools', function (Blueprint $table) {
+            $table->dropColumn(['enable_tracking_at']);
+            //
+        });
     }
 };
