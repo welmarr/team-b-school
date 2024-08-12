@@ -18,7 +18,7 @@ use App\Http\Controllers\Secured\Admin\ToolTypeController;
 use App\Http\Controllers\Secured\Admin\FileDownloadController;
 use App\Http\Controllers\Secured\Admin\ToolInventoryMovementController;
 use App\Http\Controllers\Secured\Admin\RequestController as AdminRequestController;
-use App\Http\Controllers\Secured\Dealer\DealerController as DealerProfileController;
+use App\Http\Controllers\Secured\Dealer\ProfileController as DealerProfileController;
 use App\Http\Controllers\Secured\Dealer\RequestController as DealerRequestController;
 
 /**
@@ -143,6 +143,7 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => 'auth']
 
         Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile.index');
         Route::put('/profile/update', [AdminProfileController::class, 'update'])->name('profile.update');
+
     });
 
     /**
@@ -156,7 +157,8 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => 'auth']
             $countRequest = \App\Models\TRequest::count();
             return view('secured.pages.admin.dashboard',  compact("activeMenu",  "countRequest", ));
         })->name('dashboard');
-        Route::singleton('profile', DealerProfileController::class);
+        Route::get('/profile', [DealerProfileController::class, 'index'])->name('profile.index');
+        Route::put('/profile/update', [DealerProfileController::class, 'update'])->name('profile.update');
         Route::resource('requests', DealerRequestController::class);
         Route::resource('entity/profile', DealerProfileController::class);
     });

@@ -38,7 +38,7 @@
 @endsection
 
 @section('content')
-    <!-- Main content -->
+<section class="content">
     <div class="container-fluid">
         <div class="row">
             <!-- Profile Details Section -->
@@ -48,8 +48,12 @@
                         <div class="text-center">
                             <!-- Profile picture or other content -->
                         </div>
-                        <h3 class="profile-username text-center">Users Name</h3>
-                        <p class="text-muted text-center">Affiliation</p>
+                        <h3 class="profile-username text-center">
+                            {{ $user->first_name }} {{ $user->last_name }}
+                        </h3>
+                        <p class="text-muted text-center">
+                            <strong>Role:</strong> {{ $user->role }}
+                        </p>
                     </div>
                 </div>
 
@@ -60,16 +64,10 @@
                     <div class="card-body">
                         <strong><i class="far fa-file-alt mr-1"></i> Personal Information</strong>
                         <p class="text-muted"></p>
-                        <p class="text-muted">First Name</p>
-                        <p class="text-muted">Last Name</p>
-                        <p class="text-muted">Email</p>
-                        <p class="text-muted">Phone Number</p>
-                        <hr>
-                        <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
-                        <p class="text-muted"></p>
-                        <p class="text-muted">Address</p>
-                        <p class="text-muted">City</p>
-                        <p class="text-muted">State</p>
+                        <p class="text-muted"><strong></strong> {{ $user->first_name }}</p>
+                        <p class="text-muted"><strong></strong> {{ $user->last_name }}</p>
+                        <p class="text-muted"><strong></strong> {{ $user->email }}</p>
+                        <p class="text-muted"><strong></strong> {{ $user->phone }}</p>
                         <hr>
                     </div>
                 </div>
@@ -81,56 +79,56 @@
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Edit Profile</h3>
-                            <div class="card-tools">
-                                <!-- Optional tools can be added here -->
-                            </div>
                         </div>
-                    <div class="card-body">
+                        <div class="card-body">
                         <form action="{{ route('secured.admin.profile.update') }}" method="POST">
-                        @csrf
-                        @method("PUT")
-                            <div class="form-group">
-                                <label for="inputFirstName">First Name</label>
-                                <input type="text" id="inputFirstName" class="form-control" value="">
-                            </div>
-                            <div class="form-group">
-                                <label for="inputLastName">Last Name</label>
-                                <input type="text" id="inputLastName" class="form-control" value="">
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail">Email</label>
-                                <input type="text" id="inputEmail" class="form-control" value="">
-                            </div>
-                            <div class="form-group">
-                                <label for="inputPhoneNumber">Phone Number</label>
-                                <input type="text" id="inputPhoneNumber" class="form-control" value="">
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail">Address</label>
-                                <input type="text" id="inputEmail" class="form-control" value="">
-                            </div>
-                            <div class="form-group">
-                                <label for="inputPhoneNumber">City</label>
-                                <input type="text" id="inputPhoneNumber" class="form-control" value="">
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail">State</label>
-                                <input type="text" id="inputEmail" class="form-control" value="">
-                            </div>
-                            <!-- Buttons -->
-                            <div class="row mt-3">
-                                <div class="col-12">
-                                    <a href="#" class="btn btn-secondary">Cancel</a>
-                                <input type="submit" value="Save Changes" class="btn btn-success float-right">
-                            </div>
+    @csrf
+    @method('PUT')
+    <!-- Form fields -->
+    <div class="form-group">
+        <label for="inputFirstName">First Name</label>
+        <input type="text" id="inputFirstName" name="first_name" class="form-control" value="{{ old('first_name', $user->first_name) }}">
+    </div>
+    <div class="form-group">
+        <label for="inputLastName">Last Name</label>
+        <input type="text" id="inputLastName" name="last_name" class="form-control" value="{{ old('last_name', $user->last_name) }}">
+    </div>
+    <div class="form-group">
+        <label for="inputEmail">Email</label>
+        <input type="email" id="inputEmail" name="email" class="form-control" value="{{ old('email', $user->email) }}">
+    </div>
+    <div class="form-group">
+        <label for="inputPhoneNumber">Phone Number</label>
+        <input type="text" id="inputPhoneNumber" name="phone" class="form-control" value="{{ old('phone', $user->phone) }}">
+    </div>
+    <!-- Buttons -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <a href="#" class="btn btn-secondary">Cancel</a>
+            <input type="submit" value="Save Changes" class="btn btn-success float-right">
+        </div>
+    </div>
+</form>
+
+                            <!-- Display success or error messages -->
+                            @if(session('success'))
+                                <div class="alert alert-success mt-3">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            @if(session('error'))
+                                <div class="alert alert-danger mt-3">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-    <!-- /.content -->
+</section>
 @endsection
 
 @section('footer')
@@ -146,5 +144,3 @@
 @section('js-after-bootstrap')
     <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
 @endsection
-message.txt
-7 KB
