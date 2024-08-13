@@ -10,20 +10,9 @@ use App\Http\Requests\Secured\StoreDealerProfileRequest;
 class DealerController extends Controller
 {
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Dealer $dealer)
+    public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Dealer $dealer)
-    {
-        //
+        return view('secured.pages.dealers.profile');
     }
 
     /**

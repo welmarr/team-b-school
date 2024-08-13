@@ -64,7 +64,7 @@ class User extends Authenticatable
      */
     public function dealership(): HasOne
     {
-        return $this->hasOne(Dealership::class);
+        return $this->hasOne(TDealership::class);
     }
 
 

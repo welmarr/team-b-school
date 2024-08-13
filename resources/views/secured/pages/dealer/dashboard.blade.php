@@ -2,7 +2,7 @@
 
 
 @section('title')
-    Dashboard - Admin
+    Dashboard - Dealership
 @endsection
 
 @section('css')

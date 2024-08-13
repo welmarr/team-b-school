@@ -15,8 +15,9 @@ class RequestController extends Controller
      */
     public function index()
     {
-        //
+        return view('secured.pages.dealer.requests.requests',  ['activeMenu' => 'requests']);
     }
+
 
     /**
      * Show the form for creating a new resource.

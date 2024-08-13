@@ -2,19 +2,19 @@
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
-      </ul>
+    </ul>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link"  href="{{route('unsecured.logout')}}" role="button">
+            <a class="nav-link" href="{{ route('unsecured.logout') }}" role="button">
                 <i class="fas fa-sign-out-alt"></i>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link"  href="{{ route('secured.admin.profile.index')}}" role="button">
+            <a class="nav-link" href="{{ auth()->check() && auth()->user()->role === 'admin' ? route('secured.admin.profile.index') : route('secured.dealers.profile.index') }}" role="button">
                 <i class="fas fa-user-circle"></i>
             </a>
         </li>
@@ -24,8 +24,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#"
-                role="button">
+            <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
                 <i class="fas fa-th-large"></i>
             </a>
         </li>

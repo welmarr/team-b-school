@@ -26,7 +26,6 @@ class ProfileController extends Controller
 {
     $validated = $request->validated();
     $user = Auth::user();  // Get the authenticated user
-
     try {
         // Update the user's profile
         $user->update([
@@ -35,11 +34,12 @@ class ProfileController extends Controller
             'email' => trim($validated['email']),
             'phone' => trim($validated['phone']),
         ]);
-
+        
         return redirect()->back()->with('success', 'Profile has been updated successfully.');
     } catch (\Exception $e) {
         return redirect()->back()->withInput()->withErrors('There was an error processing your request: ' . $e->getMessage());
     }
+
 }
 
 }

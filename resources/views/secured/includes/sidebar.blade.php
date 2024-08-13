@@ -104,7 +104,7 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a href=""
+                        <a href="{{ route('secured.dealers.dashboard') }}"
                             class="nav-link  {{ isset($activeMenu) && $activeMenu == 'dashboard' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
@@ -113,7 +113,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href=""
+                        <a href="{{ route('secured.dealers.requests.index') }}"
                             class="nav-link {{ isset($activeMenu) && $activeMenu == 'requests' ? 'active' : '' }}">
                             <i class="nav-icon fab fa-wpforms"></i>
                             <p>

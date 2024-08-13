@@ -48,7 +48,9 @@
                         <div class="text-center">
                             <!-- Profile picture or other content -->
                         </div>
-                        <h3 class="profile-username text-center">{{ $user->name }}</h3>
+                        <h3 class="profile-username text-center">
+                                {{ $user->first_name }} {{ $user->last_name }}
+                        </h3>
                         <p class="text-muted text-center">
                             <strong>Role:</strong> {{ $user->role }}
                         </p>
@@ -91,7 +93,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form action="#" method="POST">
+                            <form action="" method="POST">
                                 @csrf
                                 @method("PUT")
                                 <div class="form-group">
@@ -141,8 +143,7 @@
                                 <!-- Buttons -->
                                 <div class="row mt-3">
                                     <div class="col-12">
-                                        <a href="#" class="btn btn-secondary">Cancel</a>
-                                        <input type="submit" value="Save Changes" class="btn btn-success float-right">
+                                        <input type="submit" value="Save Changes" class="btn btn-success">
                                     </div>
                                 </div>
                             </form>
