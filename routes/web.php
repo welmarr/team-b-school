@@ -10,6 +10,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Controllers\Unsecured\LogoutController;
 use App\Http\Controllers\Unsecured\SignUpController;
 use App\Http\Controllers\Unsecured\RequestController;
+use App\Http\Controllers\Unsecured\TrackRepairController;
 use App\Http\Controllers\Secured\Admin\ToolController;
 use App\Http\Controllers\Secured\Admin\UnitController;
 use App\Http\Controllers\Secured\Admin\UserController;
@@ -81,9 +82,14 @@ Route::group(['as' => 'unsecured.'], function () {
 
     Route::post('/get-estimate', RequestController::class)->name('get-estimate.post');
 
+    // Route to display the form
     Route::get('track-repair', function () {
         return view('unsecured.pages.track-repair', ['activeMenu' => 'track-repair']);
     })->name('track-repair');
+
+    // Route to handle the form submission
+    Route::post('track-repair', [TrackRepairController::class, 'submit'])->name('track-repair.submit');
+
 
     Route::get('about', function () {
         return view('unsecured.pages.about',  ['activeMenu' => 'about']);

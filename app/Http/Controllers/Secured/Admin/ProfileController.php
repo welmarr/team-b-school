@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Secured\Admin;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Secured\UpdateUserProfileRequest;
+use App\Http\Requests\Secured\UpdateAdminProfileRequest;
 
 class ProfileController extends Controller
 {
