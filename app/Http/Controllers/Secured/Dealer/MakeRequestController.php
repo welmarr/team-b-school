@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Secured\Dealer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class RequestController extends Controller
+class MakeRequestController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('secured.pages.dealer.requests.requests',  ['activeMenu' => 'requests']);
+        
     }
 
     /**
@@ -20,8 +20,7 @@ class RequestController extends Controller
      */
     public function create()
     {
-        // Pass any necessary data to the view
-        return view('secured.pages.dealer.requests.createrequest');
+        //
     }
 
     /**

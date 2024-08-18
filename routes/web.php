@@ -21,6 +21,8 @@ use App\Http\Controllers\Secured\Admin\ToolInventoryMovementController;
 use App\Http\Controllers\Secured\Admin\RequestController as AdminRequestController;
 use App\Http\Controllers\Secured\Dealer\ProfileController as DealerProfileController;
 use App\Http\Controllers\Secured\Dealer\RequestController as DealerRequestController;
+use App\Http\Controllers\Secured\Dealer\MakeRequestController;
+
 
 /**
  * Web Routes
@@ -161,13 +163,17 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => 'auth']
         Route::get('dashboard', function () {
             $activeMenu = 'dashboard';
             $countRequest = \App\Models\TRequest::count();
-            return view('secured.pages.dealer.dashboard',  compact("activeMenu",  "countRequest"));
+            return view('secured.pages.dealer.dashboard', compact("activeMenu", "countRequest"));
         })->name('dashboard');
+    
+        Route::resource('profile', DealerProfileController::class);
         Route::get('/profile', [DealerProfileController::class, 'index'])->name('profile.index');
         Route::put('/profile/update', [DealerProfileController::class, 'update'])->name('profile.update');
+        
         Route::resource('requests', DealerRequestController::class);
-        Route::resource('profile', DealerProfileController::class);
+        Route::get('/requests/create', [DealerRequestController::class, 'create'])->name('requests.create');
     });
+    
 });
 
 /**

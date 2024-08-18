@@ -10,7 +10,7 @@ use App\Http\Controllers\Unsecured\Api\UploadTemporaryImageController;
 use App\Http\Controllers\Unsecured\Api\CarController as ApiCarController;
 use App\Http\Controllers\Secured\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Secured\Admin\Api\RequestController as AdminRequestController;
-
+use App\Http\Controllers\Secured\Dealer\Api\RequestController as DealerRequestController;
 
 /**
  * API Routes
@@ -33,6 +33,7 @@ Route::group(['as' => 'api.'], function () {
         // Tool and request listing routes
         Route::get('/tools', ApiToolController::class)->name('tools.index');
         Route::get('/requests', AdminRequestController::class)->name('requests.index');
+        Route::get('/dealers/{id}/requests', [DealerRequestController::class, 'index'])->name('dealers.requests.index');
     });
 });
 

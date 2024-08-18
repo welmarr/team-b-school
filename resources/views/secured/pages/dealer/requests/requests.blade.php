@@ -1,6 +1,5 @@
 @extends('secured.layout')
 
-
 @section('title')
     Request - Dealership
 @endsection
@@ -13,9 +12,9 @@
 
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte/css/adminlte.css') }}">
-
     <link rel="stylesheet" href="{{ asset('css/sharing.css') }}">
 
+    <!-- Custom Styles -->
     <style>
         .page-link {
             color: #fb4f14;
@@ -43,22 +42,13 @@
             display: flex;
         }
 
-
-        .dropdown-menu a.dt-button.dropdown-item.button-page-length.active,
-        .dropdown-menu a.dt-button.dropdown-item.buttons-columnVisibility.active {
+        .dropdown-menu a.dt-button.dropdown-item.active {
             color: inherit;
             text-decoration: none;
             background-color: inherit;
         }
 
-        .dropdown-menu a.dt-button.dropdown-item.button-page-length.active span,
-        .dropdown-menu a.dt-button.dropdown-item.buttons-columnVisibility.active span {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .dropdown-menu a.dt-button.dropdown-item.button-page-length.active span::after,
-        .dropdown-menu a.dt-button.dropdown-item.buttons-columnVisibility.active span::after {
+        .dropdown-menu a.dt-button.dropdown-item.active span::after {
             display: inline-block;
             content: "✓";
             color: inherit;
@@ -72,18 +62,17 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Request</h1>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item text-orange">Requests</li>
                         <li class="breadcrumb-item active">List</li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+            </div>
+        </div>
     </section>
 @endsection
-
 
 @section('content')
     <!-- Main content -->
@@ -91,12 +80,14 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-
                     <div class="card">
                         <div class="card-header">
                             <h3 class="m-0 card-title">Request</h3>
+                            <!-- Add New Request Button -->
+                            <div class="dt-buttons">
+                            <a href="{{ route('secured.dealers.requests.create') }}" class="btn btn-primary">Add Request</a>
+                            </div>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
                             <table id="example1" class="table table-bordered">
                                 <thead>
@@ -109,7 +100,7 @@
                                         <th>Email</th>
                                         <th>Created at</th>
                                         <th>Updated at</th>
-                                        <th class="d-flex justify-content-center">Actions</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-group-divider">
@@ -124,31 +115,24 @@
                                         <th>Email</th>
                                         <th>Created at</th>
                                         <th>Updated at</th>
-                                        <th class="d-flex justify-content-center">Actions</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
-                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
                 </div>
             </div>
         </div>
     </section>
-    <!-- /.content -->
 @endsection
-
-
 
 @section('footer')
     @include('secured.includes.footer')
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
     </aside>
-    <!-- /.control-sidebar -->
 @endsection
 
 @section('js-after-bootstrap')
@@ -171,119 +155,82 @@
 @section('js-after-adminlte')
     <script>
         $(function() {
-            // Initialize DataTable with server-side processing
+            let dataURl = '{{ route('api.secure.dealers.requests.index', ['id' => ':request_id']) }}'
+            .replace(':request_id', '{{ Auth::user()->id }}');
             var table = $("#example1").DataTable({
-                "processing": true, // Enable processing indicator
-                "serverSide": true, // Enable server-side processing
-                "ajax": {
-                    "url": "{{ route('api.secure.requests.index') }}", // Set AJAX source URL
-                    "type": "GET",
-                    "data": function(d){
-                        console.log(d)
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: dataURl,
+                    type: "GET",
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }, 
+                    dataSrc: function(json) {
+                        return json.data;
+                    },
+                    error: function(xhr, error, thrown) {
+                        alert('An error occurred while loading the data.');
                     }
                 },
                 language: {
-                    "processing": '<div class="d-flex justify-content-center"><div class="spinner-border text-orange" role="status"><span class="sr-only">Loading...</span></div></div>'
+                    processing: '<div class="d-flex justify-content-center"><div class="spinner-border text-orange" role="status"><span class="sr-only">Loading...</span></div></div>'
                 },
-                "columns": [{
-                        "data": null,
-                        "orderable": false, // Disable sorting
-                        "render": function(value, type, full, meta) {
-                            return meta.row + 1; // Row numbering
-                        }
-                    },
-                    {
-                        "data": "reference", // First name column
-                    },
-                    {
-                        "data": "car.brand.name", // First name column
-                        "orderable": true, // Disable sorting
-                        "render": function(value, type, full, meta) {
-                           if(type ==  "display"){
+                columns: [
+                    { data: null, orderable: false, render: function(value, type, full, meta) { return meta.row + 1; } },
+                    { data: "reference" },
+                    { 
+                        data: "car.brand.name",
+                        render: function(value, type, full, meta) {
                             return '<strong>' + full.car.brand.name + " " + full.car.model.name + '</strong>';
-                           }
-                           return value;
                         }
                     },
-                    {
-                        "data": "created_by.first_name", // First name column
-                        "orderable": true, // Disable sorting
-                        "render": function(value, type, full, meta) {
-                           if(type ==  "display"){
+                    { 
+                        data: "created_by.first_name",
+                        render: function(value, type, full, meta) {
                             return full.created_by.first_name + " " + full.created_by.last_name;
-                           }
-                           return value;
                         }
                     },
-                    {
-                        "data": "created_by.phone" // Phone column
-                    },
-                    {
-                        "data": "created_by.email", // Phone column
-                        "visible": false,
-                    },
-                    {
-                        "data": "created_at", // Updated at column
-                        "orderable": true, // Enable sorting
-                        "render": function(value, type, full) {
-                            if (type === 'display') {
-                                return moment(value).format('Do MMM YYYY');
-                            }
-                            return value; // Return data for other types
+                    { data: "created_by.phone" },
+                    { data: "created_by.email", visible: false },
+                    { 
+                        data: "created_at",
+                        render: function(value, type, full) {
+                            return moment(value).format('Do MMM YYYY');
                         }
                     },
-                    {
-                        "data": "updated_at", // Updated at column
-                        "orderable": true, // Enable sorting
-                        "visible": false,
-                        "render": function(value, type, full) {
-                            if (type === 'display') {
-                                return moment(value).format('Do MMM YYYY');
-                            }
-                            return value; // Return data for other types
+                    { 
+                        data: "updated_at", visible: false,
+                        render: function(value, type, full) {
+                            return moment(value).format('Do MMM YYYY');
                         }
                     },
-                    {
-                        "data": null,
-                        "orderable": false, // Disable sorting
-                        "render": function(value, type, full, meta) {
-                            let detailUrl = '{{route("secured.admin.requests.show", ["request" => ":request"])}}';
+                    { 
+                        data: null, orderable: false,
+                        render: function(value, type, full, meta) {
+                            let detailUrl = '#';
                             detailUrl = detailUrl.replace(':request', full.id);
-                            let actionsTags = '<div class="d-flex justify-content-center">';
-
-                            actionsTags +=
-                                '<button type="button" class="btn btn-outline-dark mr-2 btn-sm">Images</button> ';
-
-                            actionsTags +=
-                                '<button type="button" class="btn btn-outline-dark btn-sm mr-2">Memo</button> ';
-                            actionsTags +=
-                                '<a type="button" class="btn btn-dark btn-sm" href="' + detailUrl + '">Details</a> </div>';
-
-                            return actionsTags;
-                        }
-                    },
-                ],
-                "responsive": true, // Enable responsive design
-                "lengthChange": false, // Disable length change
-                "autoWidth": false, // Disable auto width
-                "dom": 'Bfrtip', // Define the table control elements to appear
-                "buttons": [
-                    'copy', 'csv', 'excel', 'pdf', 'print', "pageLength", {
-                        extend: 'colvis',
-                        columnText: function(dt, idx, title) {
-                            if (title == "#") {
-                                return idx + 1 + ': No';
-
-                            }
-                            return idx + 1 + ': ' + title;
+                            return `<div class="d-flex justify-content-center gap-1">
+                                        <a href="${detailUrl}" class="btn btn-xs btn-success">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </div>`;
                         }
                     }
-                ], // Add buttons
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)'); // Append buttons to container
-            // Select all buttons with class 'buttons-html5', remove 'btn-secondary' and add 'btn-dark'
-            /* $('.buttons-html5').removeClass('btn-secondary').addClass('btn-dark'); */
-            $('.dt-buttons .btn').removeClass('btn-secondary').addClass('btn-dark');
+                ],
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: false,
+                responsive: true,
+                buttons: ["pageLength", "copy", "csv", "excel", "pdf", "print", "colvis"],
+                dom: "<'row'<'col-md-6'l><'col-md-6'f>>" +
+                    "<'row'<'col-md-12'tr>>" +
+                    "<'row'<'col-md-5'i><'col-md-7'p>>" +
+                    "<'row'<'col-md-12'B>>",
+            });
 
+            table.buttons().container().appendTo('.col-md-7:eq(0)');
         });
     </script>
 @endsection
