@@ -3,12 +3,12 @@ FROM webdevops/php-nginx:8.3-alpine
 # Installation dans votre Image du minimum pour que Docker fonctionne
 RUN apk add oniguruma-dev libxml2-dev
 RUN docker-php-ext-install \
-        bcmath \
-        ctype \
-        fileinfo \
-        mbstring \
-        pdo_mysql \
-        xml
+    bcmath \
+    ctype \
+    fileinfo \
+    mbstring \
+    pdo_mysql \
+    xml
 
 # Installation dans votre image de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -30,11 +30,6 @@ RUN php artisan config:cache
 # Optimizing Route loading
 # RUN php artisan route:cache
 # Optimizing View loading
-RUN php artisan config:cache
-RUN php artisan route:cache
 RUN php artisan view:cache
-RUN php artisan optimize
-RUN php artisan optimize:clear
-RUN composer dump-autoload --optimize
 
 RUN chown -R application:application ./app
