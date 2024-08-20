@@ -29,8 +29,6 @@
         svg.feather {
             width: 16px !important;
         }
-
-
     </style>
 @endsection
 
@@ -40,12 +38,12 @@
         <div class="mt-4 row d-flex justify-items-center">
             <div class="offset-3 col-6 text-center mt-5">
                 <i class="toggle-password-icon" data-feather="check-circle">
-                    <div class="bd-callout bd-callout-info">
+                    <div class="">
                         Your <strong>account has been successfully created</strong> is currently under verification. You
                         will be notified via email once your account has been activated. This process may take up to
                         <strong>72 hours</strong>. Thank you for your patience.
                         <div class="my-4">
-                            <a class="w-100 btn btn-orange btn-lg" href="{{ route('unsecured.home') }}">Back to Home page</a>
+                            <a class="btn btn-orange" href="{{ route('home') }}">Back to Home page</a>
                         </div>
                     </div>
             </div>

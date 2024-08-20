@@ -43,7 +43,7 @@
                         will be notified via email once your account has been activated. This process may take up to
                         <strong>72 hours</strong>. Thank you for your patience.
                         <div class="my-4">
-                            <a class="btn btn-orange" href="{{ route('unsecured.home') }}">Back to Home page</a>
+                            <a class="btn btn-orange" href="{{ route('home') }}">Back to Home page</a>
                         </div>
                     </div>
             </div>

@@ -27,7 +27,7 @@
         }
 
 
-        
+
     </style>
 
 @endsection
@@ -40,7 +40,7 @@
                 <img src="{{ asset("img/not-found-img.png")}}" alt="Funny 404 Image" class="img-fluid my-4">
                 <p class="lead">Well, this is awkward... It seems like you've discovered a page that doesn't exist!</p>
                 <div class="my-4">
-                    <a class="w-100 btn btn-orange btn-lg" href="{{ route('unsecured.home') }}">Back to Home page</a>
+                    <a class="w-100 btn btn-orange btn-lg" href="{{ route('home') }}">Back to Home page</a>
                 </div>
                 <p class="fs-6">If all else fails, perhaps our missing page is off exploring the internet. If you need help, <a href="#" class="text-orange underline-orange">contact us</a>, and we'll track it down!</p>
             </div>

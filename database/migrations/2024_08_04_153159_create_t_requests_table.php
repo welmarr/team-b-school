@@ -17,9 +17,10 @@ return new class extends Migration
             $table->string('reference')->unique();
             $table->longText('memo')->nullable();
             $table->float('estimation')->nullable();
-            $table->enum('status', ['init','estimated', 'accepted', 'in_progress', 'completed', 'canceled'])->default('init');
+            $table->enum('status', ['init', 'estimated', 'accepted', 'in_progress', 'completed', 'canceled'])->default('init');
             $table->foreignId('car_id')->constrained('t_cars');
             $table->nullableMorphs('created_by');
+            $table->integer('finish_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -17,6 +17,6 @@ class TAddress extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['address_line_1','address_line_2','city', 'state', 'zip', 'morph_type', 'morph_id'];
+    protected $fillable = ['address_line_1','address_line_2','city', 'state', 'zip'];
 
 }

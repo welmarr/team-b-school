@@ -65,7 +65,7 @@
                     <br />Fields with <span class="fw-bold text-orange">*</span> are mandatory.</span>
 
                 <form class="needs-validation" enctype="multipart/form-data" method="POST"
-                    action="{{ route('unsecured.get-estimate.post') }}"> 
+                    action="{{ route('get-estimate.submit') }}">
                     @csrf
 
                     <div class="row">
@@ -264,38 +264,6 @@
                     </div>
                 </form>
 
-            </div>
-        </div>
-
-
-        <div class="row my-4" style="margin-top: 150px !important;">
-            <h1 class="card-text mb-auto my-4 fw-semibold d-flex align-items-center justify-content-center">
-                We're Here to Help
-            </h1>
-            <div class="row my-4" style="margin-top: 100px !important;">
-                <div class="col-sm-12 col-md-4 d-flex align-items-center flex-column mt-md-1">
-                    <i class="text-orange" data-feather="mail" style="width: 64px; height: 64px;"></i>
-                    <h4 class="my-2 fw-bold">Email</h4>
-                    <p class="mb-3">If you have any questions or issues, please feel free reach out to our customer
-                        support team.</p>
-                    <span class="underline-orange">test@test.test</span>
-                </div>
-
-                <div class="col-sm-12 col-md-4 d-flex align-items-center flex-column mt-sm-4 mt-md-1">
-                    <i class="text-orange" data-feather="phone" style="width: 64px; height: 64px;"></i>
-                    <h4 class="my-2 fw-bold">Phone</h4>
-                    <p class="mb-2">You can contact us by phone during our business hours.</p>
-                    <span class="underline-orange" style="margin-top: 2rem !important;">123456789</span>
-                </div>
-
-
-                <div class="col-sm-12 col-md-4 d-flex align-items-center flex-column mt-sm-4 mt-md-1">
-                    <i class="text-orange" data-feather="map-pin" style="width: 64px; height: 64px;"></i>
-                    <h4 class="my-2 fw-bold">Office</h4>
-                    <p>Our office is open for in-person inquiries.</p>
-                    <span class="underline-orange" style="margin-top: 1.5rem !important;">123 Sample St, Sydney NSW 2000
-                        AU</span>
-                </div>
             </div>
         </div>
     </div>

@@ -15,9 +15,26 @@ class ToolController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke()
+    public function index()
     {
         return DataTables::eloquent(TTool::withSum('inventories as qty', 'quantity')->with(["type", "unit"]))
             ->toJson();
+    }
+
+    public function list()
+    {
+        try {
+            $tools = TTool::all();
+
+            return response()->json([
+                'data' => $tools,
+                'msg' => ""
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'data' => null,
+                'msg' => 'There was an error processing your request. ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

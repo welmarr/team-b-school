@@ -12,7 +12,7 @@ class UnitController extends Controller
      */
     public function __invoke()
     {
-        return view('secured.pages.admin.tools.units', ['activeMenu' => 'units']);
+        return view('secured.pages.admin.units', ['activeMenu' => 'units']);
     }
 
 }

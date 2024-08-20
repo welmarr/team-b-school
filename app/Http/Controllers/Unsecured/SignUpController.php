@@ -7,6 +7,8 @@ use App\Models\TAddress;
 use App\Models\TDealership;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AccountCreationBySimpleUserMail;
 use App\Http\Requests\Unsecured\SignupRequest;
 
 class SignUpController extends Controller
@@ -17,7 +19,7 @@ class SignUpController extends Controller
      * @param SignupRequest $request
      * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function core(SignupRequest $request)
+    public function submit(SignupRequest $request)
     {
         // Initialize variables
         $user = null;
@@ -30,7 +32,6 @@ class SignUpController extends Controller
             // Create a new user
             $user = $this->createUser($validated);
 
-            //dd($validated);
 
             // Check dealership option and handle accordingly
             if ($validated['dealership_option'] === 'use_dealership') {
@@ -41,26 +42,40 @@ class SignUpController extends Controller
                 $dealership = $this->createNewDealership($user, $validated);
 
                 // Create a new address for the dealership if it was created successfully
-                if($dealership != null) {
+                if ($dealership != null) {
                     $address = $this->createDealershipAddress($dealership, $validated);
                 }
             }
 
             // Associate the user with the dealership if it exists
-            if($dealership != null) {
+            if ($dealership != null) {
                 $user->dealership_id = $dealership->id;
                 $user->save();
             }
 
+            Mail::to($user->email)->queue(new AccountCreationBySimpleUserMail($user));
+
             // Return the account created view
-            return redirect()->route('unsecured.sign-up')->with('page_need', 'login-success');
+            return redirect()->route('account-created');
         } catch (\Exception $e) {
             // Handle exceptions and delete any rows that were already created
             $this->deleteRowAlreadyCreated($e, $user, $dealership, $address, $validated);
 
             // Redirect back to the sign-up page with an error message
-            return redirect()->route('unsecured.sign-up')->withErrors(['er-500' => 'There was an error processing your request. ' . $e->getMessage()]);
+            return redirect()->route('sign-up')->with('error', 'There was an error processing your request. ' . $e->getMessage());
         }
+    }
+
+
+
+    /**
+     * Display the login view.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function view()
+    {
+        return view('unsecured.pages.sign-up');
     }
 
     /**

@@ -17,75 +17,107 @@
 @section('content')
     <div class="container">
         <div class="row my-4">
-            <div class="col-6">
-                <h5 class="my-3 fw-bold text-orange">Our story</h5>
-                <h1 class="card-text mb-auto my-3 fw-semibold">
-                    Cincy Dent Repair: Where Challenges Become Solutions
-                </h1>
+            <div class="col-12 my-2">
+                <h5 class="fw-bold text-orange">Our story</h5>
+                <h3 class="card-text mb-auto mt-3 fw-semibold">
+                    Cincy Dent Repair: Servicing the Tri-State Area Since 2017
+                </h3>
             </div>
-            <div class="col-6 d-flex justify-content-end">
-                <p>
-                    Chris Young's journey into the dent repair industry is a story of determination and entrepreneurial spirit. After spending years in various jobs, Chris decided
-                    to take a leap of faith. In 2017, he became his own employer and ventured into the dent repair business. Starting small, Chris built his reputation as a
-                    skilled traveling dent repair specialist. Fast forward to 2024, Chris's business has flourished. He not only caters to individual customer orders for dent repair but also partners with multiple
-                    dealerships. These dealerships rely on Chris for routine dent repairs across their vehicle inventory and count on him for emergency services, such as fixing damage from hailstorms that can affect numerous cars simultaneously.
-                    Chris's commitment to quality service and customer satisfaction has made Cincy Dent Repair a trusted name in the industry. Whether you're an individual car owner or a dealership, Chris's expertise ensures your vehicle is in the best hands.
+            <div class="col-12 d-flex justify-content-end">
+                <p> Sole owner and creator of Cincy Dent Repair. This is what I do,
+                    and I love what I do. I strive to provide the best service possible for all clients, but my approach
+                    to my work is fun. It's so much fun, it doesn't even feel like work. I continue to work on improving my
+                    processes to increase customer satisfaction across the board. Established in 2017, I absolutely felt
+                    like
+                    this was a service I could provide and continue to excel at, not to mention, automotive work isn't
+                    really
+                    work when you love cars as much as I do. The only thing I take more pride in besides my work is my
+                    customer
+                    and general client satisfaction with my work. High quality work at an affordable price, as well as
+                    extreme
+                    mobile availability to the extent of on-site dent repair is the calling card for Cincy Dent Repair.
+                    <br>
+                    <br>
+                    The three things I focused on the most when it comes to Cincy Dent Repair are exceptional quality,
+                    affordable pricing, and most importantly, mobility and travel. I'm not the first, and I won't be the
+                    last, but I will always work my hardest to become better and continue to improve the quality of my work.
+                    <br>
+                    <br>
+                    Cincy Dent Repair currently contracts to service several dealerships in the Tri-State area, to ensure
+                    quality repair for a large scale of vehicles, improving and fixing imperfections for vehicles being sold
+                    in the area. Make no mistake about it though, CDR offers the same repair quality for your vehicle as an
+                    individual customer as they do for a vehicle being sold by a dealership.
+                    <br>
+                    <br>
+                    I also put emphasis on the "traveling dent repair" aspect of CDR. What does that means? It means I come
+                    to
+                    you! Flexibility is the primary concern, and repairs are not done in a shop. They are done on site, by
+                    me,
+                    with my own personal tools. That means exactly what it sounds like! If you inquire about repair and are
+                    comfortable with our estimated repair costs, I will willingly travel to you and perform on-site repairs.
+                    I
+                    even offer these services on the weekends! Whereas a lot of automotive places may not provide services
+                    on
+                    weekends, I am always willing to meet and perform a repair job for a customer on the weekends if that is
+                    a
+                    more flexible option for you. The main objectives here are quality repair and customer satisfaction.
+                    <br>
+                    <br>
+                    Last but certainly not least, I do correctional repairs! What if you have previous damage and someone
+                    else
+                    has already attempted to repair it, but you are unsatisfied with their work? I can fix that! Just as a
+                    matter
+                    of pride, at times I see repair attempts that the customer may be satisfied with, but I'm not satisfied
+                    with
+                    myself. Everyone has their own different methods, and if I see a repair that could have been done a
+                    different
+                    way with more efficiency and effectiveness, then I will perform those corrective methods. I'd say the
+                    most pride
+                    I take in general in regards to a completed job is when I can effectively improve on a past repair job
+                    that may
+                    have been much more effectively completed in other ways.
+                    <br>
+                    Take a look at some of my sample work on this page, but it's just a microcosm of what is offered at
+                    Cincy Dent
+                    Repair. <br> <br> <span class="text-orange">Refer to our Facebook and Instagram page (links below) to see much more comprehensive, in depth
+                        and detailed  descriptions and photos of past jobs before you make the choice to allow CDR to service your vehicle.</span>
                 </p>
             </div>
         </div>
 
 
-        <div class="row my-4" style="margin-top: 150px !important">
-            <div class="col-6 d-flex align-items-center">
-                <div class="d-flex flex-column justify-content-center ">
-                    <h4 class="fw-bold">Chris Young</h4>
-                    <div class="d-flex flex-column flex-sm-row justify-content-between" style="border-top: 1px solid #eb4034 !important">
-                        <ul class="list-unstyled d-flex">
-                        <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="16" height="16"><use xlink:href="#twitter"/></svg></a></li>
-                        <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="16" height="16"><use xlink:href="#instagram"/></svg></a></li>
-                        <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="16" height="16"><use xlink:href="#facebook"/></svg></a></li>
-                        </ul>
+        <div class="row my-4" style="margin-top: 75px !important;">
+                <img  src="{{ asset('img/christ-01.jpg') }}" style="width: 33%; max-height: 372px !important; " />
+
+                <img src="{{ asset('img/repair1.jpg') }}" style="width: 33%; max-height: 372px !important;" />
+
+                <img  src="{{ asset('img/repair2.jpg') }}" style="width: 33%; max-height: 372px !important;" />
+        </div>
+        <div class="div">
+            <div class="row">
+                <div class="col-12 d-flex">
+                    <div class="d-flex flex-column justify-content-center">
+                        <h4 class="fw-bold">Chris Young</h4>
+                        <div class="d-flex flex-column flex-sm-row justify-content-between"
+                            style="border-top: 1px solid #eb4034 !important">
+                            <ul class="list-unstyled d-flex justify-content-center w-100">
+                                <li class=""><a class="link-dark"
+                                        href="https://www.instagram.com/cincydentrepair?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><svg
+                                            class="bi" width="16" height="16">
+                                            <use xlink:href="#instagram" />
+                                        </svg></a></li>
+                                <li class="ms-3"><a class="link-dark"
+                                        href="https://www.facebook.com/profile.php?id=61558731607535"><svg class="bi"
+                                            width="16" height="16">
+                                            <use xlink:href="#facebook" />
+                                        </svg></a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-6">
-                <img class="img-fluid" src="{{ asset('img/christ-01.jpg') }}" style="width: 85%; height: auto" />
-            </div>
         </div>
 
-
-
-        <div class="row my-4" style="margin-top: 150px !important;">
-            <h1 class="card-text mb-auto my-4 fw-semibold d-flex align-items-center justify-content-center">
-                We're Here to Help
-            </h1>
-            <div class="row my-4" style="margin-top: 100px !important;">
-                <div class="col-sm-12 col-md-4 d-flex align-items-center flex-column mt-md-1">
-                    <i class="text-orange" data-feather="mail" style="width: 64px; height: 64px;"></i>
-                    <h4 class="my-2 fw-bold">Email</h4>
-                    <p class="mb-3">If you have any questions or issues, please feel free reach out to our customer
-                        support team.</p>
-                    <span class="underline-orange">test@test.test</span>
-                </div>
-
-                <div class="col-sm-12 col-md-4 d-flex align-items-center flex-column mt-sm-4 mt-md-1">
-                    <i class="text-orange" data-feather="phone" style="width: 64px; height: 64px;"></i>
-                    <h4 class="my-2 fw-bold">Phone</h4>
-                    <p class="mb-2">You can contact us by phone during our business hours.</p>
-                    <span class="underline-orange" style="margin-top: 2rem !important;">123456789</span>
-                </div>
-
-
-                <div class="col-sm-12 col-md-4 d-flex align-items-center flex-column mt-sm-4 mt-md-1">
-                    <i class="text-orange" data-feather="map-pin" style="width: 64px; height: 64px;"></i>
-                    <h4 class="my-2 fw-bold">Office</h4>
-                    <p>Our office is open for in-person inquiries.</p>
-                    <span class="underline-orange" style="margin-top: 1.5rem !important;">123 Sample St, Sydney NSW 2000
-                        AU</span>
-                </div>
-            </div>
-        </div>
     </div>
 @endsection
 
@@ -95,8 +127,8 @@
 @endsection
 
 @section('js-after-bootstrap')
-<script  src="{{ asset('js/feather.min.js') }}"></script>
-<script>
-    feather.replace();
-</script>
+    <script src="{{ asset('js/feather.min.js') }}"></script>
+    <script>
+        feather.replace();
+    </script>
 @endsection

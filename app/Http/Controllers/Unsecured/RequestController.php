@@ -2,136 +2,131 @@
 
 namespace App\Http\Controllers\Unsecured;
 
-use Carbon\Carbon;
-use App\Models\TImage;
-use App\Models\TAddress;
-use Illuminate\Support\Str;
-use App\Models\TTemporaryFile;
-use App\Models\TRequest as TDemand;
+use App\Models\TRequest;
+use App\Models\TAppointment;
+use Illuminate\Http\Request;
+use App\Models\TRequestHistory;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\Unsecured\StoreDemandRequest;
-use App\Models\TCar;
-use App\Models\TClient;
+use App\Mail\EstimationAcceptedMail;
+use App\Mail\EstimationCanceledMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use App\Mail\EstimationAppointmentBySimpleUserMail;
 
 class RequestController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Display a listing of the resource.
      */
-    public function __invoke(StoreDemandRequest $request)
+    public function accepted(string $reference)
+    {
+        $demand = TRequest::where('reference', $reference)->first();
+
+        if (isset($demand) && $demand->status == "estimated") {
+            $demand->update([
+                'status' => 'accepted'
+            ]);
+
+            TRequestHistory::create([
+                'status' => $demand->status,
+                'request_id' => $demand->id,
+                'data' => json_encode([
+                    'status' => 'accepted'
+                ])
+            ]);
+
+            Mail::to($demand->createdBy->email)->queue(new EstimationAcceptedMail($demand));
+
+            return view('unsecured.pages.accepted-request', compact(["reference"]));
+        } else {
+            return redirect()->route('track-repair.view')->with('error', 'The estimation stage has already been finalized. Please, check the updated status by using this form and contact us if need.');
+        }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function canceled(string $reference)
+    {
+
+        $demand = TRequest::where('reference', $reference)->first();
+
+        if ($demand->status == "estimated") {
+            $demand->update([
+                'status' => 'canceled'
+            ]);
+
+            TRequestHistory::create([
+                'status' => $demand->status,
+                'request_id' => $demand->id,
+                'data' => json_encode([
+                    'status' => 'canceled'
+                ])
+            ]);
+
+            Mail::to($demand->createdBy->email)->queue(new EstimationCanceledMail($demand));
+
+            return view('unsecured.pages.canceled-request');
+        } else {
+            return redirect()->route('track-repair.view')->with('error', 'The estimation stage has already been finalized. Please, check the updated status by using this form and contact us if need.');
+        }
+    }
+
+
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function appointment(Request $request, string $reference)
     {
 
 
-        $validated = $request->validated();
-        $demand = null;
-        $address = null;
-        $client = null;
-        $files = [];
+        $validator = Validator::make($request->all(), [
+            'appointment_date' => ['required', 'date', 'after:today'],
+            'appointment_time' => ['required', 'regex:/^(?:[01]?[0-9]|2[0-3]):[0-5][0-9]$/'], // 24-hour format validation
+        ], [
+            'appointment_date.required' => 'Please select an appointment date.',
+            'appointment_date.date' => 'The appointment date must be a valid date.',
+            'appointment_date.after' => 'The appointment date must be a future date.',
+            'appointment_time.required' => 'Please select an appointment time.',
+            'appointment_time.regex' => 'The appointment time must be in a valid 24-hour format (e.g., 15:00).',
+        ]);
 
+        if ($validator->fails()) {
+            $error_msg_array = $validator->errors()->messages();
+            return redirect()->back()
+                ->with('appointment_error', reset($error_msg_array)[0]);
+        }
 
-        try {
+        $demand = TRequest::where('reference', $reference)->first();
 
-            $car = TCar::where([
-                'year' => $validated['year'],
-                'make_id' => $validated['brand'],
-                'model_id' => $validated['model']
-            ])->first();
+        if ($demand->status == "accepted") {
+            TAppointment::where('request_id', $demand->id)->update(['is_current' => false]);
+            // Combine the date and time into a datetime string
+            $datetime_string = $request->input('appointment_date') . ' ' . $request->input('appointment_time');
 
-            if ($car == null) {
-                return redirect()->back()->with('error', 'Oups! Something wrong with the car information.');
-            }
+            // Format the DateTime object for database storage (Y-m-d H:i:s)
+            $appointment_datetime = (new \DateTime($datetime_string))->format('Y-m-d H:i:s');
 
-            $address = TAddress::create([
-                'address_line_1' => $validated['address1'],
-                'address_line_2' => $validated['address2'],
-                'city' => $validated['city'],
-                'state' => $validated['state'],
-                'zip' => $validated['zipcode'],
+            //dd($appointment_datetime);
+
+            $appointment = TAppointment::create(['appointment_date' => $appointment_datetime, 'request_id' => $demand->id]);
+
+            TRequestHistory::create([
+                'status' => $demand->status,
+                'request_id' => $demand->id,
+                'data' => json_encode([
+                    'status' => '_appointment',
+                    'related_to' => TAppointment::class,
+                    'related_to_id' => $appointment->id,
+                ])
             ]);
 
+            Mail::to($demand->createdBy->email)->queue(new EstimationAppointmentBySimpleUserMail($demand, $appointment_datetime));
 
-
-            $client = TClient::create([
-                'first_name' => $validated['firstname'],
-                'last_name' => $validated['lastname'],
-                'email' => $validated['email'],
-                'phone' => $validated['phonenumber'],
-                'address_id' => $address->id,
-            ]);
-
-
-            $demand = TDemand::create([
-                'memo' => $validated['memo'],
-                'reference' => Carbon::now()->format('md') . Str::random(rand(3, 5)),
-                'car_id' => $car->id,
-                'created_by_id' => $client->id,
-                'created_by_type' => TClient::class
-            ]);
-
-
-            $tmp_images = null;
-
-            if ($request->has('filepond') && count($request->filepond) > 0) {
-                $tmp_images = TTemporaryFile::whereIn('folder', $request->input('filepond'))->get();
-            }
-            if ($demand && $tmp_images) {
-                foreach ($tmp_images as $image) {
-                    $temp_folder = 'requests/tmp/' . $image->folder;
-                    $destination_folder = 'requests/' . $image->folder;
-                    $filename = $demand->id . '-' . time() . '-' . $image->file;
-
-                    Storage::copy($temp_folder . '/' . $image->file, $destination_folder . '/' . $filename);
-
-                    $file = TImage::create([
-                        'name' => $filename,
-                        'path' => Storage::disk("public")->path($destination_folder . '/' . $filename),
-                        'mime_type' => Storage::disk("public")->mimeType($destination_folder . '/' . $filename),
-                        'size' => Storage::disk("public")->size($destination_folder . '/' . $filename),
-                        'extension' => pathinfo("/public" . $destination_folder . '/' . $filename, PATHINFO_EXTENSION),
-                        'folder' => $destination_folder,
-                        'public_uri' => (string) Str::uuid(),
-                        'request_id' => $demand->id
-                    ]);
-
-                    array_push($files, $file);
-
-                    Storage::deleteDirectory($temp_folder);
-                    $image->delete();
-                }
-            }
-            return redirect()->back()->with('success', 'Demand created successfully!');
-        } catch (\Exception $e) {
-
-
-            if ($address) {
-                $address->forceDelete();
-            }
-
-            if ($client) {
-                $client->forceDelete();
-            }
-
-            if ($demand) {
-                TImage::where('request_id', $demand->id)->forceDelete();
-
-                $demand->forceDelete();
-            }
-
-            if ($request->has('filepond') && count($request->filepond) > 0) {
-                $tmp_images = TTemporaryFile::whereIn('folder', $request->input('filepond'))->get();
-                if ($tmp_images) {
-                    foreach ($tmp_images as $image) {
-                        $temp_folder = 'requests/tmp/' . $image->folder;
-                        Storage::deleteDirectory($temp_folder);
-                        $image->delete();
-                    }
-                }
-            }
-
-            dd($e->getMessage(), $e);
-
-            return redirect()->back()->withInput()->with('error', 'Failed to create demand: ' . $e->getMessage());
+            return redirect()->route('track-repair.view', ['request' => $reference]);
+        } else {
+            return redirect()->route('track-repair.view', ['request' => $reference])->with('appointment_error', 'The estimation stage has already been finalized. Please, check the updated status by using this form and contact us if need.');
         }
     }
 }

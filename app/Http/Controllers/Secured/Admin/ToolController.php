@@ -21,7 +21,7 @@ class ToolController extends Controller
     public function index()
     {
         $activeMenu = 'tools';
-        return view('secured.pages.admin.tools.tools', compact(['activeMenu']));
+        return view('secured.pages.admin.tools', compact(['activeMenu']));
     }
 
     /**
@@ -32,7 +32,7 @@ class ToolController extends Controller
         $types = TToolType::all();
         $units = TUnit::all();
         $activeMenu = 'tools';
-        return view('secured.pages.admin.tools.tools-create', compact(['activeMenu', 'units', 'types']));
+        return view('secured.pages.admin.tools-create', compact(['activeMenu', 'units', 'types']));
     }
 
     /**
@@ -69,7 +69,7 @@ class ToolController extends Controller
         $types = TToolType::all();
         $units = TUnit::all();
         $activeMenu = 'tools';
-        return view('secured.pages.admin.tools.tools-edit', compact(['activeMenu', 'units', 'types', 'tool']));
+        return view('secured.pages.admin.tools-edit', compact(['activeMenu', 'units', 'types', 'tool']));
     }
 
     /**

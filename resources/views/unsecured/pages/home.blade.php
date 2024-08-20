@@ -105,3 +105,17 @@
 @section('footer')
     @include('unsecured.includes.footer')
 @endsection
+
+
+@section('js-before-bootstrap')
+    <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+@endsection
+
+
+@section('js-after-bootstrap')
+    <script src="{{ asset('js/feather.min.js') }}"></script>
+    <script>
+        feather.replace();
+    </script>
+@endsection

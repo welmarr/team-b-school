@@ -136,7 +136,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="modal-add-new-admin-form" method="POST" action="{{ route('api.secure.users.store') }}">
+                    <form id="modal-add-new-admin-form" method="POST" action="{{ route('api.secure.admin.users.store') }}">
                         <div class="modal-body">
                             <p class="badge badge-dark my-0"> Field with <span class="text-orange">*</span> is mandatory.
                             </p>
@@ -285,6 +285,11 @@
 
 @section('js-after-adminlte')
     <script>
+        @php
+            $userKey = Auth::user()->id;
+        @endphp
+
+
         /**
          * jQuery document ready function
          */
@@ -307,7 +312,14 @@
             var tableSaved = $("#user-list-table").DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ route('api.secure.users') }}",
+                "ajax": {
+                    "url": "{{ route('api.secure.admin.users.index') }}",
+                    "type": "GET",
+                    "beforeSend": function(request) {
+                        request.setRequestHeader('3c6e0b8a9c15224a8228b9a98ca1531d',
+                            "{{ $userKey }}");
+                    }
+                },
                 language: {
                     "processing": '<div class="d-flex justify-content-center"><div class="spinner-border text-orange" role="status"><span class="sr-only">Loading...</span></div></div>'
                 },
@@ -387,22 +399,22 @@
                         "render": function(value, type, full, meta) {
                             // Generate action buttons for each row
                             let enableDisableUrl =
-                                '{{ route('api.secure.users.disable.or.enable', ['user' => ':user']) }}'
+                                '{{ route('api.secure.admin.users.toggleStatus', ['user' => ':user']) }}'
                                 .replace(':user', full.id);
-                            let actionsTags = '<div class="d-flex justify-content-center">';
+                            let actionsTags = '<div class="d-flex justify-content-center"> <div class="btn-group">';
                             let callLabel = full.is_active ? "disable" : "enable";
 
                             if (typeof value === 'object') {
                                 actionsTags +=
-                                    '<button type="button" class="btn btn-outline-dark mr-2 btn-sm btn-disable-or-enable" ' +
+                                    '<button type="button" class="btn btn-outline-dark btn-sm btn-disable-or-enable" ' +
                                     'id="enable-disable-id-' + full.id + '" ' +
                                     'call-label="' + callLabel + '" ' +
-                                    'call-name="' + full.first_name + " " + full.last_name + '" ' +
+                                     'call-name="' + full.first_name + " " + full.last_name + '" ' +
                                     'call-url="' + enableDisableUrl + '">' +
                                     (value.is_active === 1 ? 'Disable' : 'Enable') + '</button> ';
                             }
                             actionsTags +=
-                                '<button type="button" class="btn btn-dark btn-sm">Details</button> </div>';
+                                '<button type="button" class="btn btn-dark btn-sm">Details</button> </div></div>';
 
                             return actionsTags;
                         }
@@ -521,8 +533,8 @@
             $('#modal-add-new-admin-form').submit(function(e) {
                 e.preventDefault();
                 // Clear error messages before submitting the form
-                $('span.modal-add-new-admin-form-input-error').text('');
-                $('span.modal-add-new-admin-form-input-error').addClass('d-none');
+                $('.modal-add-new-admin-form-input-error').text('');
+                $('.modal-add-new-admin-form-input-error').addClass('d-none');
 
                 let form = $(this);
                 let url = form.attr('action')
@@ -533,28 +545,6 @@
                     type: 'POST',
                     data: form.serialize(),
                     success: function(response) {
-                        /*// Prepare new row data
-                        let newRowData = {
-                            "first_name": response.data.first_name,
-                            "last_name": response.data.last_name,
-                            "phone": response.data.phone,
-                            "role": response.data.role,
-                            "email": response.data.email,
-                            "is_active": 0,
-                            "updated_at": response.data.updated_at,
-                            "id": response.data.id,
-                            "first_connect_at": response.data.first_connect_at
-                        };
-
-                        // Add the new row to the table
-                        let rowNode = tableSaved.row.add(newRowData).draw(false)
-
-                        // Update the row number
-                        tableSaved.rows().every(function(rowIdx, tableLoop, rowLoop) {
-                            this.data().DT_RowIndex = rowIdx + 1;
-                            this.invalidate();
-                        });*/
-
                         // Redraw the table to show updated row numbers
                         tableSaved.draw(false);
 
@@ -613,8 +603,10 @@
 
             $(document).on('hide.bs.modal', '#modal-add-new-admin', function() {
                 // Clear error messages before submitting the form
-                $('span.modal-add-new-admin-form-input-error').text('');
-                $('span.modal-add-new-admin-form-input-error').addClass('d-none');
+                $('.modal-add-new-admin-form-input-error').text('');
+                $('.modal-add-new-admin-form-input-error').addClass('d-none');
+
+                $('#modal-add-new-admin-form').trigger("reset");
             });
 
 
@@ -622,8 +614,6 @@
 
             // Select the button that contains the span with id modal-add-user
             var buttonContainingSpan = $('#user-list-table-add-user').closest('button');
-
-            console.log(buttonContainingSpan)
 
             // Remove the class btn-dark and add btn-outline-success
             buttonContainingSpan.removeClass('btn-dark').addClass('btn-success');

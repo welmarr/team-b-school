@@ -13,7 +13,7 @@ class ToolTypeController extends Controller
      */
     public function __invoke()
     {
-        return view('secured.pages.admin.tools.tool-types', ['activeMenu' => 'tool-types']);
+        return view('secured.pages.admin.tool-types', ['activeMenu' => 'tool-types']);
     }
 
 }

@@ -31,12 +31,16 @@
     </style>
 @endsection
 
+@php
+    $enable_help_session = false;
+@endphp
+
 
 @section('content')
     <div class="w-100" id="form-section">
         <div class="mt-4" style="max-width: 400px;">
 
-            <form action="{{ route('unsecured.ask-for.login') }}" method="POST">
+            <form action="{{ route('login.submit') }}" method="POST">
                 @csrf
                 <h4 class="my-4 fw-bold text-orange">Welcome to Cincy Dent Repair !</h4>
 
@@ -75,7 +79,7 @@
                     <div class="col-12">
                         <label for="password" class="form-label">Password <span class="text-orange">*</span></label>
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="" spellcheck="false"
+                            <input type="password" class="form-control" placeholder="" spellcheck="false"
                                 autocapitalize="none" badinput="false" autocomplete="off" name="password" id="password"
                                 required>
                             <button class="btn btn-outline-orange" type="button" id="toggle-password"><i
@@ -91,7 +95,7 @@
 
                 <div class="row my-2">
                     <div class="col-6">
-                        <a href="{{ route('unsecured.forgot-password') }}"
+                        <a href="{{ route('forgot-password.view') }}"
                             class="text-decoration-underline text-dark">Forgot password</a>
                     </div>
                     <div class="col-6 d-flex justify-content-end">
@@ -105,7 +109,7 @@
                 <hr class="mb-4 mt-2">
                 <div class="row">
                     <button class="w-100 btn btn-orange btn-lg" type="submit">Log in</button>
-                    <p class="mt-2">Don’t have an account? <a href="{{ route('unsecured.sign-up') }}"
+                    <p class="mt-2">Don’t have an account? <a href="{{ route('sign-up') }}"
                             class="text-orange">Sign up</a></p>
                 </div>
             </form>

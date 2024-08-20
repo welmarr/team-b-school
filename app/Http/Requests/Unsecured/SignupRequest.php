@@ -27,7 +27,7 @@ class SignupRequest extends FormRequest
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()->uncompromised()],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
 
             'dealership_code' => ['nullable', 'required_if:dealership_option,use_dealership', 'string', 'max:255', 'exists:t_dealerships,code'],
 
@@ -73,7 +73,6 @@ class SignupRequest extends FormRequest
             'password.mixedCase' => 'The password must contain at least one uppercase letter and one lowercase letter.',
             'password.numbers' => 'The password must contain at least one number.',
             'password.symbols' => 'The password must contain at least one symbol.',
-            'password.uncompromised' => 'The password has been compromised.',
 
             'dealership_code.required_if' => 'The dealership code is required when joining a dealership.',
 

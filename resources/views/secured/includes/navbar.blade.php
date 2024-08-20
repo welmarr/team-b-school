@@ -9,12 +9,12 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link"  href="{{route('unsecured.logout')}}" role="button">
+            <a class="nav-link"  href="{{route('logout')}}" role="button">
                 <i class="fas fa-sign-out-alt"></i>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link"  href="{{ route('secured.admin.profile.index')}}" role="button">
+            <a class="nav-link {{ isset($activeMenu) && $activeMenu == 'profile' ? 'nav-activated' : '' }}"  href="{{ route('secured.admin.profile.view')}}" role="button">
                 <i class="fas fa-user-circle"></i>
             </a>
         </li>

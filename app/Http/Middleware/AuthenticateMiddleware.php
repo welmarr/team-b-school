@@ -16,15 +16,14 @@ class AuthenticateMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check()){
-            if(Auth::user()->role == "admin"){
-                return redirect()->route("secured.admin.dashboard");
-            }else{
-                return redirect()->route("secured.dealers.dashboard");
-            }
+        // Check if the user is authenticated, has the role of 'admin' or 'dealer',
+        // and has not yet completed the initial setup (first_connect_at is null).
+        if (Auth::check() && (Auth::user()->role == "admin" || Auth::user()->role == "dealer") && Auth::user()->first_connect_at == null) {
+            // Redirect to the initial setup view if the above conditions are met.
+            return redirect()->route("secured.admin.initialSetupView");
         }
 
-
-        return redirect()->route("login");
+        // Continue to the next middleware or the requested resource.
+        return $next($request);
     }
 }

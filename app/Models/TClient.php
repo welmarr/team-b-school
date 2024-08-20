@@ -25,6 +25,6 @@ class TClient extends Model
     ];
 
     public function address(){
-        return $this->belongsTo(TAddress::class);
+        return $this->belongsTo(TAddress::class, 'address_id');
     }
 }

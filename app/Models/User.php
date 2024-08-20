@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -27,7 +27,8 @@ class User extends Authenticatable
         'is_active',
         'phone',
         'dealership_id',
-        'first_connect_at'
+        'first_connect_at',
+        'email_verified_at'
     ];
 
     /**
@@ -60,11 +61,11 @@ class User extends Authenticatable
     /**
      * Get the dealership associated with the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function dealership(): HasOne
+    public function dealership()
     {
-        return $this->hasOne(Dealership::class);
+        return $this->belongsTo(TDealership::class, 'dealership_id');
     }
 
 

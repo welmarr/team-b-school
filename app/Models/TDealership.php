@@ -27,12 +27,12 @@ class TDealership extends Model
     protected $dates = ['created_at','updated_at', 'deleted_at'];
 
     /**
-     * Get the admin associated with the dealership.
+     * Get the users associated with the dealership.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function admin(): HasOne
+    public function users()
     {
-        return $this->hasOne(User::class, 'admin_id');
+        return $this->hasMany(User::class, 'dealership_id');
     }
 }

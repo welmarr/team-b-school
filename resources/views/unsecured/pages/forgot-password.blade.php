@@ -49,7 +49,7 @@
               <hr class="mt-4 mb-3">
               <div class="row">
                 <button class="w-100 btn btn-orange btn-lg" type="submit">Reset password</button>
-                <p class="mt-2 d-flex justify-content-center"> <a href="{{route("login")}}" class="text-orange">Login</a>&nbsp; | 	&nbsp;<a href="{{route("unsecured.sign-up")}}" class="text-orange">Create account</a></p>
+                <p class="mt-2 d-flex justify-content-center"> <a href="{{route("login")}}" class="text-orange">Login</a>&nbsp; | 	&nbsp;<a href="{{route("sign-up")}}" class="text-orange">Create account</a></p>
               </div>
     </form>
     </div>

@@ -12,8 +12,15 @@ class LoginController extends Controller
 {
     /**
      * Handle the login process.
+     *
+     * This method attempts to authenticate the user, performs various checks,
+     * and redirects the user based on their role and account status.
+     *
+     * @param LoginRequest $request The validated login request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws ValidationException If authentication fails
      */
-    public function core(LoginRequest $request)
+    public function submit(LoginRequest $request)
     {
         try {
             // The request is already validated by LoginRequest
@@ -30,21 +37,31 @@ class LoginController extends Controller
             $user = Auth::user();
             $error = null;
 
+
+
             if (is_null($user->email_verified_at)) {
                 Auth::logout();
-                $error = 'Your email address is not verified.';
+                $error = 'Your email address is not verified. Please check your inbox for the verification email sent when your account was created.';
             } elseif (!$user->is_active) {
                 Auth::logout();
-                $error = 'Your account is inactive.';
+                $error = 'Your account is currently inactive. Please contact support for further assistance.';
             } else {
-                // If the user is an Admin, check and update first_connect_at
-                if ($user->role === 'admin' && is_null($user->first_connect_at)) {
-                    $user->update(['first_connect_at' => Carbon::now()]);
-                }
+                // Determine the redirect route based on the user's role and first connection status
+                $roleBasedRoutes = [
+                    'admin' => [
+                        'dashboard' => 'secured.admin.dashboard',
+                        'initialSetup' => 'secured.admin.initialSetupView',
+                    ],
+                    'dealer' => [
+                        'dashboard' => 'secured.dealers.dashboard',
+                        'initialSetup' => 'secured.dealers.initialSetupView',
+                    ],
+                ];
 
-                //dd( $user->role);
-                // Redirect based on role
-                $redirectRoute = $user->role === 'admin' ? 'secured.admin.dashboard' : 'secured.dealers.dashboard';
+                // Determine if the user needs to be redirected to the initial setup view or the dashboard
+                $redirectRoute = is_null($user->first_connect_at)
+                    ? $roleBasedRoutes[$user->role]['initialSetup']
+                    : $roleBasedRoutes[$user->role]['dashboard'];
 
                 // Regenerate session and redirect
                 $request->session()->regenerate();
@@ -56,10 +73,23 @@ class LoginController extends Controller
             return $error != null ? redirect()->back()->with('error', $error)->withInput() : redirect()->route($redirectRoute);
         } catch (ValidationException $e) {
             // Redirect back to the login form with validation errors
-            return redirect()->back()->withErrors($e->errors())->withInput();
+            return redirect()->back()->with('error', $e->errors())->withInput();
         } catch (\Exception $e) {
             // Handle any other exceptions that may occur
             return redirect()->back()->with('error', 'An unexpected error occurred. Please try again. [' .  $e->getMessage() . "]")->withInput();
         }
+    }
+
+    /**
+     * Display the login view.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function view()
+    {
+        if (Auth::check()) {
+            Auth::logout();
+        }
+        return view('unsecured.pages.login');
     }
 }

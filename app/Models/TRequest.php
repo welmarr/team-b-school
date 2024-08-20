@@ -24,12 +24,17 @@ class TRequest extends Model
         'reference',
         'car_id',
         'created_by_type',
-        'created_by_id'
+        'created_by_id',
+        'finish_by'
     ];
 
     public function car()
     {
         return $this->belongsTo(TCar::class, 'car_id');
+    }
+    public function appointments()
+    {
+        return $this->hasMany(TAppointment::class, 'request_id');
     }
 
     public function createdBy()

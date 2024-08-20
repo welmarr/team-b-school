@@ -41,7 +41,7 @@
                     <li class="nav-item">
                         <a href="{{ route('secured.admin.users.index') }}"
                             class="nav-link {{ isset($activeMenu) && $activeMenu == 'users' ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-th"></i>
+                            <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Users
                                 <span class="right badge badge-dark"> {{ isset($newUser) ? $newUser . ' New' : '' }}
@@ -82,15 +82,6 @@
                             <i class="nav-icon fab fa-uniregistry"></i>
                             <p>
                                 Units
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="pages/calendar.html" class="nav-link">
-                            <i class="nav-icon far fa-calendar-alt"></i>
-                            <p>
-                                Calendar
-                                <span class="badge badge-dark right">2</span>
                             </p>
                         </a>
                     </li>

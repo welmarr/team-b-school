@@ -66,7 +66,7 @@
     <div class="w-100" id="form-section">
         <div class="row">
             <div class="col-8 offset-2" style="">
-                <form action="{{ route('unsecured.ask-for.sign-up') }}" method="POST">
+                <form action="{{ route('sign-up.submit') }}" method="POST">
                     @csrf
                     <h4 class="my-4 fw-bold text-orange">Create account</h4>
 
