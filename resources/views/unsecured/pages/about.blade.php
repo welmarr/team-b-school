@@ -80,7 +80,7 @@
                     Take a look at some of my sample work on this page, but it's just a microcosm of what is offered at
                     Cincy Dent
                     Repair. <br> <br> <span class="text-orange">Refer to our Facebook and Instagram page (links below) to see much more comprehensive, in depth
-                        and detailed  descriptions and photos of past jobs before you make the choice to allow CDR to service your vehicle.</span>
+                        and detailed  descriptions and photos of past jobs before you make the choice to allow CDR to service your vehicle.</span><br>
                 </p>
             </div>
         </div>
