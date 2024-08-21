@@ -78,6 +78,10 @@
                         <div class="alert alert-danger">
                             <strong>Whoops! Something went wrong.<br />{{ $errors->first('er-500') }}</strong>
                         </div>
+                    @elseif ($errors->has('error'))
+                        <div class="alert alert-danger">
+                            <strong>Whoops! Something went wrong.<br />{{ $errors->first('error') }}</strong>
+                        </div>
                     @endif
 
                     <div class="row my-2">

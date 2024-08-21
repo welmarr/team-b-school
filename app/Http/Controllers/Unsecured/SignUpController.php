@@ -59,7 +59,7 @@ class SignUpController extends Controller
             return redirect()->route('account-created');
         } catch (\Exception $e) {
             // Handle exceptions and delete any rows that were already created
-            $this->deleteRowAlreadyCreated($e, $user, $dealership, $address, $validated);
+            $this->deleteRowAlreadyCreated($e, $user, $dealership, $address, $validated); 
 
             // Redirect back to the sign-up page with an error message
             return redirect()->route('sign-up')->with('error', 'There was an error processing your request. ' . $e->getMessage());

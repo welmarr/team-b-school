@@ -19,6 +19,7 @@ ENV APP_ENV production
 WORKDIR /app
 COPY . .
 
+
 # Installation et configuration de votre site pour la production
 # https://laravel.com/docs/10.x/deployment#optimizing-configuration-loading
 RUN composer install --no-interaction --optimize-autoloader --no-dev
@@ -32,7 +33,6 @@ RUN php artisan optimize
 RUN php artisan optimize:clear
 RUN composer dump-autoload --optimize
 
-RUN chown -R application:application ./storage ./bootstrap/cache
-RUN chmod -R 775 ./storage ./bootstrap/cache
+RUN chmod -R 777 ./app/storage ./app/bootstrap/cache
 
 RUN chown -R application:application ./app

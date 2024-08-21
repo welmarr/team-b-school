@@ -47,21 +47,24 @@ class LoginController extends Controller
                 $error = 'Your account is currently inactive. Please contact support for further assistance.';
             } else {
                 // Determine the redirect route based on the user's role and first connection status
-                $roleBasedRoutes = [
-                    'admin' => [
-                        'dashboard' => 'secured.admin.dashboard',
-                        'initialSetup' => 'secured.admin.initialSetupView',
-                    ],
-                    'dealer' => [
-                        'dashboard' => 'secured.dealers.dashboard',
-                        'initialSetup' => 'secured.dealers.initialSetupView',
-                    ],
-                ];
+
 
                 // Determine if the user needs to be redirected to the initial setup view or the dashboard
-                $redirectRoute = is_null($user->first_connect_at)
-                    ? $roleBasedRoutes[$user->role]['initialSetup']
-                    : $roleBasedRoutes[$user->role]['dashboard'];
+                    if($user->role == 'admin'){
+                        $roleBasedRoutes = [
+                                'dashboard' => 'secured.admin.dashboard',
+                                'initialSetup' => 'secured.admin.initialSetupView',
+                        ];
+                        $redirectRoute = is_null($user->first_connect_at)
+                        ? $roleBasedRoutes['initialSetup']
+                        : $roleBasedRoutes['dashboard'];
+                    }else{
+                        if(is_null($user->first_connect_at)){
+                            $user->email_verified_at = \Carbon\Carbon::now();
+                            $user->save();
+                        }
+                        $redirectRoute = 'secured.dealers.dashboard';
+                    }
 
                 // Regenerate session and redirect
                 $request->session()->regenerate();
