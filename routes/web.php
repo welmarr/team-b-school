@@ -150,6 +150,8 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => ['auth'
         Route::get('dashboard', DealerDashboardController::class)->name('dashboard');
         Route::singleton('profile', DealerProfileController::class);
         Route::resource('requests', DealerRequestController::class);
+        Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/dealership/update', [ProfileController::class, 'updateDealerShip'])->name('profile.dealership.update');
     });
 });
 

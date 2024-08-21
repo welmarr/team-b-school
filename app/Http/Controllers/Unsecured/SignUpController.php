@@ -43,13 +43,17 @@ class SignUpController extends Controller
 
                 // Create a new address for the dealership if it was created successfully
                 if ($dealership != null) {
-                    $address = $this->createDealershipAddress($dealership, $validated);
+                    $address = $this->createDealershipAddress($validated);
                 }
             }
 
             // Associate the user with the dealership if it exists
             if ($dealership != null) {
                 $user->dealership_id = $dealership->id;
+                if($address){
+                    $dealership->address_id = $address->id;
+                    $dealership->save();
+                }
                 $user->save();
             }
 
@@ -59,7 +63,7 @@ class SignUpController extends Controller
             return redirect()->route('account-created');
         } catch (\Exception $e) {
             // Handle exceptions and delete any rows that were already created
-            $this->deleteRowAlreadyCreated($e, $user, $dealership, $address, $validated); 
+            $this->deleteRowAlreadyCreated($e, $user, $dealership, $address, $validated);
 
             // Redirect back to the sign-up page with an error message
             return redirect()->route('sign-up')->with('error', 'There was an error processing your request. ' . $e->getMessage());
@@ -137,7 +141,7 @@ class SignUpController extends Controller
      * @param array $validated
      * @return TAddress|null
      */
-    private function createDealershipAddress($dealership, $validated)
+    private function createDealershipAddress($validated)
     {
         // Check if the new dealership address line 1 is provided
         if ($validated['new_dealership_address_line_1'] != null) {
@@ -148,8 +152,6 @@ class SignUpController extends Controller
                 "city" => $validated["new_dealership_city"],
                 "state" => $validated["new_dealership_state"],
                 "zip" => $validated["new_dealership_zip"],
-                "morph_type" => TDealership::class,
-                "morph_id" => $dealership->id,
             ]);
         }
 
@@ -175,7 +177,7 @@ class SignUpController extends Controller
         if ($validated['dealership_option'] === 'create_dealership') {
             // Delete the address if it was created
             if ($validated['new_dealership_address_line_1'] != null && $address != null) {
-                TAddress::where('dealership_id', $dealership->id)->forceDelete();
+                TAddress::where('dealership_id', $dealership->address_id)->forceDelete();
             }
 
             // Delete the dealership if it was created
