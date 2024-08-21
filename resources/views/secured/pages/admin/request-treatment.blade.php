@@ -731,12 +731,12 @@
 
                                 var updateRouteTemplate =
                                     "{{ route('api.secure.requests.tools.usage.update', ['request_id' => ':request_id', 'inventory' => ':inventory']) }}"
-                                    .replace('request_id', response.data.request_id).replace(
-                                        'inventory', response.data.id);
+                                    .replace(':request_id', response.data.request_id).replace(
+                                        ':inventory', response.data.id);
                                 var deleteRouteTemplate =
                                     "{{ route('api.secure.requests.tools.usage.delete', ['request_id' => ':request_id', 'inventory' => ':inventory']) }}"
-                                    .replace('request_id', response.data.request_id).replace(
-                                        'inventory', response.data.id);
+                                    .replace('r:equest_id', response.data.request_id).replace(
+                                        ':inventory', response.data.id);
 
                                 var rowId = 'tool-usage-row-' + response.data.id;
                                 var rowHtml = '<tr id="' + rowId + '">' +
