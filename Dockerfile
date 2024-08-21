@@ -33,6 +33,5 @@ RUN php artisan optimize
 RUN php artisan optimize:clear
 RUN composer dump-autoload --optimize
 
-RUN chmod -R 777 ./app/storage ./app/bootstrap/cache
-
 RUN chown -R application:application ./app
+RUN chmod -R 777 ./app

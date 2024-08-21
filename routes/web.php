@@ -10,6 +10,7 @@ use App\Http\Controllers\Unsecured\HomePageController;
 use App\Http\Controllers\Unsecured\AboutPageController;
 use App\Http\Controllers\Secured\Sharing\ProfileController;
 use App\Http\Controllers\Unsecured\ValidateEmailController;
+use App\Http\Controllers\Secured\Dealer\DashboardController as DealerDashboardController;
 use App\Http\Controllers\Unsecured\ForgotPasswordController;
 use App\Http\Controllers\Unsecured\GetEstimatePageController;
 use App\Http\Controllers\Unsecured\TrackRepairPageController;
@@ -145,11 +146,8 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => ['auth'
      * Routes for dealer functionalities.
      */
     Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
-        Route::get('dashboard', function () {
-            $activeMenu = 'dashboard';
-            $countRequest = \App\Models\TRequest::count();
-            return view('secured.pages.dealer.dashboard',  compact("activeMenu",  "countRequest",));
-        })->name('dashboard');
+
+        Route::get('dashboard', DealerDashboardController::class)->name('dashboard');
         Route::singleton('profile', DealerProfileController::class);
         Route::resource('requests', DealerRequestController::class);
     });
