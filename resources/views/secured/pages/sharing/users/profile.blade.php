@@ -206,18 +206,13 @@
                                     </div>
                                     <!-- Form fields -->
                                     <div class="form-group">
-                                        <label for="inputFirstName">First Name</label>
-                                        <input type="text" id="inputFirstName" name="first_name" class="form-control"
+                                        <label for="dearler-name">Name</label>
+                                        <input type="text" id="dearler-name" name="first_name" class="form-control"
                                             value="{{ old('first_name', $user->first_name) }}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputLastName">Last Name</label>
-                                        <input type="text" id="inputLastName" name="last_name" class="form-control"
-                                            value="{{ old('last_name', $user->last_name) }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputPhoneNumber">Phone Number</label>
-                                        <input type="text" id="inputPhoneNumber" name="phone" class="form-control"
+                                        <label for="dearler-phone">Phone Number</label>
+                                        <input type="text" id="dearler-phone" name="phone" class="form-control"
                                             value="{{ old('phone', $user->phone) }}">
                                     </div>
                                     <!-- Buttons -->

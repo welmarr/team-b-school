@@ -74,9 +74,6 @@ class LoginController extends Controller
 
             // If there was an error, redirect back with the error message
             return $error != null ? redirect()->back()->with('error', $error)->withInput() : redirect()->route($redirectRoute);
-        } catch (ValidationException $e) {
-            // Redirect back to the login form with validation errors
-            return redirect()->back()->with('error', $e->errors())->withInput();
         } catch (\Exception $e) {
             // Handle any other exceptions that may occur
             return redirect()->back()->with('error', 'An unexpected error occurred. Please try again. [' .  $e->getMessage() . "]")->withInput();
