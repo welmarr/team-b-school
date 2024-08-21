@@ -19,8 +19,6 @@ ENV APP_ENV production
 WORKDIR /app
 COPY . .
 
-RUN sudo chmod -R 777 storage
-
 # Installation et configuration de votre site pour la production
 # https://laravel.com/docs/10.x/deployment#optimizing-configuration-loading
 RUN composer install --no-interaction --optimize-autoloader --no-dev
