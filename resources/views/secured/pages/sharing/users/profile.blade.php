@@ -87,9 +87,31 @@
                                         </span><strong>{{ $user->phone }}</strong></p>
                                 </div>
                             </div>
-                            <hr>
+                            @if ($user->role == 'dealer' && isset($user->dealership))
+                                <hr>
+                                <strong><i class="far fa-file-alt mr-1"></i> Dealership Information</strong>
+                                <p class="text-muted"></p>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <p class=""><span class="text-muted">Name:
+                                            </span><strong>{{ $user->dealership->name }}</strong></p>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <p class=""><span class="text-muted">Code:
+                                            </span><strong>{{ $user->dealership->code }}</strong></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <p class=""><span class="text-muted">Phone:
+                                            </span><strong>{{ $user->dealership->phone }}</strong></p>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
+
+
                 </div>
 
                 <!-- Edit Profile Section -->
@@ -100,7 +122,7 @@
                                 <h3 class="card-title">Edit Profile</h3>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('secured.admin.profile.update') }}" method="POST">
+                                <form action="{{ route('secured.admin.profile.update') }}" method="POST" id="form-section-user">
                                     @csrf
                                     @method('PUT')
                                     <div class="row">
@@ -136,13 +158,79 @@
                                     <!-- Buttons -->
                                     <div class="row mt-3">
                                         <div class="col-12 d-flex justify-content-end">
-                                            <input type="submit" value="Save Changes" class="btn btn-success">
+                                            <input type="submit" value="Save Changes" class="btn btn-success" form="form-section-user">
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
+                    <section class="connectedSortable">
+                        <!-- Calendar -->
+                        <div class="card bg-gradient-success">
+                            <div class="card-header border-0">
+
+                                <h3 class="card-title">
+                                    <i class="far fa-calendar-alt"></i>
+                                    Edit Dealership profile
+                                </h3>
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-success btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-success btn-sm" data-card-widget="remove">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body pt-0">
+
+                                <form action="{{ route('secured.admin.profile.update') }}" method="POST" id="form-section-user">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="row">
+                                        <div class="col-12">
+                                            @if (session('dearler_success'))
+                                                <div class="alert alert-success">
+                                                    {{ session('dearler_success') }}
+                                                </div>
+                                            @endif
+                                            @if (session('dearler_error'))
+                                                <div class="alert alert-danger">
+                                                    {{ session('dearler_error') }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <!-- Form fields -->
+                                    <div class="form-group">
+                                        <label for="inputFirstName">First Name</label>
+                                        <input type="text" id="inputFirstName" name="first_name" class="form-control"
+                                            value="{{ old('first_name', $user->first_name) }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputLastName">Last Name</label>
+                                        <input type="text" id="inputLastName" name="last_name" class="form-control"
+                                            value="{{ old('last_name', $user->last_name) }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputPhoneNumber">Phone Number</label>
+                                        <input type="text" id="inputPhoneNumber" name="phone" class="form-control"
+                                            value="{{ old('phone', $user->phone) }}">
+                                    </div>
+                                    <!-- Buttons -->
+                                    <div class="row mt-3">
+                                        <div class="col-12 d-flex justify-content-end">
+                                            <input type="submit" value="Save Changes" class="btn btn-success" form="form-section-user">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    </section>
                 </div>
             </div>
         </div>

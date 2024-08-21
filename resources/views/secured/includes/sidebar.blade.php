@@ -95,7 +95,7 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a href=""
+                        <a href="{{ route('secured.dealers.dashboard')}}"
                             class="nav-link  {{ isset($activeMenu) && $activeMenu == 'dashboard' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>

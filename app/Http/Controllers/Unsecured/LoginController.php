@@ -50,21 +50,21 @@ class LoginController extends Controller
 
 
                 // Determine if the user needs to be redirected to the initial setup view or the dashboard
-                    if($user->role == 'admin'){
-                        $roleBasedRoutes = [
-                                'dashboard' => 'secured.admin.dashboard',
-                                'initialSetup' => 'secured.admin.initialSetupView',
-                        ];
-                        $redirectRoute = is_null($user->first_connect_at)
+                if ($user->role == 'admin') {
+                    $roleBasedRoutes = [
+                        'dashboard' => 'secured.admin.dashboard',
+                        'initialSetup' => 'secured.admin.initialSetupView',
+                    ];
+                    $redirectRoute = is_null($user->first_connect_at)
                         ? $roleBasedRoutes['initialSetup']
                         : $roleBasedRoutes['dashboard'];
-                    }else{
-                        if(is_null($user->first_connect_at)){
-                            $user->email_verified_at = \Carbon\Carbon::now();
-                            $user->save();
-                        }
-                        $redirectRoute = 'secured.dealers.dashboard';
+                } else {
+                    if (is_null($user->first_connect_at)) {
+                        $user->first_connect_at = \Carbon\Carbon::now();
+                        $user->save();
                     }
+                    $redirectRoute = 'secured.dealers.dashboard';
+                }
 
                 // Regenerate session and redirect
                 $request->session()->regenerate();

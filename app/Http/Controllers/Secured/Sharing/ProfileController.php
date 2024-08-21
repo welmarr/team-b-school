@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Secured\Sharing;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Secured\UpdateUserProfileRequest;
+use App\Models\TDealership;
 
 class ProfileController extends Controller
 {
@@ -15,6 +16,9 @@ class ProfileController extends Controller
     {
         $activeMenu = 'profile';
         $user = Auth::user();
+        //$dealership =  TDealership::where('id', $user->dealership_id)->first();
+
+        //dd($user->dealership, $dealership, Auth::user()->email);
         return view('secured.pages.sharing.users.profile', compact('user', 'activeMenu'));
     }
 

@@ -25,13 +25,19 @@ COPY . .
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 # Generate security key
 RUN php artisan key:generate
-# Optimizing Configuration loading
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
-RUN php artisan optimize
-RUN php artisan optimize:clear
-RUN composer dump-autoload --optimize
+# Optimizing Route loading
+# Clear various caches and configurations
+RUN php artisan config:clear         # Clear the configuration cache
+RUN php artisan route:clear          # Clear the route cache
+RUN php artisan view:clear           # Clear the compiled view files
+RUN php artisan cache:clear          # Clear the application cache
+RUN php artisan config:cache         # Cache the configuration files
+RUN php artisan route:cache          # Cache the routes
+RUN php artisan view:cache           # Cache the views
+RUN php artisan optimize:clear       # Clear all compiled classes and files
+RUN php artisan optimize             # Optimize the framework for better performance
+
+RUN chown -R application:application ./storage ./bootstrap/cache
+RUN chmod -R 777 ./storage ./bootstrap/cache
 
 RUN chown -R application:application ./app
-RUN chmod -R 777 ./app
