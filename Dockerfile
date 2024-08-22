@@ -29,8 +29,6 @@ RUN apk add --no-cache --update \
 RUN docker-php-ext-install \
     bcmath \
     bz2 \
-    calendar \
-    dba \
     enchant \
     exif \
     ffi \
@@ -39,26 +37,12 @@ RUN docker-php-ext-install \
     gmp \
     imap \
     intl \
-    ldap \
-    mysqli \
-    opcache \
     pcntl \
-    pdo_dblib \
     pdo_mysql \
-    pdo_pgsql \
-    pgsql \
-    pspell \
-    shmop \
-    snmp \
     soap \
     sockets \
-    sysvmsg \
-    sysvsem \
-    sysvshm \
     tidy \
-    xsl \
-    zend_test \
-    zip
+    xml
 
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
