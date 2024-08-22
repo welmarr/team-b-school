@@ -2,14 +2,14 @@ FROM webdevops/php-nginx:8.3-alpine
 
 # Essentials
 RUN echo "UTC" > /etc/timezone
-RUN apk add zip unzip curl sqlite supervisor git
+RUN apk add --no-cache zip unzip curl sqlite supervisor git
 
 # Installing bash
 RUN apk add bash
 RUN sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd
 
 # Installing PHP
-RUN apk add php83 \
+RUN apk add --no-cache php83 \
     php83-common \
     php83-fpm \
     php83-session \
@@ -33,6 +33,8 @@ RUN apk add php83 \
     php83-pdo_sqlite \
     php83-tokenizer \
     php83-pecl-redis
+
+    RUN ln -s /usr/bin/php82 /usr/bin/php
 
 # Enable GD library with JPEG and PNG support
 # RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
