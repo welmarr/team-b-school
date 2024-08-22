@@ -38,15 +38,15 @@ RUN [ -e /usr/bin/php ] && rm /usr/bin/php || true \
     && ln -s /usr/bin/php83 /usr/bin/php
 
 # Enable GD library with JPEG and PNG support
-# RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-#     && docker-php-ext-install \
-#     bcmath \
-#     ctype \
-#     fileinfo \
-#     mbstring \
-#     pdo_mysql \
-#     xml \
-#     gd
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
+    bcmath \
+    ctype \
+    fileinfo \
+    mbstring \
+    pdo_mysql \
+    xml \
+    gd
 
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
