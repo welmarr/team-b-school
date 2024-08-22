@@ -149,7 +149,6 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => ['auth'
     Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
 
         Route::get('dashboard', DealerDashboardController::class)->name('dashboard');
-        Route::singleton('profile', DealerProfileController::class);
         Route::resource('requests', DealerRequestController::class);
         Route::get('/profile', [ProfileController::class, 'view'])->name('profile.view');
         Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
