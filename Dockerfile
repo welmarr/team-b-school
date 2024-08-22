@@ -1,29 +1,32 @@
 FROM webdevops/php-nginx:8.3-alpine
 
 # Installation dans votre Image du minimum pour que Docker fonctionne
-RUN apt-get update && apt-get install -y \
-    libonig-dev \
+# Installation des dépendances nécessaires
+RUN apk add --no-cache \
     oniguruma-dev \
-    build-essential \
+    build-base \
     libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
     libxml2-dev \
-    locales \
     zip \
-    jpegoptim optipng pngquant gifsicle \
+    jpegoptim \
+    optipng \
+    pngquant \
+    gifsicle \
     unzip \
     git \
     curl \
     libzip-dev \
     supervisor \
     bcmath \
-    nano
+    nano \
+    && rm -rf /var/cache/apk/* /tmp/*
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install \
+# Enable GD library with JPEG and PNG support
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
     bcmath \
     ctype \
     fileinfo \
@@ -32,12 +35,10 @@ RUN docker-php-ext-install \
     xml \
     gd
 
-
-# Installation dans votre image de Composer
+# Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-
-
+# Configuration de l'environnement et de l'application
 ENV WEB_DOCUMENT_ROOT /app/public
 ENV APP_ENV production
 WORKDIR /app
@@ -45,26 +46,25 @@ COPY . .
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Installation et optimisation de Laravel
+RUN composer install --no-interaction --optimize-autoloader --no-dev \
+    && php artisan key:generate \
+    && php artisan config:clear \
+    && php artisan route:clear \
+    && php artisan view:clear \
+    && php artisan cache:clear \
+    && php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache \
+    && php artisan optimize:clear \
+    && php artisan optimize \
+    && rm -rf /usr/bin/composer
 
-# Installation et configuration de votre site pour la production
-# https://laravel.com/docs/10.x/deployment#optimizing-configuration-loading
-RUN composer install --no-interaction --optimize-autoloader --no-dev
-# Generate security key
-RUN php artisan key:generate
-# Optimizing Route loading
-# Clear various caches and configurations
-RUN php artisan config:clear         # Clear the configuration cache
-RUN php artisan route:clear          # Clear the route cache
-RUN php artisan view:clear           # Clear the compiled view files
-RUN php artisan cache:clear          # Clear the application cache
-RUN php artisan config:cache         # Cache the configuration files
-RUN php artisan route:cache          # Cache the routes
-RUN php artisan view:cache           # Cache the views
-RUN php artisan optimize:clear       # Clear all compiled classes and files
-RUN php artisan optimize             # Optimize the framework for better performance
+# Permissions et utilisateur non-root
+RUN chown -R application:application /app \
+    && chmod -R 777 /app/storage /app/bootstrap/cache
 
-RUN chown -R application:application ./storage ./bootstrap/cache
-RUN chmod -R 777 ./storage ./bootstrap/cache
+USER application
 
-RUN chown -R application:application ./app
-CMD /usr/bin/supervisord
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
