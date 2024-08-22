@@ -1,39 +1,49 @@
 FROM webdevops/php-nginx:8.3-alpine
 
-# Installation dans votre Image du minimum pour que Docker fonctionne
-# Installation des dépendances nécessaires
-RUN apk add --no-cache \
-    oniguruma-dev \
-    build-base \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    libxml2-dev \
-    zip \
-    jpegoptim \
-    optipng \
-    pngquant \
-    gifsicle \
-    unzip \
-    git \
-    curl \
-    libzip-dev \
-    supervisor \
-    bcmath \
-    nano \
-    && rm -rf /var/cache/apk/* /tmp/*
+# Essentials
+RUN echo "UTC" > /etc/timezone
+RUN apk add --no-cache zip unzip curl sqlite supervisor git
 
+# Installing bash
+RUN apk add bash
+RUN sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd
+
+# Installing PHP
+RUN apk add --no-cache php83 \
+    php83-common \
+    php83-fpm \
+    php83-session \
+    php83-pdo \
+    php83-opcache \
+    php83-zip \
+    php83-phar \
+    php83-iconv \
+    php83-cli \
+    php83-curl \
+    php83-openssl \
+    php83-mbstring \
+    php83-tokenizer \
+    php83-fileinfo \
+    php83-json \
+    php83-xml \
+    php83-xmlwriter \
+    php83-simplexml \
+    php83-dom \
+    php83-pdo_mysql \
+    php83-pdo_sqlite \
+    php83-tokenizer \
+    php83-pecl-redis
 
 # Enable GD library with JPEG and PNG support
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install \
-    bcmath \
-    ctype \
-    fileinfo \
-    mbstring \
-    pdo_mysql \
-    xml \
-    gd
+# RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+#     && docker-php-ext-install \
+#     bcmath \
+#     ctype \
+#     fileinfo \
+#     mbstring \
+#     pdo_mysql \
+#     xml \
+#     gd
 
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
