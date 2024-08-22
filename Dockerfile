@@ -20,7 +20,7 @@ WORKDIR /app
 COPY . .
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-
+RUN touch ./storage/logs/worker.log
 # Installation et configuration de votre site pour la production
 # https://laravel.com/docs/10.x/deployment#optimizing-configuration-loading
 RUN composer install --no-interaction --optimize-autoloader --no-dev
@@ -31,7 +31,7 @@ RUN php artisan key:generate
 RUN php artisan config:clear         # Clear the configuration cache
 RUN php artisan route:clear          # Clear the route cache
 RUN php artisan view:clear           # Clear the compiled view files
-RUN php artisan cache:clear          # Clear the application cache
+#RUN php artisan cache:clear          # Clear the application cache
 RUN php artisan config:cache         # Cache the configuration files
 RUN php artisan route:cache          # Cache the routes
 RUN php artisan view:cache           # Cache the views
