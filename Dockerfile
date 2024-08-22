@@ -2,13 +2,13 @@ FROM alpine:latest
 
 # Essentials
 RUN echo "UTC" > /etc/timezone
-RUN apk add --no-cache zip unzip curl sqlite supervisor git
+RUN apk add --no-cache zip unzip curl sqlite supervisor git mysql-client msmtp perl wget procps shadow libzip libpng libjpeg-turbo libwebp freetype icu icu-data-full
 
 # Installing bash
 RUN apk add bash
 RUN sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd
 
-# Installing PHP
+# Installing PHP and necessary extensions
 RUN apk add --no-cache php83 \
     php83-common \
     php83-fpm \
@@ -34,19 +34,18 @@ RUN apk add --no-cache php83 \
     php83-tokenizer \
     php83-pecl-redis
 
+
+# Remove existing php symlink and create a new one pointing to php83
 RUN [ -e /usr/bin/php ] && rm /usr/bin/php || true \
     && ln -s /usr/bin/php83 /usr/bin/php
 
-# Enable GD library with JPEG and PNG support
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install \
-    bcmath \
-    ctype \
-    fileinfo \
-    mbstring \
-    pdo_mysql \
-    xml \
-    gd
+    # Configure PHP
+RUN mkdir -p /run/php/
+RUN touch /run/php/php8.3-fpm.pid
+
+COPY php-fpm.conf /etc/php83/php-fpm.conf
+COPY php.ini-production /etc/php82/php.ini
+
 
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -75,7 +74,6 @@ RUN composer install --no-interaction --optimize-autoloader --no-dev \
 # Permissions et utilisateur non-root
 RUN chown -R application:application ./storage ./bootstrap/cache \
     && chmod -R 777 /app/storage /app/bootstrap/cache \
-    chown -R application:application /app
+    && chown -R application:application /app
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
-
