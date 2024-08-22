@@ -18,9 +18,6 @@ class ProfileController extends Controller
     {
         $activeMenu = 'profile';
         $user = Auth::user();
-        //$dealership =  TDealership::where('id', $user->dealership_id)->first();
-
-        //dd($user->dealership, $dealership, Auth::user()->email);
         return view('secured.pages.sharing.users.profile', compact('user', 'activeMenu'));
     }
 

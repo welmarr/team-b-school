@@ -14,7 +14,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ isset($activeMenu) && $activeMenu == 'profile' ? 'nav-activated' : '' }}"  href="{{ route('secured.admin.profile.view')}}" role="button">
+            <a class="nav-link {{ isset($activeMenu) && $activeMenu == 'profile' ? 'nav-activated' : '' }}"  href=" {{ Auth::user()->role == 'admin' ? route('secured.admin.profile.view') : route('secured.dealers.profile.view') }}" role="button">
                 <i class="fas fa-user-circle"></i>
             </a>
         </li>

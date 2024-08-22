@@ -77,7 +77,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('secured.admin.dashboard') }}" class="text-orange">Dashboard</a>
+                            <a href="{{ $user->role == 'admin' ? route('secured.admin.dashboard') : route('secured.dealers.dashboard') }}" class="text-orange">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item active">Profile</li>
                     </ol>

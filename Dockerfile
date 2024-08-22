@@ -2,22 +2,48 @@ FROM webdevops/php-nginx:8.3-alpine
 
 # Installation dans votre Image du minimum pour que Docker fonctionne
 RUN apk add oniguruma-dev libxml2-dev
+
+RUN apt-get update && apt-get install -y \
+    libonig-dev\
+    build-essential \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
+    unzip \
+    git \
+    curl \
+    libzip-dev\
+    supervisor\
+    bcmath
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
 RUN docker-php-ext-install \
     bcmath \
     ctype \
     fileinfo \
     mbstring \
     pdo_mysql \
-    xml
+    xml \
+    gd
+
 
 # Installation dans votre image de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 
 
 ENV WEB_DOCUMENT_ROOT /app/public
 ENV APP_ENV production
 WORKDIR /app
 COPY . .
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 
 # Installation et configuration de votre site pour la production
@@ -41,3 +67,4 @@ RUN chown -R application:application ./storage ./bootstrap/cache
 RUN chmod -R 777 ./storage ./bootstrap/cache
 
 RUN chown -R application:application ./app
+CMD /usr/bin/supervisord
