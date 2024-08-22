@@ -2,14 +2,14 @@ FROM webdevops/php-nginx:8.3-alpine
 
 # Essentials
 RUN echo "UTC" > /etc/timezone
-RUN apk add --no-cache zip unzip curl sqlite supervisor git
+RUN apk add zip unzip curl sqlite supervisor git
 
 # Installing bash
 RUN apk add bash
 RUN sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd
 
 # Installing PHP
-RUN apk add --no-cache php83 \
+RUN apk add php83 \
     php83-common \
     php83-fpm \
     php83-session \
@@ -67,14 +67,12 @@ RUN composer install --no-interaction --optimize-autoloader --no-dev \
     && php artisan route:cache \
     && php artisan view:cache \
     && php artisan optimize:clear \
-    && php artisan optimize \
-    && rm -rf /usr/bin/composer
+    && php artisan optimize
 
 # Permissions et utilisateur non-root
-RUN chown -R application:application /app \
-    && chmod -R 777 /app/storage /app/bootstrap/cache
-
-USER application
+RUN chown -R application:application ./storage ./bootstrap/cache \
+    && chmod -R 777 /app/storage /app/bootstrap/cache \
+    chown -R application:application /app
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
