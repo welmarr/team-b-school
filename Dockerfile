@@ -1,48 +1,14 @@
 FROM webdevops/php-nginx:8.3-alpine
 
-RUN echo "UTC" > /etc/timezone
-# Installing bash
-RUN apk add bash
-RUN sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd
-
-
-RUN apk add --no-cache --update \
-    bzip2-dev \
-    enchant2-dev \
-    libpng-dev \
-    gmp-dev \
-    imap-dev \
-    icu-dev \
-    openldap-dev \
-    freetds-dev \
-    postgresql-dev \
-    aspell-dev \
-    net-snmp-dev \
-    libxml2-dev \
-    tidyhtml-dev  \
-    libxslt-dev \
-    libzip-dev \
-    supervisor \
-    nano \
-    oniguruma-dev
-
+RUN apk add oniguruma-dev libxml2-dev
 RUN docker-php-ext-install \
     bcmath \
-    bz2 \
-    enchant \
-    exif \
-    ffi \
-    gd \
-    gettext \
-    gmp \
-    imap \
-    intl \
-    pcntl \
+    ctype \
+    fileinfo \
+    mbstring \
     pdo_mysql \
-    soap \
-    sockets \
-    tidy \
     xml
+
 
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -55,18 +21,22 @@ COPY . .
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 
-# Installation et optimisation de Laravel
-RUN composer install --no-interaction --optimize-autoloader --no-dev \
-    && php artisan key:generate \
-    && php artisan config:clear \
-    && php artisan route:clear \
-    && php artisan view:clear \
-    && php artisan cache:clear \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
-    && php artisan optimize:clear \
-    && php artisan optimize
+# Installation et configuration de votre site pour la production
+# https://laravel.com/docs/10.x/deployment#optimizing-configuration-loading
+RUN composer install --no-interaction --optimize-autoloader --no-dev
+# Generate security key
+RUN php artisan key:generate
+# Optimizing Route loading
+# Clear various caches and configurations
+RUN php artisan config:clear         # Clear the configuration cache
+RUN php artisan route:clear          # Clear the route cache
+RUN php artisan view:clear           # Clear the compiled view files
+RUN php artisan cache:clear          # Clear the application cache
+RUN php artisan config:cache         # Cache the configuration files
+RUN php artisan route:cache          # Cache the routes
+RUN php artisan view:cache           # Cache the views
+RUN php artisan optimize:clear       # Clear all compiled classes and files
+RUN php artisan optimize             # Optimize the framework for better performance
 
 
 # Permissions et utilisateur non-root
