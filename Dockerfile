@@ -35,7 +35,7 @@ RUN php artisan view:clear           # Clear the compiled view files
 RUN php artisan config:cache         # Cache the configuration files
 RUN php artisan route:cache          # Cache the routes
 RUN php artisan view:cache           # Cache the views
-RUN php artisan optimize:clear       # Clear all compiled classes and files
+#RUN php artisan optimize:clear       # Clear all compiled classes and files
 RUN php artisan optimize             # Optimize the framework for better performance
 
 
