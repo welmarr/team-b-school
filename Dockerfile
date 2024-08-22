@@ -1,24 +1,24 @@
 FROM webdevops/php-nginx:8.3-alpine
 
 # Installation dans votre Image du minimum pour que Docker fonctionne
-RUN apk add oniguruma-dev libxml2-dev
-
 RUN apt-get update && apt-get install -y \
-    libonig-dev\
+    libonig-dev \
+    oniguruma-dev \
     build-essential \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
+    libxml2-dev \
     locales \
     zip \
     jpegoptim optipng pngquant gifsicle \
-    vim \
     unzip \
     git \
     curl \
-    libzip-dev\
-    supervisor\
-    bcmath
+    libzip-dev \
+    supervisor \
+    bcmath \
+    nano
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
