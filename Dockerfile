@@ -1,4 +1,4 @@
-FROM webdevops/php-nginx:8.3-alpine
+FROM alpine:latest
 
 # Essentials
 RUN echo "UTC" > /etc/timezone
