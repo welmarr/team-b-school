@@ -34,7 +34,7 @@ RUN apk add --no-cache php83 \
     php83-tokenizer \
     php83-pecl-redis
 
-    RUN ln -s /usr/bin/php82 /usr/bin/php
+    RUN ln -s /usr/bin/php83 /usr/bin/php
 
 # Enable GD library with JPEG and PNG support
 # RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
