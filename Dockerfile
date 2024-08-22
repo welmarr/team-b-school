@@ -44,6 +44,6 @@ RUN chown -R application:application ./storage ./bootstrap/cache \
     && chmod -R 777 /app/storage /app/bootstrap/cache \
     && chown -R application:application /app
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
 
