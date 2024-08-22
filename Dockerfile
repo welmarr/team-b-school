@@ -31,11 +31,11 @@ RUN php artisan key:generate
 RUN php artisan config:clear         # Clear the configuration cache
 RUN php artisan route:clear          # Clear the route cache
 RUN php artisan view:clear           # Clear the compiled view files
-#RUN php artisan cache:clear          # Clear the application cache
+RUN php artisan cache:clear          # Clear the application cache
 RUN php artisan config:cache         # Cache the configuration files
 RUN php artisan route:cache          # Cache the routes
 RUN php artisan view:cache           # Cache the views
-#RUN php artisan optimize:clear       # Clear all compiled classes and files
+RUN php artisan optimize:clear       # Clear all compiled classes and files
 RUN php artisan optimize             # Optimize the framework for better performance
 
 
