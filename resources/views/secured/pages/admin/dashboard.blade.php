@@ -170,8 +170,7 @@
                         <div class="card-body p-0">
 
                             <div class="modal-body text-center" id="request-list-loader">
-                                <div id="loader" class="spinner-border text-success" role="status"
-                                    >
+                                <div id="loader" class="spinner-border text-success" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </div>
@@ -226,7 +225,7 @@
             // Function to fetch and set enabled dates
             function updateEnabledDates(currentViewDate) {
                 $.ajax({
-                    url: "{{ route('api.secure.requests.dashboard.appointment.list') }}", //
+                    url: "{{ route('api.secure.admin.requests.dashboard.appointment.list') }}", //
                     method: 'GET',
                     data: {
                         year: currentViewDate.year(),
@@ -262,13 +261,14 @@
                 });
             }
 
+
             function updateRequestist(selectedDate) {
                 //request-list-for
                 //request-list-loader
                 $('#request-list-loader').show();
                 $('#request-list').hide();
                 $.ajax({
-                    url: "{{ route('api.secure.requests.dashboard.list') }}",
+                    url: "{{ route('api.secure.admin.requests.dashboard.list') }}",
                     method: 'GET',
                     data: {
                         date: selectedDate.format('YYYY-MM-DD'),
@@ -279,19 +279,33 @@
                         $('#request-list-for').text(selectedDate.format('YYYY-MM-DD'))
                         console.log(response);
 
-                        response.data.forEach(function(item) {
-                            var listItem = `
-                    <li class="item">
-                        <div class="product-info">
-                            <a href="#" class="product-title">${item.reference}
-                                <span class="badge badge-warning float-right">${selectedDate.format('YYYY-MM-DD HH:mm')}</span></a>
-                            <span class="product-description">
-                                ${item.car_brand}/${item.car_model}/${item.car_year}
-                            </span>
-                        </div>
-                    </li>`;
-                            requestList.append(listItem);
-                        });
+                        if (response.data.length === 0) {
+                            var emptyMessage = `
+                            <li class="item">
+                                <div class="product-info">
+                                    <span class="product-title">No requests found for ${selectedDate.format('YYYY-MM-DD')}</span>
+                                </div>
+                            </li>`;
+                            requestList.append(emptyMessage);
+                        } else {
+                            response.data.forEach(function(item) {
+                                let urlView =
+                                    "{{ route('secured.admin.requests.show', ['id' => ':request_id']) }}"
+                                    .replace(':request_id', item.id);
+
+                                var listItem = `
+                                <li class="item">
+                                    <div class="product-info">
+                                        <a href="${urlView}" class="product-title">${item.reference}
+                                            <span class="badge badge-warning float-right">${selectedDate.format('YYYY-MM-DD HH:mm')}</span></a>
+                                        <span class="product-description">
+                                            ${item.car_brand}/${item.car_model}/${item.car_year}
+                                        </span>
+                                    </div>
+                                </li>`;
+                                requestList.append(listItem);
+                            });
+                        }
 
                         $('#request-list-loader').hide();
                         $('#request-list').show();
@@ -303,8 +317,6 @@
                     }
                 });
             }
-
-
 
             // Fetch initial enabled dates
             var initialViewDate = $('#calendar').datetimepicker('viewDate');

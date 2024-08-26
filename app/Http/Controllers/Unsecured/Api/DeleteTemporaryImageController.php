@@ -13,6 +13,7 @@ class DeleteTemporaryImageController extends Controller
      */
     public function __invoke()
     {
+
         $temporaryImage = TTemporaryFile::where("folder", request()->getContent())->first();
         if ($temporaryImage) {
             Storage::deleteDirectory("requests/tmp/" .$temporaryImage->folder);

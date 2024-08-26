@@ -13,7 +13,6 @@ class RequestToolController extends Controller
 {
     public function add(Request $request, int $demand_id)
     {
-        //dd($id);
         $request->validate([
             'tool' => 'required|exists:t_tools,id',
             'qty' => 'required|integer|min:1',
@@ -27,7 +26,7 @@ class RequestToolController extends Controller
             $inventory->request_id = $demand_id;
             $inventory->save();
 
-            $inventory = TToolInventoryMovement::where('id', $inventory->id)->with(["tool", "request"])->first();
+            $inventory = TToolInventoryMovement::where('id', $inventory->id)->with(["tool", "request", "tool.unit"])->first();
             return response()->json([
                 'data' => $inventory,
                 'msg' => 'Tool usage added successfully!'
@@ -67,14 +66,16 @@ class RequestToolController extends Controller
         }
     }
 
-    public function delete($id)
+    public function delete(int $request_id, int $inventory)
     {
         try {
-            $inventory = TToolInventoryMovement::findOrFail($id);
-            $inventory->delete();
+
+            $inventory_data = TToolInventoryMovement::findOrFail($inventory);
+            $inventory_data->delete();
 
             return response()->json([
-                'msg' => 'Tool usage deleted successfully!'
+                'msg' => 'Tool usage deleted successfully!',
+                'data' => $inventory_data
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

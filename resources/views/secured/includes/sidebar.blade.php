@@ -104,7 +104,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href=""
+                        <a href="{{route("secured.dealers.requests.index")}}"
                             class="nav-link {{ isset($activeMenu) && $activeMenu == 'requests' ? 'active' : '' }}">
                             <i class="nav-icon fab fa-wpforms"></i>
                             <p>

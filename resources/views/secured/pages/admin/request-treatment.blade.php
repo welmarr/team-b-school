@@ -8,6 +8,7 @@
     @if (isset($demand) && $demand->status == 'accepted')
         <link rel="stylesheet" href="{{ asset('plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css') }}">
     @elseif (isset($demand) && $demand->status == 'in_progress')
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ asset('css/bootstrap-select.min.css') }}">
         <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
@@ -32,6 +33,10 @@
                 display: block !important;
                 width: 100% !important;
                 padding: 0px !important;
+            }
+
+            .my-select button.btn.dropdown-toggle.btn-light {
+                background-color: white !important;
             }
         </style>
     @endif
@@ -213,16 +218,22 @@
                                 <h5><i class="fas fa-warning"></i> Note:</h5>
                                 The estimation is already sent to the customer. You can call him if need.
                             </div>
-                            <strong><i class="fas fa-comment-dollar"></i> Estimated budget sent</strong>
-                            <p class="text-muted  mb-2">
-                                <span class="tag tag-danger">{{ "$" . $demand->estimation }}</span>
-                            </p>
-                            <br>
 
-                            <strong><i class="fas fa-stopwatch"></i> Expected Completion Time</strong>
-                            <p class="text-muted  mb-2">
-                                <span class="tag tag-danger">{{ $demand->finish_by }}</span>
-                            </p>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
+                                    <strong><i class="fas fa-comment-dollar"></i> Estimated budget sent</strong>
+                                    <p class="text-muted  mb-2">
+                                        <span class="tag tag-danger">{{ "$" . $demand->estimation }}</span>
+                                    </p>
+                                    <br>
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <strong><i class="fas fa-stopwatch"></i> Expected Completion Time</strong>
+                                    <p class="text-muted  mb-2">
+                                        <span class="tag tag-danger">{{ $demand->finish_by }}</span>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -341,13 +352,13 @@
                                             action="{{ route('secured.admin.request.start', ['id' => $demand->id]) }}">
                                             @csrf
                                             <input type="hidden" name="code">
-                                        </form>
-                                        <div class="row">
-                                            <div class="col-12 d-flex justify-content-end">
-                                                <button class="btn btn-success mt-4 mr-3" type="submit"
-                                                    id="start-work-form-button" form="start-work-form">Start</button>
+                                            <div class="row">
+                                                <div class="col-12 d-flex justify-content-end">
+                                                    <button class="btn btn-success mt-4 mr-3" type="submit"
+                                                        id="start-work-form-button" form="start-work-form">Start</button>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
 
                                 @endif
@@ -421,6 +432,32 @@
 
                     </div>
 
+                    <div class="modal fade" id="modal-tool-usage-remove">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Confirmation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Do you want to remove <strong id="modal-tool-usage-remove-tool-qty"> </strong> of
+                                        <span id="modal-tool-usage-remove-tool-name" class="badge badge-warning">
+                                        </span> from this repair
+                                        work?
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-dark" id="modal-content-yes" attr-call-url=""
+                                        attr-call-by="">Yes</button>
+                                    <button type="button" class="btn btn-dark" data-dismiss="modal">No</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
                     <div class="card card-{{ $statusClasses[$demand->status] ?? 'dark' }}">
                         <div class="card-header">
                             <h3 class="card-title">Tools used</h3>
@@ -443,16 +480,18 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-12 d-flex justify-content-between">
-                                    <form action="{{ route('secured.admin.request.complete', ['id' => $demand->id]) }}" id="request-completed-submit-form" method="POST">
+                                    <form action="{{ route('secured.admin.request.complete', ['id' => $demand->id]) }}"
+                                        id="request-completed-submit-form" method="POST">
                                         @csrf
 
-                                    <button type="submit" class="btn btn-success ml-3 modal-request-completed" id="request-completed-submit" form="request-completed-submit-form"><i
-                                        class="fas fa-check"></i> Request completed</button>
+                                        <button type="submit" class="btn btn-success ml-3 modal-request-completed"
+                                            id="request-completed-submit" form="request-completed-submit-form"><i
+                                                class="fas fa-check"></i> Request completed</button>
                                     </form>
                                     <button
                                         class="btn btn-{{ $statusClasses[$demand->status] ?? 'dark' }} mr-3 modal-add-tool-add-handler"
                                         data-mode="add"
-                                        data-href="{{ route('api.secure.requests.tools.usage.add', ['request_id' => $demand->id]) }}"><i
+                                        data-href="{{ route('api.secure.admin.requests.tools.usage.add', ['request_id' => $demand->id]) }}"><i
                                             class="fas fa-plus-circle"></i>
                                         Add tool</button>
                                 </div>
@@ -476,13 +515,14 @@
                                                 <td class="text-right py-0 align-middle">
                                                     <div class="btn-group btn-group-sm">
                                                         <button type="button" data-qty="{{ \abs($inventory->quantity) }}"
-                                                            data-href="{{ route('api.secure.requests.tools.usage.update', ['request_id' => $demand->id, 'inventory' => $inventory->id]) }}"
+                                                            data-href="{{ route('api.secure.admin.requests.tools.usage.update', ['request_id' => $demand->id, 'inventory' => $inventory->id]) }}"
                                                             data-id="{{ $inventory->id }}"
                                                             data-tool-id="{{ $inventory->tool->id }}"
                                                             class="btn btn-{{ $statusClasses[$demand->status] ?? 'dark' }} modal-add-tool-edit-handler"><i
                                                                 class="fas fa-pen"></i></button>
-                                                        <button type="button"data-id="{{ $inventory->id }}" data-href=""
-                                                            class="btn btn-outline-{{ $statusClasses[$demand->status] ?? 'dark' }}"><i
+                                                        <button type="button"data-id="{{ $inventory->id }}"
+                                                            data-href="{{ route('api.secure.admin.requests.tools.usage.delete', ['request_id' => $demand->id, 'inventory' => $inventory->id]) }}"
+                                                            class="btn btn-outline-{{ $statusClasses[$demand->status] ?? 'dark' }} modal-add-tool-remove"><i
                                                                 class="fas fa-trash-alt"></i></button>
                                                     </div>
                                                 </td>
@@ -493,9 +533,8 @@
                             </table>
                         </div>
                     </div>
-
                 @elseif ($demand->status == 'completed')
-                <div class="card card-{{ $statusClasses[$demand->status] ?? 'dark' }}">
+                    <div class="card card-{{ $statusClasses[$demand->status] ?? 'dark' }}">
                         <div class="card-header">
                             <h3 class="card-title">Invoice</h3>
                             <div class="card-tools">
@@ -509,7 +548,8 @@
 
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-center">
-                                    <a class="btn btn-success my-2" href="{{route('secured.admin.request.invoice', ['id' => $demand->id])}}"
+                                    <a class="btn btn-success my-2"
+                                        href="{{ route('secured.admin.request.invoice', ['id' => $demand->id]) }}"
                                         id="print-invoice-form-button" form="start-work-form">Print invoice</a>
                                 </div>
                             </div>
@@ -673,7 +713,7 @@
 
                 function populateToolSelect(selected = null) {
                     $.ajax({
-                        url: "{{ route('api.secure.tools.list') }}", // The route to get the tools
+                        url: "{{ route('api.secure.admin.tools.list') }}", // The route to get the tools
                         method: 'GET',
                         success: function(response) {
                             // console.log(selected);
@@ -707,6 +747,55 @@
                     });
                 }
 
+                $(document).on('click', '.modal-add-tool-remove', function() {
+                    // Get the necessary data from the clicked button
+                    var toolName = $(this).closest('tr').find('td:first').text();
+                    var toolQty = $(this).closest('tr').find('td:nth-child(2)').text();
+                    var callUrl = $(this).data('href');
+                    var toolId = $(this).data('id');
+
+                    // Populate the modal with the tool name, quantity, and URL
+                    $('#modal-tool-usage-remove-tool-name').text(toolName);
+                    $('#modal-tool-usage-remove-tool-qty').text(toolQty);
+                    $('#modal-content-yes').attr('attr-call-url', callUrl);
+                    $('#modal-content-yes').attr('attr-call-by', toolId);
+
+                    // Show the modal
+                    $('#modal-tool-usage-remove').modal('show');
+                });
+
+                $('#modal-content-yes').on('click', function() {
+                    var callUrl = $(this).attr('attr-call-url');
+
+                    $.ajax({
+                        url: callUrl,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                'content')
+                        },
+                        success: function(response) {
+                            // Handle the success case
+                            $('#tool-usage-row-' + response.data.id).remove();
+                            $('#modal-tool-usage-remove').modal('hide');
+
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.msg
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle the error case
+                            console.error("An error occurred: " + error);
+                            Toast.fire({
+                                icon: 'error',
+                                title: "An error occurred: " + error
+                            });
+                        }
+                    });
+                });
+
                 // Handle form submission for adding or updating tool usage
                 $('#modal-add-tool-usage-form').submit(function(event) {
                     event.preventDefault();
@@ -730,18 +819,21 @@
                             if (response.data) {
 
                                 var updateRouteTemplate =
-                                    "{{ route('api.secure.requests.tools.usage.update', ['request_id' => ':request_id', 'inventory' => ':inventory']) }}"
+                                    "{{ route('api.secure.admin.requests.tools.usage.update', ['request_id' => ':request_id', 'inventory' => ':inventory']) }}"
                                     .replace(':request_id', response.data.request_id).replace(
                                         ':inventory', response.data.id);
                                 var deleteRouteTemplate =
-                                    "{{ route('api.secure.requests.tools.usage.delete', ['request_id' => ':request_id', 'inventory' => ':inventory']) }}"
+                                    "{{ route('api.secure.admin.requests.tools.usage.delete', ['request_id' => ':request_id', 'inventory' => ':inventory']) }}"
                                     .replace('r:equest_id', response.data.request_id).replace(
                                         ':inventory', response.data.id);
 
                                 var rowId = 'tool-usage-row-' + response.data.id;
                                 var rowHtml = '<tr id="' + rowId + '">' +
                                     '<td>' + response.data.tool.name + '</td>' +
-                                    '<td>' + Math.abs(response.data.quantity) + '</td>' +
+                                    '<td>' + Math.abs(response.data.quantity) + " " + (response.data
+                                        .tool
+                                        .unit != null ? response.data.tool.unit.abbreviation : "") +
+                                    '</td>' +
                                     '<td class="text-right py-0 align-middle">' +
                                     '<div class="btn-group btn-group-sm">' +
                                     '<button type="button" data-qty="' + Math.abs(response.data
@@ -753,7 +845,7 @@
                                     '<i class="fas fa-pen"></i></button>' +
                                     '<button type="button" data-id="' + response.data.id + '"' +
                                     ' data-href="' + deleteRouteTemplate + '"' +
-                                    ' class="btn btn-outline-warning">' +
+                                    ' class="btn btn-outline-warning modal-add-tool-remove">' +
                                     '<i class="fas fa-trash-alt"></i></button>' +
                                     '</div>' +
                                     '</td>' +
@@ -831,10 +923,10 @@
                         </div>
                         <div class="col-12 product-image-thumbs">
                             ${files.map((file, index) => `
-                                                                                                                                                                                                                                                                                                                            <div class="product-image-thumb ${index === 0 ? 'active' : ''}">
-                                                                                                                                                                                                                                                                                                                                <img src="${file.public_uri}" alt="${file.name}">
-                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                        `).join('')}
+                                                                                                                                                                                                                                                                                                                                                                <div class="product-image-thumb ${index === 0 ? 'active' : ''}">
+                                                                                                                                                                                                                                                                                                                                                                    <img src="${file.public_uri}" alt="${file.name}">
+                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                            `).join('')}
                         </div>
                     </div>
                 `;

@@ -20,9 +20,20 @@ class TTool extends Model
     {
         return $this->belongsTo(TToolType::class, 'tool_type_id');
     }
-    public function inventories ()
+    public function inventories()
     {
         return $this->hasMany(TToolInventoryMovement::class, 'tool_id');
     }
 
+    public function calculateStock()
+    {
+        return $this->inventories()
+        ->where(function ($query) {
+            $query->whereNull('request_id')
+                  ->orWhereHas('request', function ($query) {
+                      $query->where('status', '!=', 'canceled');
+                  });
+        })
+        ->sum('quantity');
+    }
 }

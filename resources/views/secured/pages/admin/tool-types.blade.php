@@ -139,7 +139,7 @@
                         </button>
                     </div>
                     <form id="modal-add-new-tool-type-form" method="POST"
-                        action="{{ route('api.secure.tool-types.store') }}">
+                        action="{{ route('api.secure.admin.tool-types.store') }}">
                         <div class="modal-body">
                             <p class="badge badge-dark my-0"> Field with <span class="text-orange">*</span> is mandatory.
                             </p>
@@ -328,7 +328,7 @@
             var tableSaved = $("#tool-type-list-table").DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ route('api.secure.tool-types.index') }}",
+                "ajax": "{{ route('api.secure.admin.tool-types.index') }}",
                 language: {
                     "processing": '<div class="d-flex justify-content-center"><div class="spinner-border text-orange" role="status"><span class="sr-only">Loading...</span></div></div>'
                 },
@@ -360,7 +360,7 @@
                         "render": function(value, type, full, meta) {
                             // Generate action buttons for each row
                             let updateUrl =
-                                '{{ route('api.secure.tool-types.update', ['tool_type' => ':tool_type']) }}'
+                                '{{ route('api.secure.admin.tool-types.update', ['tool_type' => ':tool_type']) }}'
                                 .replace(':tool_type', full.id);
                             return `
                             <div class="d-flex justify-content-center">

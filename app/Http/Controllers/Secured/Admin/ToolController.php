@@ -9,12 +9,37 @@ use App\Models\TTool;
 use App\Models\TUnit;
 use App\Models\TToolType;
 use App\Http\Controllers\Controller;
+use App\Models\TToolInventoryMovement;
 use App\Http\Requests\Secured\StoreToolRequest;
 use App\Http\Requests\Secured\UpdateToolRequest;
 
 class ToolController extends Controller
 {
 
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function history(TTool $tool)
+    {
+        $addedMovements = TToolInventoryMovement::where('tool_id', $tool->id)->where('type', 'Added')->paginate(10);
+        $scrapedMovements = TToolInventoryMovement::where('tool_id', $tool->id)->where('type', 'Scraped')->paginate(10);
+        $usedMovements = TToolInventoryMovement::where('tool_id', $tool->id)->where('type', 'Used')->paginate(10);
+
+        $activeMenu = 'tools';
+        return view('secured.pages.admin.tools-history', compact(['activeMenu', 'tool', 'addedMovements', 'scrapedMovements', 'usedMovements']));
+    }
+
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function fullHistory(TTool $tool)
+    {
+        $inventory = TToolInventoryMovement::paginate(10);
+        $activeMenu = 'tools';
+        return view('secured.pages.admin.tools-history', compact(['activeMenu', 'inventory', 'tool',]));
+    }
     /**
      * Display a listing of the resource.
      */
@@ -95,6 +120,5 @@ class ToolController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('error', 'There was an error processing your request. ' . $e->getMessage());
         }
-
     }
 }

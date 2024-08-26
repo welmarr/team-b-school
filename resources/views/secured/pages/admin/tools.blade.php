@@ -112,6 +112,90 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
+                            <div class="modal fade" id="modal-add-inventory">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Inventory movement</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form id="modal-add-inventory-form" method="POST" action=""
+                                            autocomplete="off">
+                                            <div class="modal-body">
+                                                <div class="d-block  text-center">
+                                                    <div id="modal-add-inventory-form-loader"
+                                                        class="spinner-border text-warning" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <div id="modal-add-inventory-form-content" style="display: none;">
+                                                    <p class="badge badge-dark my-0"> Field with <span
+                                                            class="text-orange">*</span> is
+                                                        mandatory.
+                                                    </p>
+                                                    @csrf
+                                                    <div class="row my-2">
+                                                        <div class="col-12 form-group">
+                                                            <label for="modal-add-inventory-form-tool"
+                                                                class="form-label">Type of mouvement
+                                                                <span class="text-orange">*</span></label>
+                                                            <select class="form-select" id="modal-add-inventory-form-tool"
+                                                                name="action_type" required>
+                                                                <option selected>Select the type</option>
+                                                                <option value="scrap">Scrap stock</option>
+                                                                <option value="add">Add inventory</option>
+                                                            </select>
+
+                                                            <div class="text-danger mb-3  d-none modal-add-inventory-form-input-error"
+                                                                id="action_type-error">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row my-2">
+                                                        <div class="col-12 form-group">
+                                                            <label for="modal-add-inventory-form-qty"
+                                                                class="form-label">Quantity
+                                                                <span class="text-orange">*</span></label>
+                                                            <input type="text" class="form-control"
+                                                                id="modal-add-inventory-form-qty" name="qty"
+                                                                placeholder="" required autocomplete="off" required>
+
+                                                            <div class="text-danger mb-3  d-none modal-add-inventory-form-input-error"
+                                                                id="qty-error">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row my-2">
+                                                        <div class="col-12 form-group">
+                                                            <label for="modal-add-inventory-form-memo"
+                                                                class="form-label">Description</label>
+                                                            <textarea class="form-control" id="modal-add-inventory-form-memo" rows="3" name="memo"></textarea>
+
+                                                            <div class="text-danger mb-3  d-none modal-add-inventory-form-input-error"
+                                                                id="memo-error">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" form="modal-add-inventory-form"
+                                                    class="btn btn-success" id="modal-add-inventory-submit"
+                                                    attr-call-url="" attr-call-by="">Add</button>
+                                                <button type="button" class="btn btn-orange"
+                                                    data-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+
                             <table id="tool-list-table" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
@@ -137,37 +221,6 @@
                                         <th>Type</th>
                                         <th>Created at</th>
                                         <th class="d-flex justify-content-center">Actions</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-
-                <div class="d-none" id="tool-histories-associated-table">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="m-0 card-title">Inventory movements</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <table id="tool-type-history-table" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Date</th>
-                                        <th>Details</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-group-divider">
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Date</th>
-                                        <th>Details</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -222,6 +275,17 @@
         $(function() {
 
             /**
+             * Configure SweetAlert2 toast
+             * @type {Object}
+             */
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+
+            /**
              * Initialize DataTable with server-side processing
              * @type {Object}
              */
@@ -240,7 +304,7 @@
             var tableSaved = $("#tool-list-table").DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ route('api.secure.tools.index') }}",
+                "ajax": "{{ route('api.secure.admin.tools.index') }}",
                 language: {
                     "processing": '<div class="d-flex justify-content-center"><div class="spinner-border text-orange" role="status"><span class="sr-only">Loading...</span></div></div>'
                 },
@@ -261,6 +325,7 @@
                     {
                         "data": "qty",
                         "orderable": false,
+                        searchable: false,
                         "render": function(value, type, full, meta) {
                             if (type === 'display') {
                                 let valueUpdate = value ?? 0;
@@ -319,10 +384,19 @@
                             let updateUrl =
                                 '{{ route('secured.admin.tools.edit', ['tool' => ':tool']) }}'
                                 .replace(':tool', full.id);
+
+                            let historyUrl =
+                                '{{ route('secured.admin.tools.history', ['tool' => ':tool']) }}'
+                                .replace(':tool', full.id);
+
+                            let addMovementUrl =
+                                '{{ route('api.secure.admin.tools.movement', ['id' => ':tool']) }}'
+                                .replace(':tool', full.id);
                             return `
                             <div class="d-flex justify-content-center"><div class="btn-group">
-                                <button type="button" class="btn btn-dark btn-sm btn-histories" id="tool-list-table-history-${full.id}">Add movement</button>
+                                <button type="button" class="btn btn-dark btn-sm btn-histories modal-add-inventory-handler" id="modal-add-inventory-${full.id}" data-href="${addMovementUrl}">Add movement</button>
                                 <a type="button" class="btn btn-outline-dark btn-sm btn-update" id="tool-list-table-update-${full.id}" href="${updateUrl}" call-name="${full.name}" call-description="${full.description || ''}">Update</a>
+                                <a type="button" class="btn btn-outline-dark btn-sm btn-update" id="tool-list-table-history-${full.id}" href="${historyUrl}" call-name="${full.name}" call-description="${full.description || ''}">History</a>
                             </div></div>`;
                         }
                     },
@@ -360,6 +434,98 @@
 
 
             $('[data-toggle="tooltip"]').tooltip()
+
+
+
+            $(document).on('click', '.modal-add-inventory-handler', function() {
+                console.log('Button clicked, toggling modal...');
+                $('#modal-add-inventory-form')[0].reset(); // Reset the form fields
+
+                $('#modal-add-inventory-form').attr('action', $(this).data('href'));
+
+                $('#' + $(this).attr('id')).parents('tr').toggleClass('highlight');
+
+
+                $('#modal-add-inventory-form-loader').hide();
+                $('#modal-add-inventory-form-content').show();
+                $('#modal-add-inventory').modal('show');
+            });
+
+            $(document).on('hide.bs.modal', '#modal-add-inventory', function() {
+                // Clear error messages before submitting the form
+                $('.modal-add-inventory-form-input-error').text('');
+                $('.modal-add-inventory-form-input-error').addClass('d-none');
+                // Remove highlight class from table rows when modal is hidden
+                $('#tool-list-table tr').removeClass('highlight');
+            });
+
+
+            $(document).on('click', '#modal-add-inventory-submit', function() {
+                console.log('Button modal-add-inventory-submit clicked, form submitted...');
+
+                // Clear error messages before submitting the form
+                $('.modal-add-inventory-form-input-error').text('');
+                $('.modal-add-inventory-form-input-error').addClass('d-none');
+                let form = $('#modal-add-inventory-form');
+
+                let url = form.attr('action');
+
+                if (!document.getElementById('modal-add-inventory-form').checkValidity()) {
+                    document.getElementById('modal-add-inventory-form').reportValidity();
+                    return ;
+                }
+
+                // Send AJAX request to add new unit
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: form.serialize(),
+                    success: function(response) {
+                        // Redraw the table to show updated row numbers
+                        tableSaved.draw(false);
+
+                        // Show success toast notification
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.msg
+                        });
+
+                        // Reset the form
+                        form.trigger("reset");
+
+                        // Close the modal
+                        $('#modal-add-inventory').modal('toggle');
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            // Handle validation errors
+                            var errors = xhr.responseJSON.errors;
+                            var errorMessages = '';
+
+                            $.each(errors, function(key, value) {
+                                // Concatenate each error message
+                                errorMessages += `${key}: ${value[0]}\n`;
+
+                                // Display error message for each field
+                                $(`#${key}-error`).text(value[0]).removeClass('d-none');
+
+                            });
+
+                            // Display validation errors in a toast notification
+                            Toast.fire({
+                                icon: 'error',
+                                title: `There are some validation errors.\n${errorMessages}`
+                            });
+                        } else {
+                            // Handle other errors
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Oops! Something went wrong during the execution of the action. Try later.'
+                            });
+                        }
+                    }
+                })
+            });
         });
     </script>
 @endsection

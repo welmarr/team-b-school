@@ -18,6 +18,7 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
 
 
 
@@ -138,7 +139,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="modal-add-new-unit-form" method="POST" action="{{ route('api.secure.units.store') }}" autocomplete="off" >
+                    <form id="modal-add-new-unit-form" method="POST" action="{{ route('api.secure.admin.units.store') }}" autocomplete="off" >
                         <div class="modal-body">
                             <p class="badge badge-dark my-0"> Field with <span class="text-orange">*</span> is mandatory.
                             </p>
@@ -356,7 +357,7 @@
             var tableSaved = $("#unit-list-table").DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ route('api.secure.units.index') }}",
+                "ajax": "{{ route('api.secure.admin.units.index') }}",
                 language: {
                     "processing": '<div class="d-flex justify-content-center"><div class="spinner-border text-orange" role="status"><span class="sr-only">Loading...</span></div></div>'
                 },
@@ -391,7 +392,7 @@
                         "render": function(value, type, full, meta) {
                             // Generate action buttons for each row
                             let updateUrl =
-                                '{{ route('api.secure.units.update', ['unit' => ':unit']) }}'
+                                '{{ route('api.secure.admin.units.update', ['unit' => ':unit']) }}'
                                 .replace(':unit', full.id);
                             return `
                             <div class="d-flex justify-content-center">
@@ -468,8 +469,8 @@
              */
             function handleFormSubmit(form, formMethod, modalID) {
                 // Clear error messages before submitting the form
-                $('span.' + modalID + '-form-input-error').text('');
-                $('span.' + modalID + '-form-input-error').addClass('d-none');
+                $('.' + modalID + '-form-input-error').text('');
+                $('.' + modalID + '-form-input-error').addClass('d-none');
 
                 let url = form.attr('action');
 

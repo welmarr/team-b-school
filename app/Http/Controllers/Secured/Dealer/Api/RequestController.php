@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Secured\Admin\Api;
+namespace App\Http\Controllers\Secured\Dealer\Api;
 
 use App\Models\TImage;
 use App\Models\TRequest;
 use App\Models\TAppointment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Yajra\DataTables\Facades\DataTables;
 
 class RequestController extends Controller
@@ -14,11 +15,10 @@ class RequestController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function index(Request $request)
+    public function index(Request $request, int $user_id)
     {
-        //dd($queryParams = $request->query());
 
-        return DataTables::eloquent(TRequest::with(['car.brand', 'car.model', 'createdBy'])->select())
+        return DataTables::eloquent(TRequest::where('created_by_id', $user_id)->where('created_by_type', User::class)->with(['car.brand', 'car.model', 'createdBy'])->select())
             ->escapeColumns(['created_by_id'])
             ->toJson();
     }
@@ -39,7 +39,7 @@ class RequestController extends Controller
     }
 
 
-    public function dashboardListAppointment(Request $request)
+    public function dashboardListAppointment(Request $request, $user_id)
     {
         try {
             // Validate the incoming request
@@ -53,7 +53,10 @@ class RequestController extends Controller
             $appointments = TAppointment::whereYear('appointment_date', $request->year)
                 ->whereMonth('appointment_date', $request->month)
                 ->where('is_current', true)
-                ->pluck('appointment_date', 'request_id');
+                ->whereHas('request', function ($query) use ($user_id) {
+                    $query->where('created_by_id', $user_id)->where('created_by_type', User::class);
+                })
+                ->pluck('appointment_date');
 
 
             // Convert the dates to an array of strings in 'YYYY-MM-DD' format and remove duplicates
@@ -72,7 +75,7 @@ class RequestController extends Controller
         }
     }
 
-    public function dashboardListRequest(Request $request)
+    public function dashboardListRequest(Request $request, $user_id)
     {
         try {
             // Validate the incoming request
@@ -87,13 +90,14 @@ class RequestController extends Controller
                 ->whereHas('appointments', function ($query) use ($date) {
                     $query->whereDate('appointment_date', $date)
                         ->where('is_current', true);
+                })->whereHas('request', function ($query) use ($user_id) {
+                    $query->where('created_by_id', $user_id)->where('created_by_type', User::class);
                 })
-                ->get(['estimation', 'reference', 'car_id', 'id']); // Select only specific fields from TRequest
+                ->get(['estimation', 'reference', 'car_id']); // Select only specific fields from TRequest
 
             // Transform the data to include car brand, model, and year
             $demands = $demands->map(function ($demand) {
                 return [
-                    'id' => $demand->id,
                     'estimation' => $demand->estimation,
                     'reference'  => $demand->reference,
                     'car_id'     => $demand->car_id,
@@ -103,7 +107,6 @@ class RequestController extends Controller
                 ];
             });
 
-            //dd( $date, $demands);
 
             return response()->json(['data' => $demands->values(), 'msg' => "Enabled dates fetched successfully."], 200);
         } catch (\Exception $e) {
@@ -112,6 +115,5 @@ class RequestController extends Controller
 
             return response()->json(['data' => [], 'msg' => "An error occurred. Returning the current date."], 200);
         }
-
     }
 }

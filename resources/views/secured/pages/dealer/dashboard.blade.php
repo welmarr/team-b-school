@@ -2,7 +2,7 @@
 
 
 @section('title')
-    Dashboard - Admin
+    Dashboard - Dealer
 @endsection
 
 @section('css')
@@ -54,7 +54,7 @@
                             <span class="info-box-text">Requests</span>
                             <span class="info-box-number">
                                 {{ $countRequest }}
-                            </span>  
+                            </span>
                         </div>
                     </div>
                 </div>

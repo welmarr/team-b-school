@@ -2,7 +2,7 @@
 
 
 @section('title')
-    Request - Admin
+    Request - Dealer
 @endsection
 
 @section('css')
@@ -224,11 +224,12 @@
              * DataTable Initialization
              * This initializes the DataTable with specific configurations and data from the server.
              */
-            $("#table-request-list").DataTable({
+            var tableSaved  = $("#table-request-list").DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('api.secure.admin.requests.index') }}",
+                    url: "{{ route('api.secure.dealer.requests.index', ['user_id' => ':user_id']) }}"
+                        .replace(':user_id', "{{ Auth()->user()->id }}"),
                     type: "GET"
                 },
                 language: {
@@ -304,11 +305,11 @@
                         render: function(value, type, data, meta) {
 
                             let viewUrl =
-                                '{{ route('secured.admin.requests.show', ['id' => ':request_id']) }}'
+                                '{{ route('secured.dealers.requests.show', ['request' => ':request_id']) }}'
                                 .replace(':request_id', data.id);
 
                             let imagesUrl =
-                                '{{ route('api.secure.admin.requests.images', ['id' => ':request_id']) }}'
+                                '{{ route('api.secure.dealer.requests.images', ['id' => ':request_id']) }}'
                                 .replace(':request_id', data.id);
 
                             return `
@@ -329,7 +330,14 @@
                 lengthChange: false,
                 autoWidth: false,
                 dom: 'Bfrtip',
-                buttons: [
+                buttons: [{
+                        text: '<i class="fas fa-plus" id="request-list-table-add-request"></i> Request',
+                        action: function(e, dt, node, config) {
+                            // Open modal for adding new request
+
+                            window.location.href = '{{ route('secured.dealers.requests.create') }}'
+                        }
+                    },
                     'copy', 'csv', 'excel', 'pdf', 'print', "pageLength",
                     {
                         extend: 'colvis',
@@ -337,10 +345,22 @@
                             `${idx + 1}: ${title}`
                     }
                 ]
-            }).buttons().container().appendTo('#table-request-list_wrapper .col-md-6:eq(0)');
+            });
 
             // Change button class
             $('.dt-buttons .btn').removeClass('btn-secondary').addClass('btn-dark');
+
+            // Select the button that contains the span with id modal-add-request
+            var buttonContainingSpan = $('#request-list-table-add-request').closest('button');
+
+
+            // Append DataTable buttons to the wrapper and style them
+            tableSaved.buttons().container().appendTo('#request-list-table_wrapper .col-md-6:eq(0)');
+            $('.dt-buttons .btn').removeClass('btn-secondary').addClass('btn-dark');
+
+            // Remove the class btn-dark and add btn-outline-success
+            buttonContainingSpan.removeClass('btn-dark').addClass('btn-success');
+
 
             /**
              * Image Loading Function
@@ -375,10 +395,10 @@
                                 </div>
                                 <div class="col-12 product-image-thumbs">
                                     ${files.map((file, index) => `
-                                                            <div class="product-image-thumb ${index === 0 ? 'active' : ''}">
-                                                                <img src="${file.url}" alt="${file.name}">
-                                                            </div>
-                                                        `).join('')}
+                                                                <div class="product-image-thumb ${index === 0 ? 'active' : ''}">
+                                                                    <img src="${file.url}" alt="${file.name}">
+                                                                </div>
+                                                            `).join('')}
                                 </div>
                             </div>
                         `;

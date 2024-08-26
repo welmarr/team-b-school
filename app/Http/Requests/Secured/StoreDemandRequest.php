@@ -11,18 +11,38 @@ class StoreDemandRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
+    }
+
+     /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'cars.*.brand' => 'required|string|max:255',
+            'cars.*.year' => 'required|integer|min:1900',
+            'cars.*.model' => 'required|string|max:255',
+            'cars.*.memo' => 'nullable|string|max:255',
+            'cars.*.filepond' => 'array',
+            'cars.*.filepond.*' => 'required|string',
+        ];
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get custom messages for validation errors.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array
      */
-    public function rules(): array
+    public function messages()
     {
         return [
-            //
+            'cars.*.brand.required' => 'The brand is required for each car.',
+            'cars.*.year.required' => 'The year is required for each car.',
+            'cars.*.model.required' => 'The model is required for each car.',
+            'cars.*.filepond.*.required' => 'Each car must have at least one file uploaded.',
         ];
     }
 }

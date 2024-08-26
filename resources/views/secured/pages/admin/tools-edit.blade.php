@@ -82,7 +82,7 @@
                 <div class="col-12" id="tool-table">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="m-0 card-title">Update tool</h3>
+                            <h3 class="m-0 card-title">Update tool <span class="badge badge-success">{{ $tool->name}}</span></h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">

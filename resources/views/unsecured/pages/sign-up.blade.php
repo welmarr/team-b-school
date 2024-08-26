@@ -59,6 +59,10 @@
             width: 100% !important;
             padding: 0px !important;
         }
+
+        .my-select button.btn.dropdown-toggle.btn-light {
+            background-color: white !important;
+        }
     </style>
 @endsection
 

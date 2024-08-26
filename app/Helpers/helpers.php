@@ -66,3 +66,20 @@ if (!function_exists('USA_states')) {
         ];
     }
 }
+
+
+if (!function_exists('requestGroupCode')) {
+    function requestGroupCode($length = 6)
+    {
+        $datePart = date('ymd');
+
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $dynamicPart = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $dynamicPart .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $datePart . $dynamicPart;
+    }
+}

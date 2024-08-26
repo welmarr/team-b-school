@@ -39,8 +39,6 @@ class RequestController extends Controller
         $files = TImage::where('request_id', $id)->get();
         $inventories = TToolInventoryMovement::where('request_id', $id)->where('type', 'Used')->get();
 
-        //dd($inventories);
-
         $appointment = $demand ? TAppointment::where('request_id', $demand->id)->where('is_current', true)->first() : null;
         return view('secured.pages.admin.request-treatment', compact("demand", "activeMenu", "files", "appointment", 'inventories'));
     }
