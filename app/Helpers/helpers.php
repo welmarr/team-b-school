@@ -1,6 +1,12 @@
 <?php
 
-
+/**
+ * Convert bytes to kilobytes.
+ *
+ * @param int $bytes The number of bytes to convert.
+ * @param int $decimals The number of decimal places to round to.
+ * @return string The formatted string representing kilobytes.
+ */
 if (!function_exists('convertBytesToKB')) {
     function convertBytesToKB($bytes, $decimals = 2)
     {
@@ -8,6 +14,11 @@ if (!function_exists('convertBytesToKB')) {
     }
 }
 
+/**
+ * Get an array of US states with their abbreviations as keys and full names as values.
+ *
+ * @return array An associative array of US states.
+ */
 if (!function_exists('USA_states')) {
     function USA_states()
     {
@@ -67,7 +78,12 @@ if (!function_exists('USA_states')) {
     }
 }
 
-
+/**
+ * Generate a request group code.
+ *
+ * @param int $length The length of the dynamic part of the code.
+ * @return string The generated request group code.
+ */
 if (!function_exists('requestGroupCode')) {
     function requestGroupCode($length = 6)
     {
@@ -81,5 +97,29 @@ if (!function_exists('requestGroupCode')) {
         }
 
         return $datePart . $dynamicPart;
+    }
+}
+
+/**
+ * Generate a random alphanumeric code.
+ *
+ * @param int $length The length of the code to generate.
+ * @return string The generated random alphanumeric code.
+ */
+if (!function_exists('generateRandomAlphanumericCode')) {
+    function generateRandomAlphanumericCode($length)
+    {
+        // Define the characters to use for the random code
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+
+        // Generate the random code
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        // Return the generated code
+        return date('i') . $randomString  . date('H');
     }
 }

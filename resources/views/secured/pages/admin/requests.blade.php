@@ -221,10 +221,10 @@
             };
 
             /**
-             * DataTable Initialization
-             * This initializes the DataTable with specific configurations and data from the server.
+             * Initialize DataTable with server-side processing
+             * @type {Object}
              */
-            $("#table-request-list").DataTable({
+            var tableSaved = $("#table-request-list").DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -337,7 +337,9 @@
                             `${idx + 1}: ${title}`
                     }
                 ]
-            }).buttons().container().appendTo('#table-request-list_wrapper .col-md-6:eq(0)');
+            });
+
+            tableSaved.buttons().container().appendTo('#table-request-list_wrapper .col-md-6:eq(0)');
 
             // Change button class
             $('.dt-buttons .btn').removeClass('btn-secondary').addClass('btn-dark');
@@ -375,10 +377,10 @@
                                 </div>
                                 <div class="col-12 product-image-thumbs">
                                     ${files.map((file, index) => `
-                                                            <div class="product-image-thumb ${index === 0 ? 'active' : ''}">
-                                                                <img src="${file.url}" alt="${file.name}">
-                                                            </div>
-                                                        `).join('')}
+                                                                <div class="product-image-thumb ${index === 0 ? 'active' : ''}">
+                                                                    <img src="${file.url}" alt="${file.name}">
+                                                                </div>
+                                                            `).join('')}
                                 </div>
                             </div>
                         `;

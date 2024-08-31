@@ -20,7 +20,7 @@ class ValidateEmailController extends Controller
                 if ($user->role == 'admin') {
                     $user->update(['email_verified_at' => Carbon::now(), 'is_active' => 1,]);
                 } else {
-                    $user->update(['email_verified_at' => Carbon::now()]);
+                    $user->update(['email_verified_at' => Carbon::now(), 'is_active' => 1]);
                 }
                 return redirect()->route("login")->with("success", "Your email is verified. You can login.");
             }

@@ -1,6 +1,15 @@
 @extends('secured.layout')
 
-@section('title', 'Request creation - Dealers')
+@php
+    $label = [
+        'admin' => 'Admin',
+        'dealer' => 'Dealer',
+        'dealer-admin' => 'Dealer',
+        'simple-customer' => 'Customer',
+    ];
+@endphp
+
+@section('title', 'Request creation - ' . $label[Auth::user()->role])
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('adminlte/css/adminlte.css') }}">

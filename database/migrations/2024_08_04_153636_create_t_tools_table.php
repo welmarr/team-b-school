@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->boolean('track_usage')->default(true);
             $table->integer('condition')->nullable();
+            $table->timestamp('enable_tracking_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->foreignId('tool_type_id')->constrained('t_tool_types');

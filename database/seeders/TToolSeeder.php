@@ -89,13 +89,15 @@ class TToolSeeder extends Seeder
         foreach ($tools as $tool) {
             $toolType = TToolType::where('name', $tool['tool_type'])->first();
             $unit = TUnit::where('name', $tool['unit'])->first();
-
+            $usage_track = rand(0,1);
+            
             if ($toolType && $unit) {
                 TTool::create([
                     'name' => $tool['name'],
                     'description' => $tool['description'],
-                    'track_usage' => rand(0,1),
+                    'track_usage' => $usage_track,
                     'condition' => $tool['condition'],
+                    'enable_tracking_at' => $usage_track == 1 ? now() : null,
                     'tool_type_id' => $toolType->id,
                     'unit_id' => $unit->id,
                 ]);

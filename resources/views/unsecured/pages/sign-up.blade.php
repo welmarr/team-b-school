@@ -91,8 +91,8 @@
                     <div class="row my-2">
                         <div class="col-6">
                             <label for="first-name" class="form-label">First name <span class="text-orange">*</span></label>
-                            <input type="text" class="form-control" id="first-name" name="first_name" placeholder="John"
-                                required>
+                            <input type="text" class="form-control is-required" id="first-name" name="first_name"
+                                placeholder="John" required>
 
                             @error('first_name')
                                 <div class="text-danger mb-3">
@@ -102,8 +102,8 @@
                         </div>
                         <div class="col-6">
                             <label for="last-name" class="form-label">Last name <span class="text-orange">*</span></label>
-                            <input type="text" class="form-control" id="last-name" name="last_name" placeholder="Doe"
-                                required>
+                            <input type="text" class="form-control is-required" id="last-name" name="last_name"
+                                placeholder="Doe" required>
 
                             @error('last_name')
                                 <div class="text-danger mb-3">
@@ -116,7 +116,7 @@
                     <div class="row my-2">
                         <div class="col-6">
                             <label for="email" class="form-label">Email <span class="text-orange">*</span></label>
-                            <input type="email" class="form-control" id="email" name="email"
+                            <input type="email" class="form-control is-required" id="email" name="email"
                                 placeholder="you@example.com" required>
 
                             @error('email')
@@ -127,7 +127,7 @@
                         </div>
                         <div class="col-6">
                             <label for="phonenumber" class="form-label">Phone <span class="text-orange">*</span></label>
-                            <input type="text" class="form-control" id="phonenumber" name="phone"
+                            <input type="text" class="form-control is-required" id="phonenumber" name="phone"
                                 placeholder="123456789" required>
 
                             @error('phone')
@@ -175,17 +175,36 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="row">
 
-                    <div class="form-check my-2">
-                        <input type="radio" class="form-check-input custom-radio" id="use_dealership"
-                            name="dealership_option" value="use_dealership">
-                        <label class="form-check-label" for="use_dealership">Join Dealership</label>
-                    </div>
 
-                    <div class="form-check my-2">
-                        <input type="radio" class="form-check-input custom-radio" id="create_dealership"
-                            name="dealership_option" value="create_dealership" checked>
-                        <label class="form-check-label" for="create_dealership">Register Dealership</label>
+                        <div class="col-md-4 col-sm-12">
+
+                            <div class="form-check my-2">
+                                <input type="radio" class="form-check-input custom-radio" id="use_dealership"
+                                    name="dealership_option" value="use_dealership"
+                                    {{ old('dealership_option') == 'use_dealership' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="use_dealership">Join Dealership</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+
+                            <div class="form-check my-2">
+                                <input type="radio" class="form-check-input custom-radio" id="create_dealership"
+                                    name="dealership_option" value="create_dealership"
+                                    {{ old('dealership_option') == null || old('dealership_option') == 'create_dealership' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="create_dealership">Register Dealership</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+
+                            <div class="form-check my-2">
+                                <input type="radio" class="form-check-input custom-radio" id="simple_customer"
+                                    name="dealership_option" value="simple_customer"
+                                    {{ old('dealership_option') == 'simple_customer' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="simple_customer">I'm simple customer</label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="card my-2" id="dealership_code_group" style="display: none;">
@@ -215,7 +234,7 @@
                                 <div class="col-6">
                                     <label for="new_dealership_name" class="form-label">New Dealership Name <span
                                             class="text-orange">*</span></label>
-                                    <input type="text" class="form-control" id="new_dealership_name"
+                                    <input type="text" class="form-control is-required" id="new_dealership_name"
                                         name="new_dealership_name" placeholder="New Dealership Name" required>
 
                                     @error('new_dealership_name')
@@ -227,7 +246,7 @@
                                 <div class="col-6">
                                     <label for="new_dealership_phone" class="form-label">New Dealership Phone <span
                                             class="text-orange">*</span></label>
-                                    <input type="text" class="form-control" id="new_dealership_phone"
+                                    <input type="text" class="form-control is-required" id="new_dealership_phone"
                                         name="new_dealership_phone" placeholder="New Dealership Phone" required>
 
                                     @error('new_dealership_phone')
@@ -392,65 +411,78 @@
     <script src="{{ asset('js/feather.min.js') }}"></script>
     <script>
         $(document).ready(function() {
+            // Initialize select picker and Feather icons
             $('.my-select').selectpicker();
+            feather.replace();
 
+            // Function to toggle password visibility
+            function togglePasswordVisibility(buttonId, inputId, iconClass) {
+                $(buttonId).on('click', function() {
+                    let passwordField = $(inputId);
+                    let icon = $(iconClass);
 
-            feather.replace(); // Initialize Feather icons
-
-            $('#toggle-password').on('click', function() {
-                let passwordField = $('#password');
-                let passwordFieldType = passwordField.attr('type');
-                let icon = $('.toggle-password-icon');
-
-                if (passwordFieldType === 'password') {
-                    passwordField.attr('type', 'text');
-                    icon.replaceWith(feather.icons['eye'].toSvg({
-                        class: 'toggle-password-icon'
-                    }));
-                } else {
-                    passwordField.attr('type', 'password');
-                    icon.replaceWith(feather.icons['eye-off'].toSvg({
-                        class: 'toggle-password-icon'
-                    }));
-                }
-            });
-
-
-            $('#toggle-password-confirmation').on('click', function() {
-                let passwordField = $('#password-confirmation');
-                let passwordFieldType = passwordField.attr('type');
-                let icon = $('.toggle-password-confirmation-icon');
-
-                if (passwordFieldType === 'password') {
-                    passwordField.attr('type', 'text');
-                    icon.replaceWith(feather.icons['eye'].toSvg({
-                        class: 'toggle-password-confirmation-icon'
-                    }));
-
-                } else {
-                    passwordField.attr('type', 'password');
-                    icon.replaceWith(feather.icons['eye-off'].toSvg({
-                        class: 'toggle-password-confirmation-icon'
-                    }));
-                }
-            });
-
-
-            $(document).ready(function() {
-                $('input[name="dealership_option"]').on('change', function() {
-                    let dealershipCodeGroup = $('#dealership_code_group');
-                    let createDealershipGroup = $('#create_dealership_group');
-                    if ($(this).val() === 'use_dealership') {
-                        dealershipCodeGroup.show();
-                        createDealershipGroup.hide();
-                        createDealershipGroup.find('input').val('')
-                    } else if ($(this).val() === 'create_dealership') {
-                        dealershipCodeGroup.hide();
-                        createDealershipGroup.show();
-                        dealershipCodeGroup.find('input').val('');
+                    if (passwordField.attr('type') === 'password') {
+                        passwordField.attr('type', 'text');
+                        icon.replaceWith(feather.icons['eye'].toSvg({
+                            class: iconClass.substring(1)
+                        }));
+                    } else {
+                        passwordField.attr('type', 'password');
+                        icon.replaceWith(feather.icons['eye-off'].toSvg({
+                            class: iconClass.substring(1)
+                        }));
                     }
                 });
+            }
+
+            // Initialize password visibility toggles
+            togglePasswordVisibility('#toggle-password', '#password', '.toggle-password-icon');
+            togglePasswordVisibility('#toggle-password-confirmation', '#password-confirmation',
+                '.toggle-password-confirmation-icon');
+
+            // Function to manage dealership forms
+            function manageDealershipForms(selectedOption) {
+                let dealershipCodeGroup = $('#dealership_code_group');
+                let createDealershipGroup = $('#create_dealership_group');
+                let selectPicker = createDealershipGroup.find('.my-select');
+
+                if (selectedOption === 'use_dealership') {
+                    // Show Join Dealership Form
+                    dealershipCodeGroup.show().find('input').prop('disabled', false);
+                    dealershipCodeGroup.show().find('.is-required').prop('required', true);
+
+                    createDealershipGroup.hide().find('input').val('').prop('required', false).prop('disabled',
+                        true);
+                    selectPicker.prop('disabled', true).selectpicker(
+                        'refresh'); // Disable bootstrap-select and refresh
+                } else if (selectedOption === 'create_dealership') {
+                    // Show Register Dealership Form
+                    //
+                    createDealershipGroup.show().find('input').prop('disabled', false);
+                    createDealershipGroup.show().find('.is-required').prop('required', true);
+
+                    dealershipCodeGroup.hide().find('input').val('').prop('required', false).prop('disabled', true);
+
+                    selectPicker.prop('disabled', false).selectpicker(
+                        'refresh'); // Enable bootstrap-select and refresh
+                } else {
+                    // Hide all forms for "I'm a simple customer"
+                    dealershipCodeGroup.hide().find('input').val('').prop('required', false).prop('disabled', true);
+                    createDealershipGroup.hide().find('input').val('').prop('required', false).prop('disabled',
+                        true);
+
+                    selectPicker.prop('disabled', true).selectpicker(
+                        'refresh'); // Disable bootstrap-select and refresh
+                }
+            }
+
+            // Function to handle radio button change event
+            $('input[name="dealership_option"]').on('change', function() {
+                manageDealershipForms($(this).val());
             });
+
+            // Initialize forms based on the default selected radio button
+            manageDealershipForms($('input[name="dealership_option"]:checked').val());
         });
     </script>
 @endsection

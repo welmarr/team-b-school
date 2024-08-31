@@ -22,6 +22,7 @@ class SignupRequest extends FormRequest
      */
     public function rules(): array
     {
+        //dd(request()->all());
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -29,17 +30,18 @@ class SignupRequest extends FormRequest
             'phone' => ['required', 'string', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10', 'unique:users'],
             'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
 
-            'dealership_code' => ['nullable', 'required_if:dealership_option,use_dealership', 'string', 'max:255', 'exists:t_dealerships,code'],
+            'dealership_code' => ['sometimes', 'required_if:dealership_option,use_dealership', 'string', 'max:255', 'exists:t_dealerships,code'],
 
-            'dealership_option' => ['required', 'string', 'in:use_dealership,create_dealership'],
+            'dealership_option' => ['required', 'string', 'in:use_dealership,create_dealership,simple_customer'],
 
-            'new_dealership_name' => ['nullable', 'required_if:dealership_option,create_dealership', 'string', 'max:255'],
-            'new_dealership_phone' => ['nullable', 'required_if:dealership_option,create_dealership', 'string', 'min:10', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'unique:t_dealerships,phone'],
-            'new_dealership_address_line_1' => ['nullable', 'required_with_all:new_dealership_city,new_dealership_state,new_dealership_zip', 'string', 'max:255'],
-            'new_dealership_address_line_2' => ['nullable', 'string', 'max:255'],
-            'new_dealership_city' => ['nullable', 'required_with_all:new_dealership_address_line_1,new_dealership_state,new_dealership_zip', 'string', 'max:255'],
-            'new_dealership_state' => ['nullable', 'required_with_all:new_dealership_address_line_1,new_dealership_city,new_dealership_zip', 'string', 'max:255'],
-            'new_dealership_zip' => ['nullable', 'required_with_all:new_dealership_address_line_1,new_dealership_city,new_dealership_state', 'string', 'max:255'],
+            'new_dealership_name' => ['sometimes', 'required_if:dealership_option,create_dealership', 'string', 'max:255'],
+            'new_dealership_phone' => ['sometimes', 'required_if:dealership_option,create_dealership', 'string', 'min:10', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'unique:t_dealerships,phone'],
+
+            'new_dealership_address_line_1' => 'nullable|string|required_with_all:new_dealership_address_line_2,new_dealership_state,new_dealership_city,new_dealership_zip',
+            'new_dealership_address_line_2' => 'nullable|string|required_with:new_dealership_address_line_1',
+            'new_dealership_state' => 'nullable|string|required_with:new_dealership_address_line_1',
+            'new_dealership_city' => 'nullable|string|required_with:new_dealership_address_line_1',
+            'new_dealership_zip' => 'nullable|string|required_with:new_dealership_address_line_1',
         ];
     }
 
@@ -85,24 +87,11 @@ class SignupRequest extends FormRequest
             'new_dealership_phone.regex' => 'The phone number format is invalid. Examples: 123 456 7890, (123) 456-7890.',
             'new_dealership_phone.min' => 'The phone number must be at least 10 characters.',
 
-            'new_dealership_address_line_1.required_with_all' => 'The address line 1 is required when city, state, and zip are present.',
-            'new_dealership_address_line_1.string' => 'The address line 1 must be a string.',
-            'new_dealership_address_line_1.max' => 'The address line 1 may not be greater than 255 characters.',
-
-            'new_dealership_address_line_2.string' => 'The address line 2 must be a string.',
-            'new_dealership_address_line_2.max' => 'The address line 2 may not be greater than 255 characters.',
-
-            'new_dealership_city.required_with_all' => 'The city is required when address line 1, state, and zip are present.',
-            'new_dealership_city.string' => 'The city must be a string.',
-            'new_dealership_city.max' => 'The city may not be greater than 255 characters.',
-
-            'new_dealership_state.required_with_all' => 'The state is required when address line 1, city, and zip are present.',
-            'new_dealership_state.string' => 'The state must be a string.',
-            'new_dealership_state.max' => 'The state may not be greater than 255 characters.',
-
-            'new_dealership_zip.required_with_all' => 'The zip code is required when address line 1, city, and state are present.',
-            'new_dealership_zip.string' => 'The zip code must be a string.',
-            'new_dealership_zip.max' => 'The zip code may not be greater than 255 characters.',
+            'new_dealership_address_line_1.required_with_all' => 'All address fields must be filled together or left empty.',
+            'new_dealership_address_line_2.required_with' => 'All address fields must be filled together or left empty.',
+            'new_dealership_state.required_with' => 'All address fields must be filled together or left empty.',
+            'new_dealership_city.required_with' => 'All address fields must be filled together or left empty.',
+            'new_dealership_zip.required_with' => 'All address fields must be filled together or left empty.',
         ];
     }
 

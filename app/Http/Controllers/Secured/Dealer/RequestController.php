@@ -70,10 +70,10 @@ class RequestController extends Controller
                     'model_id' => $info['model']
                 ])->first();
 
-                $reqGroup = requestGroupCode(rand(3, 5)) . Auth::user()->id;
+                $reqGroup = requestGroupCode(rand(3, 5)) . '-' .  Auth::user()->id;
                 $demand = Demand::create([
                     'memo' => $info['memo'],
-                    'reference' => Carbon::now()->format('md') . Str::random(rand(3, 5)),
+                    'reference' => generateRandomAlphanumericCode(rand(3, 5)),
                     'request_group' => $reqGroup,
                     'car_id' => $car->id,
                     'created_by_id' => Auth::user()->id,

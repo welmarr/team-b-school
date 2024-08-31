@@ -1,9 +1,14 @@
 @extends('secured.layout')
+@php
+    $label = [
+        'admin' => 'Admin',
+        'dealer' => 'Dealer',
+        'dealer-admin' => 'Dealer',
+        'simple-customer' => 'Customer',
+    ];
+@endphp
 
-
-@section('title')
-    Dashboard - Dealer
-@endsection
+@section('title', 'Dashboard - ' . $label[Auth::user()->role])
 
 @section('css')
     <!-- iCheck -->

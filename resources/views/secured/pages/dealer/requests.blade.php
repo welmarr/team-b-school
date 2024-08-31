@@ -1,9 +1,15 @@
 @extends('secured.layout')
 
+@php
+    $label = [
+        'admin' => 'Admin',
+        'dealer' => 'Dealer',
+        'dealer-admin' => 'Dealer',
+        'simple-customer' => 'Customer',
+    ];
+@endphp
 
-@section('title')
-    Request - Dealer
-@endsection
+@section('title', 'Request - ' . $label[Auth::user()->role])
 
 @section('css')
     <!-- DataTables -->

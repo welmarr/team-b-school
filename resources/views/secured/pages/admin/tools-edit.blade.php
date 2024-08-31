@@ -211,8 +211,8 @@
                                         <button type="submit" form="modal-add-new-tool-form"
                                             class="btn btn-success mr-2" id="modal-add-new-tool-submit" attr-call-url=""
                                             attr-call-by="">Update</button>
-                                        <button type="button" class="btn btn-orange"
-                                            data-dismiss="modal">Cancel</button>
+                                        <a  href="{{ route('secured.admin.tools.index') }}" type="button" class="btn btn-orange"
+                                            data-dismiss="modal">Cancel</a>
                                     </div>
                                 </div>
                             </form>

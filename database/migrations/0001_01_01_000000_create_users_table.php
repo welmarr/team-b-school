@@ -17,12 +17,13 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('phone')->nullable();
-            $table->enum('role', ['admin', 'dealer']);
+            $table->enum('role', ['admin', 'dealer', 'dealer-admin', 'simple-customer']);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('is_active')->default(false);
             $table->rememberToken();
 
+            $table->timestamp('first_connect_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

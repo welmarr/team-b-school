@@ -15,9 +15,12 @@ class UserSeeder extends Seeder
     {
 
         // Create 10 users with verified email
-        User::factory()->count(50)->create();
+        User::factory()->count(10)->create();
 
         // Create 5 users with unverified email
-        User::factory()->unverified()->count(20)->create();
+        User::factory()->unverified()->count(10)->create();
+
+        // Create 5 users admin dealer
+        User::factory()->dealerAdmin()->count(5)->create();
     }
 }

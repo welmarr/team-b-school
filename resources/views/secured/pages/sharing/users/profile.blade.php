@@ -1,7 +1,16 @@
 @extends('secured.layout')
 
+@php
+    $label = [
+        'admin' => 'Admin',
+        'dealer' => 'Dealer',
+        'dealer-admin' => 'Dealer',
+        'simple-customer' => 'Customer',
+    ];
+@endphp
+
 @section('title')
-    Profile - {{ $user->role == 'admin' ? 'Admin' : 'Dealer' }}
+    Profile - {{ $label[$user->role] }}
 @endsection
 
 @section('css')
@@ -72,12 +81,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Profile - {{ $user->role == 'admin' ? 'Admin' : 'Dealer' }}</h1>
+                    <h1>Profile - {{ $label[$user->role] }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{ $user->role == 'admin' ? route('secured.admin.dashboard') : route('secured.dealers.dashboard') }}" class="text-orange">Dashboard</a>
+                            <a href="{{ $user->role == 'admin' ? route('secured.admin.dashboard') : route('secured.dealers.dashboard') }}"
+                                class="text-orange">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item active">Profile</li>
                     </ol>
@@ -102,7 +112,7 @@
                                 <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>
                             </h3>
                             <p class="text-center">
-                                <span class="badge text-bg-success">Role:{{ $user->role }}</span>
+                                <span class="badge text-bg-success">Role: {{ $label[$user->role] }}</span>
                             </p>
                         </div>
                     </div>
@@ -134,7 +144,7 @@
                                         </span><strong>{{ $user->phone }}</strong></p>
                                 </div>
                             </div>
-                            @if ($user->role == 'dealer' && isset($user->dealership))
+                            @if (($user->role == 'dealer' || $user->role == 'dealer-admin') && isset($user->dealership))
                                 <hr>
                                 <strong><i class="far fa-file-alt mr-1"></i> Dealership Information</strong>
                                 <p class="text-muted"></p>
@@ -170,7 +180,7 @@
                             </div>
                             <div class="card-body">
                                 <form
-                                    action="{{ $user->role == 'dealer' ? route('secured.dealers.profile.update') : route('secured.admin.profile.update') }}"
+                                    action="{{ $user->role == 'admin' ? route('secured.admin.profile.update') : route('secured.dealers.profile.update') }}"
                                     method="POST" id="form-section-user">
                                     @csrf
                                     @method('PUT')
@@ -215,7 +225,7 @@
                             </div>
                         </div>
                     </div>
-                    @if ($user->role == 'dealer' && isset($user->dealership))
+                    @if ($user->role == 'dealer-admin' && isset($user->dealership))
                         <section class="connectedSortable">
                             <!-- Calendar -->
                             <div class="card card-primary">
@@ -238,8 +248,8 @@
                                     <!-- /. tools -->
                                 </div>
                                 <div class="card-body pt-0">
-                                    <form action="{{ route('secured.dealers.profile.dealership.update') }}" method="POST"
-                                        id="form-section-dealership">
+                                    <form action="{{ route('secured.dealers.profile.dealership.update') }}"
+                                        method="POST" id="form-section-dealership">
                                         @csrf
                                         @method('PUT')
                                         <div class="row mt-4">
@@ -271,8 +281,7 @@
                                         <div class="form-group">
                                             <label for="dealership-phone">Phone Number</label>
                                             <input type="text" id="dealership-phone" name="dealership_phone"
-                                                class="form-control"
-                                                value="{{ $user->dealership->phone }}">
+                                                class="form-control" value="{{ $user->dealership->phone }}">
 
                                             @error('dealership_phone')
                                                 <div class="text-danger mb-3">
@@ -280,76 +289,81 @@
                                                 </div>
                                             @enderror
                                         </div>
-                                        @if(isset($user->dealership->address))
-                                        <div class="row my-2">
-                                            <div class="col-6">
-                                                <label for="address" class="form-label">Address</label>
-                                                <input type="text" class="form-control" id="address"
-                                                    name="dealership_address_line_1" placeholder="1234 Main St" value="{{ $user->dealership->address->address_line_1 }}">
+                                        @if (isset($user->dealership->address))
+                                            <div class="row my-2">
+                                                <div class="col-6">
+                                                    <label for="address" class="form-label">Address</label>
+                                                    <input type="text" class="form-control" id="address"
+                                                        name="dealership_address_line_1" placeholder="1234 Main St"
+                                                        value="{{ $user->dealership->address->address_line_1 }}">
 
-                                                @error('dealership_address_line_1')
-                                                    <div class="text-danger mb-3">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-6">
-                                                <label for="address2" class="form-label">Address 2 </label>
-                                                <input type="text" class="form-control" id="address2"
-                                                    name="dealership_address_line_2" placeholder="Apartment or suite" value="{{ $user->dealership->address->address_line_2 }}">
+                                                    @error('dealership_address_line_1')
+                                                        <div class="text-danger mb-3">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-6">
+                                                    <label for="address2" class="form-label">Address 2 </label>
+                                                    <input type="text" class="form-control" id="address2"
+                                                        name="dealership_address_line_2" placeholder="Apartment or suite"
+                                                        value="{{ $user->dealership->address->address_line_2 }}">
 
-                                                @error('dealership_address_line_2')
-                                                    <div class="text-danger mb-3">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="row my-2">
-                                            <div class="col-md-4">
-                                                <label for="state" class="form-label">State
-                                                    {{ $user->dealership->state }}</label>
-                                                <select class="form-select my-select" data-live-search="true"
-                                                    id="state" name="dealership_state">
-                                                    <option value="">Choose...</option>
-                                                    @foreach (USA_states() as $sigle => $state)
-                                                        <option value="{{ $sigle }}" {{ $user->dealership->address->state == $sigle ? 'selected' : '' }}>
-                                                            {{ $state }}</option>
-                                                    @endforeach
-                                                </select>
-
-                                                @error('dealership_state')
-                                                    <div class="text-danger mb-3">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
+                                                    @error('dealership_address_line_2')
+                                                        <div class="text-danger mb-3">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
                                             </div>
 
-                                            <div class="col-md-5">
-                                                <label for="city" class="form-label">City</label>
-                                                <input type="text" class="form-control" id="city"
-                                                    name="dealership_city" placeholder="City" value="{{ $user->dealership->address->city }}">
+                                            <div class="row my-2">
+                                                <div class="col-md-4">
+                                                    <label for="state" class="form-label">State
+                                                        {{ $user->dealership->state }}</label>
+                                                    <select class="form-select my-select" data-live-search="true"
+                                                        id="state" name="dealership_state">
+                                                        <option value="">Choose...</option>
+                                                        @foreach (USA_states() as $sigle => $state)
+                                                            <option value="{{ $sigle }}"
+                                                                {{ $user->dealership->address->state == $sigle ? 'selected' : '' }}>
+                                                                {{ $state }}</option>
+                                                        @endforeach
+                                                    </select>
 
-                                                @error('dealership_city')
-                                                    <div class="text-danger mb-3">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
+                                                    @error('dealership_state')
+                                                        <div class="text-danger mb-3">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-md-5">
+                                                    <label for="city" class="form-label">City</label>
+                                                    <input type="text" class="form-control" id="city"
+                                                        name="dealership_city" placeholder="City"
+                                                        value="{{ $user->dealership->address->city }}">
+
+                                                    @error('dealership_city')
+                                                        <div class="text-danger mb-3">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-3">
+                                                    <label for="zip" class="form-label">Zip</label>
+                                                    <input type="text" class="form-control" id="zip"
+                                                        name="dealership_zip" placeholder="Zip code"
+                                                        value="{{ $user->dealership->address->zip }}">
+
+                                                    @error('dealership_zip')
+                                                        <div class="text-danger mb-3">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
                                             </div>
-
-                                            <div class="col-3">
-                                                <label for="zip" class="form-label">Zip</label>
-                                                <input type="text" class="form-control" id="zip"
-                                                    name="dealership_zip" placeholder="Zip code" value="{{ $user->dealership->address->zip }}">
-
-                                                @error('dealership_zip')
-                                                    <div class="text-danger mb-3">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                        </div>
                                         @endif
                                         <!-- Buttons -->
                                         <div class="row mt-3">

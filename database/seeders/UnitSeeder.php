@@ -66,7 +66,7 @@ class UnitSeeder extends Seeder
             ['name' => 'Tablespoon', 'description' => 'Unit of volume', 'abbreviation' => 'tbsp'],
             ['name' => 'Volt', 'description' => 'Unit of electric potential', 'abbreviation' => 'V'],
             ['name' => 'Ohm', 'description' => 'Unit of electrical resistance', 'abbreviation' => 'Ω'],
-            ['name' => 'Siemens', 'description' => 'Unit of electrical conductance', 'abbreviation' => 'S'],
+            ['name' => 'Siemens', 'description' => 'Unit of electrical conductance', 'abbreviation' => 'Siemens'],
         ];
 
         foreach ($units as $unit) {

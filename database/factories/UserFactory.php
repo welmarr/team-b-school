@@ -39,7 +39,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'is_active' => rand(0, 1),
-            'role' => ['admin', 'dealer'][rand(0, 1)],
+            'role' => ['admin', 'dealer', 'simple-customer'][rand(0, 2)], //
             'phone' => $this->faker->phoneNumber()
         ];
     }
@@ -51,6 +51,15 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
-        ]); 
+            'is_active' => 0,
+        ]);
+    }
+
+
+    public function dealerAdmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'dealer-admin',
+        ]);
     }
 }

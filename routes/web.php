@@ -99,7 +99,7 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => ['auth'
      *
      * Routes for admin functionalities.
      */
-    Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::group(['prefix' => 'admins', 'as' => 'admin.'], function () {
 
         Route::get('/initial-setup', [SharingUserController::class, 'initialSetupView'])->name('initialSetupView');
         Route::post('/initial-setup', [SharingUserController::class, 'initialSetupCreate'])->name('initialSetupCreate');
@@ -108,7 +108,6 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => ['auth'
 
             // Admin dashboard
             Route::get('dashboard', AdminDashboardController::class)->name('dashboard');
-
             // Resource routes
             Route::get('/requests', [AdminRequestController::class, 'index'])->name('requests.index');
             Route::post('/requests/{id}/estimating', [AdminRequestController::class, 'estimating'])->name('requests.estimate.submit');
@@ -129,7 +128,9 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => ['auth'
             Route::resource('tools', AdminToolController::class);
             Route::get('/tools/{tool}/history', [AdminToolController::class, 'history'])->name('tools.history');
             Route::get('/tools/{tool}/history/full', [AdminToolController::class, 'fullHistory'])->name('tools.history.list');
-            Route::get('users', AdminUserController::class)->name('users.index');
+
+            Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+            Route::get('/users/{id}', [AdminUserController::class, 'show'])->name('users.show');
 
             // Admin profile
             Route::get('/profile', [ProfileController::class, 'view'])->name('profile.view');
@@ -138,7 +139,6 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => ['auth'
 
         // File download route
         Route::get('/file/{public_uri}', AdminDownloadImageController::class)->name('file.download');
-
     });
 
     /**
@@ -146,16 +146,18 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => ['auth'
      *
      * Routes for dealer functionalities.
      */
-    Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
+    Route::group(['prefix' => 'dealers-customers', 'as' => 'dealers.'], function () {
 
-        Route::get('dashboard', DealerDashboardController::class)->name('dashboard');
-        Route::post('/requests/{id}/cancel', [DealerRequestController::class, 'cancel'])->name('request.cancel');
-        Route::post('/requests/{id}/accept', [DealerRequestController::class, 'accept'])->name('request.accept');
-        Route::post('/requests/{id}/appointment', [DealerRequestController::class, 'appointment'])->name('request.estimation.appointment');
-        Route::resource('requests', DealerRequestController::class);
-        Route::get('/profile', [ProfileController::class, 'view'])->name('profile.view');
-        Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-        Route::put('/profile/dealership/update', [ProfileController::class, 'updateDealerShip'])->name('profile.dealership.update');
+        Route::middleware([\App\Http\Middleware\AuthenticateMiddleware::class])->group(function () {
+            Route::get('dashboard', DealerDashboardController::class)->name('dashboard');
+            Route::post('/requests/{id}/cancel', [DealerRequestController::class, 'cancel'])->name('request.cancel');
+            Route::post('/requests/{id}/accept', [DealerRequestController::class, 'accept'])->name('request.accept');
+            Route::post('/requests/{id}/appointment', [DealerRequestController::class, 'appointment'])->name('request.estimation.appointment');
+            Route::resource('requests', DealerRequestController::class);
+            Route::get('/profile', [ProfileController::class, 'view'])->name('profile.view');
+            Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+            Route::put('/profile/dealership/update', [ProfileController::class, 'updateDealerShip'])->name('profile.dealership.update');
+        });
     });
 });
 

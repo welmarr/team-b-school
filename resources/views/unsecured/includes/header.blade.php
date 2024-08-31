@@ -6,7 +6,7 @@
       <li><a href="{{ route('about') }}" class="nav-link px-2 {{ isset($activeMenu) && $activeMenu ==  'about' ? 'text-orange' : 'link-dark' }} fw-semibold">About us</a></li>
     </ul>
 
-    <a href="/" class="d-flex align-items-center text-decoration-none">
+    <a href="{{ route('home') }}" class="d-flex align-items-center text-decoration-none">
         <img class="img-fluid" src="{{ asset('img/cincy-transparent.png') }}" style="width: 45%; height: auto" />
     </a>
 

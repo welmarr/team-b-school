@@ -28,8 +28,7 @@ class TDealershipFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'code' => Str::random(rand(3,5)),
-            'admin_id' => User::factory(),
+            'code' =>generateRandomAlphanumericCode(rand(3,5)),
             'phone' => $this->faker->phoneNumber(),
         ];
     }

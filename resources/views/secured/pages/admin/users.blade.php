@@ -398,10 +398,14 @@
                         "orderable": false,
                         "render": function(value, type, full, meta) {
                             // Generate action buttons for each row
+                            let detailsUrl =
+                                '{{ route('secured.admin.users.show', ['id' => ':id']) }}'
+                                .replace(':id', full.id);
                             let enableDisableUrl =
                                 '{{ route('api.secure.admin.users.toggleStatus', ['user' => ':user']) }}'
                                 .replace(':user', full.id);
-                            let actionsTags = '<div class="d-flex justify-content-center"> <div class="btn-group">';
+                            let actionsTags =
+                                '<div class="d-flex justify-content-center"> <div class="btn-group">';
                             let callLabel = full.is_active ? "disable" : "enable";
 
                             if (typeof value === 'object') {
@@ -409,12 +413,13 @@
                                     '<button type="button" class="btn btn-outline-dark btn-sm btn-disable-or-enable" ' +
                                     'id="enable-disable-id-' + full.id + '" ' +
                                     'call-label="' + callLabel + '" ' +
-                                     'call-name="' + full.first_name + " " + full.last_name + '" ' +
+                                    'call-name="' + full.first_name + " " + full.last_name + '" ' +
                                     'call-url="' + enableDisableUrl + '">' +
                                     (value.is_active === 1 ? 'Disable' : 'Enable') + '</button> ';
                             }
                             actionsTags +=
-                                '<button type="button" class="btn btn-dark btn-sm">Details</button> </div></div>';
+                                '<a type="button" href="' + detailsUrl +
+                                '" class="btn btn-dark btn-sm">Details</a> </div></div>';
 
                             return actionsTags;
                         }

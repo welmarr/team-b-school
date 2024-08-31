@@ -550,7 +550,7 @@
                                 <div class="col-12 d-flex justify-content-center">
                                     <a class="btn btn-success my-2"
                                         href="{{ route('secured.admin.request.invoice', ['id' => $demand->id]) }}"
-                                        id="print-invoice-form-button" form="start-work-form">Print invoice</a>
+                                        id="print-invoice-form-button" form="start-work-form" target="_blank">Print invoice</a>
                                 </div>
                             </div>
                         </div>

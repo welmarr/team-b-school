@@ -27,11 +27,9 @@ class SignUpController extends Controller
         $address = null;
         $validated = $request->validated();
 
-
         try {
             // Create a new user
             $user = $this->createUser($validated);
-
 
             // Check dealership option and handle accordingly
             if ($validated['dealership_option'] === 'use_dealership') {
@@ -39,7 +37,7 @@ class SignUpController extends Controller
                 $dealership = $this->findExistingDealership($validated);
             } elseif ($validated['dealership_option'] === 'create_dealership') {
                 // Create a new dealership
-                $dealership = $this->createNewDealership($user, $validated);
+                $dealership = $this->createNewDealership($validated);
 
                 // Create a new address for the dealership if it was created successfully
                 if ($dealership != null) {
@@ -50,7 +48,7 @@ class SignUpController extends Controller
             // Associate the user with the dealership if it exists
             if ($dealership != null) {
                 $user->dealership_id = $dealership->id;
-                if($address){
+                if ($address) {
                     $dealership->address_id = $address->id;
                     $dealership->save();
                 }
@@ -90,6 +88,15 @@ class SignUpController extends Controller
      */
     private function createUser($validated)
     {
+        $user_role = "";
+        if ($validated['dealership_option'] === 'use_dealership') {
+            $user_role = "dealer";
+        } elseif ($validated['dealership_option'] === 'create_dealership') {
+            $user_role = "dealer-admin";
+        } else {
+            $user_role = "simple-customer";
+        }
+
         // Create and return a new user
         return User::create([
             "email" => $validated["email"],
@@ -97,7 +104,7 @@ class SignUpController extends Controller
             "first_name" => $validated["first_name"],
             "last_name" => $validated["last_name"],
             "phone" => $validated["phone"],
-            "role" => "dealer",
+            "role" => $user_role,
         ]);
     }
 
@@ -120,17 +127,14 @@ class SignUpController extends Controller
      * @param array $validated
      * @return TDealership
      */
-    private function createNewDealership($user, $validated)
+    private function createNewDealership($validated)
     {
-        // Generate a unique code for the new dealership
-        $code = date('H') . date('i') . '-' . $this->generateRandomAlphanumericCode(rand(2, 4));
 
         // Create and return a new dealership
         return TDealership::create([
             "name" => $validated["new_dealership_name"],
             "phone" => $validated["new_dealership_phone"],
-            "code" => $code,
-            "admin_id" => $user->id
+            "code" =>  generateRandomAlphanumericCode(rand(3, 5)),
         ]);
     }
 
@@ -190,27 +194,5 @@ class SignUpController extends Controller
         if ($user != null) {
             User::where('id', $user->id)->forceDelete();
         }
-    }
-
-    /**
-     * Generate a random alphanumeric code of a given length.
-     *
-     * @param int $length
-     * @return string
-     */
-    protected function generateRandomAlphanumericCode($length)
-    {
-        // Define the characters to use for the random code
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-
-        // Generate the random code
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-
-        // Return the generated code
-        return $randomString;
     }
 }

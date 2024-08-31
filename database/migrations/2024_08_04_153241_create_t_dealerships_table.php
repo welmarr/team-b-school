@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('code');
             $table->string('phone')->nullable();
-            $table->foreignId('admin_id')->constrained('users')->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

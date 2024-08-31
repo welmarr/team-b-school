@@ -17,7 +17,7 @@ class TDealership extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name','code','admin_id', 'phone'];
+    protected $fillable = ['name','code', 'phone'];
 
     /**
      * The attributes that should be mutated to dates.
