@@ -10,7 +10,7 @@ echo "Pulling latest code"
 echo "Building docker image"
 docker build -t registry.gitlab.com/monverdict/team-b-school .
 
-docker login -u Shadows97 -p glpat-1bJMW-7QSwRaXMJ8sQJL registry.gitlab.com
+docker login -u Shadows97 -p THEPASWWORD registry.gitlab.com
 
 echo "Pushing docker image"
 docker push registry.gitlab.com/monverdict/team-b-school
