@@ -111,7 +111,9 @@ Route::group(['prefix' => 'secured', 'as' => 'secured.', 'middleware' => ['auth'
             // Resource routes
             Route::get('/requests', [AdminRequestController::class, 'index'])->name('requests.index');
             Route::post('/requests/{id}/estimating', [AdminRequestController::class, 'estimating'])->name('requests.estimate.submit');
+
             Route::get('/requests/{id}', [AdminRequestController::class, 'show'])->name('requests.show');
+
             Route::post('/requests/{id}/appointment', [AdminRequestController::class, 'appointment'])->name('request.estimation.appointment');
             Route::post('/requests/{id}/start', [AdminRequestController::class, 'start'])->name('request.start');
             Route::post('/requests/{id}/complete', [AdminRequestController::class, 'complete'])->name('request.complete');

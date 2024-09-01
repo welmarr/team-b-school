@@ -33,6 +33,7 @@ Route::group(['as' => 'api.'], function () {
             Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
             Route::post('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('users.toggleStatus');
             Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+            Route::get('/users/{id}/requests', [AdminRequestController::class, 'forUser'])->name('users.requests.index');
 
             // Unit listing routes
             Route::apiResource('/units', ApiUnitController::class);

@@ -5,6 +5,8 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('adminlte/css/adminlte.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('css/sharing.css') }}">
+
     @if (isset($demand) && $demand->status == 'accepted')
         <link rel="stylesheet" href="{{ asset('plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css') }}">
     @elseif (isset($demand) && $demand->status == 'in_progress')

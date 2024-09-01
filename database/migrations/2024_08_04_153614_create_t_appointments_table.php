@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('t_appointments', function (Blueprint $table) {
             $table->id();
             $table->timestamp('appointment_date');
+            $table->boolean('is_current')->default(true);
             $table->softDeletes();
             $table->timestamps();
             $table->foreignId('request_id')->constrained('t_requests');

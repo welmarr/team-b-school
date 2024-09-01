@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Secured\Admin\Api;
 
+use App\Models\User;
 use App\Models\TImage;
 use App\Models\TRequest;
 use App\Models\TAppointment;
@@ -16,12 +17,32 @@ class RequestController extends Controller
      */
     public function index(Request $request)
     {
-        //dd($queryParams = $request->query());
+
+        //dd(request()->all(), isset($request->search), isset($request->search['value']));
+
+        /*if (isset($request->search) && isset($request->search['value'])) {
+            $search = $request->search['value'];
+
+            return DataTables::eloquent(TRequest::whereHas('createdBy', function ($query) use ($search) {
+                $query->where('last_name', $search)->orWhere('first_name', $search);
+            })->with(['car.brand', 'car.model', 'createdBy'])->select())
+                ->escapeColumns(['created_by_id'])
+                ->toJson();
+        }*/
 
         return DataTables::eloquent(TRequest::with(['car.brand', 'car.model', 'createdBy'])->select())
             ->escapeColumns(['created_by_id'])
             ->toJson();
     }
+    /**
+     * Handle the incoming request.
+     */
+    public function forUser(Request $request, int $id)
+    {
+        return DataTables::eloquent(TRequest::where('created_by_type', User::class)->where('created_by_id', $id)->with(['car.brand', 'car.model', 'createdBy'])->select())
+            ->toJson();
+    }
+
 
 
 
@@ -112,6 +133,5 @@ class RequestController extends Controller
 
             return response()->json(['data' => [], 'msg' => "An error occurred. Returning the current date."], 200);
         }
-
     }
 }

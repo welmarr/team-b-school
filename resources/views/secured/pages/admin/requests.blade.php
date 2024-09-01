@@ -257,6 +257,7 @@
                     {
                         "data": "car_id",
                         "orderable": true,
+                        "searchable":false,
                         "render": function(value, type, data, meta) {
                             if (type == 'display') {
                                 return data.car.brand.name + " " + data.car.model.name;
@@ -267,6 +268,7 @@
                     {
                         "data": "created_by_id",
                         "orderable": true,
+                        "searchable":false,
                         "render": function(value, type, data, meta) {
                             if (type == 'display') {
                                 return data.created_by.first_name + " " + data.created_by.last_name;
@@ -275,11 +277,13 @@
                         }
                     },
                     {
-                        'data': 'created_by.phone'
+                        'data': 'created_by.phone',
+                        "searchable":false,
                     },
                     {
                         'data': 'created_by.email',
                         'visible': false,
+                        "searchable":false,
                     },
                     {
                         "data": "created_at",
