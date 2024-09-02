@@ -22,7 +22,6 @@ class SignupRequest extends FormRequest
      */
     public function rules(): array
     {
-        //dd(request()->all());
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -102,7 +101,6 @@ class SignupRequest extends FormRequest
      */
     public function validationData()
     {
-        //dd(parent::validationData());
         return parent::validationData();
     }
 }

@@ -64,7 +64,6 @@ class RequestController extends Controller
                 return explode(" ", $date)[0];
             })->unique()->values(); // Remove duplicates and reset keys
 
-            //dd($appointments, $enabledDates  );
             // Return the dates as a JSON response
             return response()->json(['data' => $enabledDates, 'msg' => "Enabled dates fetched successfully."], 200);
         } catch (\Exception $e) {
@@ -110,7 +109,6 @@ class RequestController extends Controller
 
             return response()->json(['data' => $demands->values(), 'msg' => "Enabled dates fetched successfully."], 200);
         } catch (\Exception $e) {
-            //dd($e->getMessage());
             // Log the error for debugging
 
             return response()->json(['data' => [], 'msg' => "An error occurred. Returning the current date."], 200);

@@ -40,7 +40,6 @@ class RequestToolController extends Controller
 
     public function update(Request $request, $demand_id, $inventory_id)
     {
-        //dd($demand_id, $inventory_id);
 
         $request->validate([
             'tool' => 'required|exists:t_tools,id',

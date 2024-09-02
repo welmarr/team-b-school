@@ -18,18 +18,6 @@ class RequestController extends Controller
     public function index(Request $request)
     {
 
-        //dd(request()->all(), isset($request->search), isset($request->search['value']));
-
-        /*if (isset($request->search) && isset($request->search['value'])) {
-            $search = $request->search['value'];
-
-            return DataTables::eloquent(TRequest::whereHas('createdBy', function ($query) use ($search) {
-                $query->where('last_name', $search)->orWhere('first_name', $search);
-            })->with(['car.brand', 'car.model', 'createdBy'])->select())
-                ->escapeColumns(['created_by_id'])
-                ->toJson();
-        }*/
-
         return DataTables::eloquent(TRequest::with(['car.brand', 'car.model', 'createdBy'])->select())
             ->escapeColumns(['created_by_id'])
             ->toJson();
@@ -82,7 +70,6 @@ class RequestController extends Controller
                 return explode(" ", $date)[0];
             })->unique()->values(); // Remove duplicates and reset keys
 
-            //dd($appointments, $enabledDates  );
             // Return the dates as a JSON response
             return response()->json(['data' => $enabledDates, 'msg' => "Enabled dates fetched successfully."], 200);
         } catch (\Exception $e) {
@@ -124,13 +111,9 @@ class RequestController extends Controller
                 ];
             });
 
-            //dd( $date, $demands);
 
             return response()->json(['data' => $demands->values(), 'msg' => "Enabled dates fetched successfully."], 200);
         } catch (\Exception $e) {
-            //dd($e->getMessage());
-            // Log the error for debugging
-
             return response()->json(['data' => [], 'msg' => "An error occurred. Returning the current date."], 200);
         }
     }

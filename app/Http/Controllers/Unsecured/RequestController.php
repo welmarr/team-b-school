@@ -108,8 +108,6 @@ class RequestController extends Controller
             // Format the DateTime object for database storage (Y-m-d H:i:s)
             $appointment_datetime = (new \DateTime($datetime_string))->format('Y-m-d H:i:s');
 
-            //dd($appointment_datetime);
-
             $appointment = TAppointment::create(['appointment_date' => $appointment_datetime, 'request_id' => $demand->id]);
 
             TRequestHistory::create([

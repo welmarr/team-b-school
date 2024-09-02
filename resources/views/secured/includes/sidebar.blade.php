@@ -1,7 +1,9 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-light-orange mt-4 {{-- elevation-1 --}}">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link mb-4">
+
+    <a href="{{ Auth::user()->role == 'admin' ? route('secured.admin.dashboard') : route('secured.dealers.dashboard') }}"
+        class="brand-link mb-4">
         <img src="{{ asset('img/cincy-transparent.png') }}" alt="Logo" class="img-fluid mx-auto d-block"
             style="width: 50% !important;">
     </a>
@@ -95,7 +97,7 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a href="{{ route('secured.dealers.dashboard')}}"
+                        <a href="{{ route('secured.dealers.dashboard') }}"
                             class="nav-link  {{ isset($activeMenu) && $activeMenu == 'dashboard' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
@@ -104,7 +106,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{route("secured.dealers.requests.index")}}"
+                        <a href="{{ route('secured.dealers.requests.index') }}"
                             class="nav-link {{ isset($activeMenu) && $activeMenu == 'requests' ? 'active' : '' }}">
                             <i class="nav-icon fab fa-wpforms"></i>
                             <p>

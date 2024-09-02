@@ -52,8 +52,6 @@ class GetEstimatePageController extends Controller
         $client = null;
         $files = [];
 
-        //dd(9);
-
         try {
             $car = TCar::where([
                 'year' => $validated['year'],

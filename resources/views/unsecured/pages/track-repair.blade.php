@@ -181,7 +181,7 @@
                                 'init' =>
                                     'Your request has been received and is being processed. If you do not receive an estimate within 24 hours, please contact us.',
                                 'estimated' =>
-                                    'An estimate has been provided for your request. Please review and accept it to proceed.',
+                                    'An estimate has been prepared for your request. Please check your email to refuse or accept the estimate.',
                                 'accepted' =>
                                     'You have successfully accepted the estimation. The next step is to schedule an appointment. You can either call us or select a convenient date to drop off your vehicle. We’re here to accommodate your schedule and ensure a smooth service experience.',
                                 'in_progress' =>

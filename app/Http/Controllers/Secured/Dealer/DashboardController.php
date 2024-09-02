@@ -20,7 +20,6 @@ class DashboardController extends Controller
 
 
         $countRequest = TRequest::where('created_by_id', Auth::user()->id)->where('created_by_type', User::class)->count();
-        //dd($countRequest);
         return view('secured.pages.dealer.dashboard',  compact("activeMenu", "countRequest"));
     }
 }

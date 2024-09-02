@@ -49,7 +49,6 @@ class ToolTypeController extends Controller
         $validated = $request->validated();
         try {
             $tToolType = TToolType::findOrFail($id);
-            //dd($tToolType->name);
             // Create and return a new user
             $tToolType->update([
                 'name' => $validated['name'],

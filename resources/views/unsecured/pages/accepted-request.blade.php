@@ -15,13 +15,12 @@
                 <div class="row">
                     <div class="col-12"><i class="text-success" data-feather="check-circle"></i></div>
                 </div>
-                <p class="lead mt-3">Thank you for accepting the repair estimation. Your request is now being processed.</p>
-                <p class="mt-2">Our team will begin work on your vehicle shortly. You will be notified once the repair is
-                    complete.
-                    If you have any questions, please do not hesitate to contact us.</p>
-                <div class="btn-group">
-                    <a class="btn btn-outline-success" href="{{ route('home') }}">Home</a><a class="btn btn-success"
-                        href="{{ route('get-estimate.view', ['reference' => $reference]) }}">Track Repair</a>
+                <p class="lead mt-3">Thank you for accepting the repair estimation.</p>
+                <p class="mt-2">The next step is to schedule an appointment. Simply click the link below to be redirected
+                    to our appointment booking page. If you have any questions or need further assistance, please feel free
+                    to contact us anytime.</p>
+                <div class="btn-group"><a class="btn btn-success"
+                        href="{{ route('track-repair.view', ['reference' => $reference]) }}">Track Repair</a>
                 </div>
                 </p>
             </div>

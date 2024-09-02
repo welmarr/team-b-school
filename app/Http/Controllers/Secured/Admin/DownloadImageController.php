@@ -24,8 +24,6 @@ class DownloadImageController extends Controller
         // Find the image by its public URI
         $image = TImage::where('public_uri', $public_uri)->first();
 
-        //dd(DIRECTORY_SEPARATOR, $image->path, storage_path($image->path));
-
         if (isset($image)) {
             $filePath = $image->path;
 

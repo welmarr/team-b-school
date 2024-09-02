@@ -88,7 +88,6 @@ class RequestController extends Controller
     public function appointment(AppointmentRequest $request, int $id)
     {
 
-
         try {
             $demand = TRequest::where('id', $id)->first();
 
@@ -200,7 +199,6 @@ class RequestController extends Controller
 
             return redirect()->back()->with('error_completed', $error);
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return redirect()->back()->withInput()->with('error_completed', 'There was an error processing your request. ' . $e->getMessage());
         }
     }

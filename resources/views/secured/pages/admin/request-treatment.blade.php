@@ -250,16 +250,27 @@
                                 </button>
                             </div>
                         </div>
+
                         <div class="card-body">
-                            @if (session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
-                            @if (session('error'))
+                            @if ($errors->any())
                                 <div class="alert alert-danger">
-                                    {{ session('error') }}
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
                                 </div>
+                            @else
+                                @if (session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
+                                @if (session('error'))
+                                    <div class="alert alert-danger">
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
                             @endif
 
                             @if (isset($appointment))
@@ -552,7 +563,8 @@
                                 <div class="col-12 d-flex justify-content-center">
                                     <a class="btn btn-success my-2"
                                         href="{{ route('secured.admin.request.invoice', ['id' => $demand->id]) }}"
-                                        id="print-invoice-form-button" form="start-work-form" target="_blank">Print invoice</a>
+                                        id="print-invoice-form-button" form="start-work-form" target="_blank">Print
+                                        invoice</a>
                                 </div>
                             </div>
                         </div>
@@ -925,10 +937,10 @@
                         </div>
                         <div class="col-12 product-image-thumbs">
                             ${files.map((file, index) => `
-                                                                                                                                                                                                                                                                                                                                                                <div class="product-image-thumb ${index === 0 ? 'active' : ''}">
-                                                                                                                                                                                                                                                                                                                                                                    <img src="${file.public_uri}" alt="${file.name}">
-                                                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                                                            `).join('')}
+                                                                                                                                                                                                                                                                                                                                                                            <div class="product-image-thumb ${index === 0 ? 'active' : ''}">
+                                                                                                                                                                                                                                                                                                                                                                                <img src="${file.public_uri}" alt="${file.name}">
+                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                        `).join('')}
                         </div>
                     </div>
                 `;
