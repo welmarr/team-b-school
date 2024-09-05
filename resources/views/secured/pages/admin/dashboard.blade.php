@@ -297,7 +297,7 @@
                                 <li class="item">
                                     <div class="product-info">
                                         <a href="${urlView}" class="product-title">${item.reference}
-                                            <span class="badge badge-warning float-right">${selectedDate.format('YYYY-MM-DD HH:mm')}</span></a>
+                                            <span class="badge badge-warning float-right">${selectedDate.format('YYYY-MM-DD')}</span></a>
                                         <span class="product-description">
                                             ${item.car_brand}/${item.car_model}/${item.car_year}
                                         </span>
