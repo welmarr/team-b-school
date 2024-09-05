@@ -120,11 +120,21 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
-                                <strong><i class="fas fa-map-marker-alt mr-1"></i>
-                                    Location</strong>
-                                <p class="text-muted mb-2">Malibu, California</p>
-                            </div>
+
+
+                            @if (isset($demand->createdBy) &&
+                                    isset($demand->createdBy->dealership) &&
+                                    isset($demand->createdBy->dealership->address))
+                                @php
+                                    $address = $demand->createdBy->dealership->address;
+                                @endphp
+
+                                <div class="col-6">
+                                    <strong><i class="fas fa-map-marker-alt mr-1"></i>
+                                        {{ $address->address_line_1 . $address->address_line_2 . ', ' . $address->city . ',' . $address->state . ', US ' . $address->zip }}</strong>
+                                </div>
+                            @endif
+
                             @if ($demand->estimation != 0)
                                 <div class="col-6">
                                     <i class="fas fa-money-bill-alt"></i> Estimation</strong>
@@ -937,10 +947,10 @@
                         </div>
                         <div class="col-12 product-image-thumbs">
                             ${files.map((file, index) => `
-                                                                                                                                                                                                                                                                                                                                                                            <div class="product-image-thumb ${index === 0 ? 'active' : ''}">
-                                                                                                                                                                                                                                                                                                                                                                                <img src="${file.public_uri}" alt="${file.name}">
-                                                                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                                                                        `).join('')}
+                                                                                                                                                                                                                                                                                                                                                                                    <div class="product-image-thumb ${index === 0 ? 'active' : ''}">
+                                                                                                                                                                                                                                                                                                                                                                                        <img src="${file.public_uri}" alt="${file.name}">
+                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                `).join('')}
                         </div>
                     </div>
                 `;

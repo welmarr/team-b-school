@@ -17,7 +17,7 @@ class TDealership extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name','code', 'phone'];
+    protected $fillable = ['name','code', 'phone', 'address_id'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -35,4 +35,8 @@ class TDealership extends Model
     {
         return $this->hasMany(User::class, 'dealership_id');
     }
+    public function address(){
+        return $this->belongsTo(TAddress::class, "address_id");
+    }
+
 }

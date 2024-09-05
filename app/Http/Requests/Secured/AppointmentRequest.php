@@ -22,7 +22,7 @@ class AppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'appointment_date' => ['required', 'date', 'after:yesterday'],
+            'appointment_date' => ['required', 'date', 'after_or_equal:now'],
             'appointment_time' => ['required', 'regex:/^(?:[01]?[0-9]|2[0-3]):[0-5][0-9]$/'],
         ];
     }
