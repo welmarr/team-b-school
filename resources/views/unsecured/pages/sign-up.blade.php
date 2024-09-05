@@ -77,8 +77,15 @@
                 <form action="{{ route('sign-up.submit') }}" method="POST">
                     @csrf
                     <h4 class="my-4 fw-bold text-orange">Create account</h4>
-
-                    @if ($errors->has('er-500'))
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @elseif ($errors->has('er-500'))
                         <div class="alert alert-danger">
                             <strong>Whoops! Something went wrong.<br />{{ $errors->first('er-500') }}</strong>
                         </div>
@@ -87,6 +94,7 @@
                             <strong>Whoops! Something went wrong.<br />{{ $errors->first('error') }}</strong>
                         </div>
                     @endif
+
 
                     <div class="row my-2">
                         <div class="col-6">

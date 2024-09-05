@@ -109,10 +109,10 @@ class SignupRequest extends FormRequest
             'new_dealership_phone' => ['sometimes', 'required_if:dealership_option,create_dealership', 'string', 'min:10', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'unique:t_dealerships,phone'],
 
             'new_dealership_address_line_1' => 'sometimes|string|required_with_all:new_dealership_address_line_2,new_dealership_state,new_dealership_city,new_dealership_zip',
-            'new_dealership_address_line_2' => 'sometimes|string|required_with:new_dealership_address_line_1',
-            'new_dealership_state' => 'sometimes|string|required_with:new_dealership_address_line_1',
-            'new_dealership_city' => 'sometimes|string|required_with:new_dealership_address_line_1',
-            'new_dealership_zip' => 'sometimes|string|required_with:new_dealership_address_line_1',
+            'new_dealership_address_line_2' => 'nullable|string',
+            'new_dealership_state' => 'nullable|string|required_with:new_dealership_address_line_1',
+            'new_dealership_city' => 'nullable|string|required_with:new_dealership_address_line_1',
+            'new_dealership_zip' => 'nullable|string|required_with:new_dealership_address_line_1',
         ];
     }
 

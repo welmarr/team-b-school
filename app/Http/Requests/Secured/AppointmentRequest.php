@@ -37,9 +37,8 @@ class AppointmentRequest extends FormRequest
                 $this->merge(['appointment_time' => '00:00']);
             }
         }
-
         if ($this->has(['appointment_date', 'appointment_time'])) {
-            $combinedDatetime = Carbon::createFromFormat('Y-m-d H:i', $this->appointment_date . ' ' . $this->appointment_time);
+            $combinedDatetime = Carbon::createFromFormat('m/d/Y H:i', $this->appointment_date . ' ' . $this->appointment_time);
             $this->merge([
                 'appointment_datetime' => $combinedDatetime->format('Y-m-d H:i'),
             ]);
@@ -63,7 +62,7 @@ class AppointmentRequest extends FormRequest
     {
 
         return [
-            'appointment_datetime' => ['required', 'date', 'after_or_equal:now'],
+            'appointment_datetime' => ['required', 'date', 'after_or_equal:' . \Carbon\Carbon::now()->setTimeZone('America/New_York')->format('Y-m-d H:i')],
         ];
     }
 
@@ -72,7 +71,7 @@ class AppointmentRequest extends FormRequest
         return [
             'appointment_datetime.required' => 'Please select an appointment date.',
             'appointment_datetime.date' => 'The appointment date must be a valid date.',
-            'appointment_date.required' => 'Please select an appointment date.',
+            'appointment_datetime.after_or_equal' => 'Please, the date must be a after or equal to ' . \Carbon\Carbon::now()->setTimeZone('America/New_York') . '.',
             'appointment_date.date' => 'The appointment date must be a valid date.',
             'appointment_date.after' => 'The appointment date must be a future date.',
             'appointment_time.required' => 'Please select an appointment time.',
