@@ -7,6 +7,78 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SignupRequest extends FormRequest
 {
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation()
+    {
+        $dealershipOption = $this->input('dealership_option');
+
+        // Remove fields based on dealership option
+        if ($dealershipOption === 'use_dealership') {
+            // Remove fields related to creating a new dealership if they are present
+            if ($this->has('new_dealership_name')) {
+                $this->request->remove('new_dealership_name');
+            }
+            if ($this->has('new_dealership_phone')) {
+                $this->request->remove('new_dealership_phone');
+            }
+            if ($this->has('new_dealership_address_line_1')) {
+                $this->request->remove('new_dealership_address_line_1');
+            }
+            if ($this->has('new_dealership_address_line_2')) {
+                $this->request->remove('new_dealership_address_line_2');
+            }
+            if ($this->has('new_dealership_state')) {
+                $this->request->remove('new_dealership_state');
+            }
+            if ($this->has('new_dealership_city')) {
+                $this->request->remove('new_dealership_city');
+            }
+            if ($this->has('new_dealership_zip')) {
+                $this->request->remove('new_dealership_zip');
+            }
+        } elseif ($dealershipOption === 'create_dealership') {
+            // Remove fields related to using an existing dealership if they are present
+            if ($this->has('dealership_code')) {
+                $this->request->remove('dealership_code');
+            }
+
+            if ($this->has('new_dealership_address_line_2') && $this->has('new_dealership_address_line_2') == null) {
+                $this->request->remove('new_dealership_address_line_2');
+            }
+        } else {
+            // If simple_customer is selected, remove all dealership-related fields if they are present
+            if ($this->has('dealership_code')) {
+                $this->request->remove('dealership_code');
+            }
+            if ($this->has('new_dealership_name')) {
+                $this->request->remove('new_dealership_name');
+            }
+            if ($this->has('new_dealership_phone')) {
+                $this->request->remove('new_dealership_phone');
+            }
+            if ($this->has('new_dealership_address_line_1')) {
+                $this->request->remove('new_dealership_address_line_1');
+            }
+            if ($this->has('new_dealership_address_line_2')) {
+                $this->request->remove('new_dealership_address_line_2');
+            }
+            if ($this->has('new_dealership_state')) {
+                $this->request->remove('new_dealership_state');
+            }
+            if ($this->has('new_dealership_city')) {
+                $this->request->remove('new_dealership_city');
+            }
+            if ($this->has('new_dealership_zip')) {
+                $this->request->remove('new_dealership_zip');
+            }
+        }
+    }
+
+
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -36,11 +108,11 @@ class SignupRequest extends FormRequest
             'new_dealership_name' => ['sometimes', 'required_if:dealership_option,create_dealership', 'string', 'max:255'],
             'new_dealership_phone' => ['sometimes', 'required_if:dealership_option,create_dealership', 'string', 'min:10', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'unique:t_dealerships,phone'],
 
-            'new_dealership_address_line_1' => 'nullable|string|required_with_all:new_dealership_address_line_2,new_dealership_state,new_dealership_city,new_dealership_zip',
-            'new_dealership_address_line_2' => 'nullable|string|required_with:new_dealership_address_line_1',
-            'new_dealership_state' => 'nullable|string|required_with:new_dealership_address_line_1',
-            'new_dealership_city' => 'nullable|string|required_with:new_dealership_address_line_1',
-            'new_dealership_zip' => 'nullable|string|required_with:new_dealership_address_line_1',
+            'new_dealership_address_line_1' => 'sometimes|string|required_with_all:new_dealership_address_line_2,new_dealership_state,new_dealership_city,new_dealership_zip',
+            'new_dealership_address_line_2' => 'sometimes|string|required_with:new_dealership_address_line_1',
+            'new_dealership_state' => 'sometimes|string|required_with:new_dealership_address_line_1',
+            'new_dealership_city' => 'sometimes|string|required_with:new_dealership_address_line_1',
+            'new_dealership_zip' => 'sometimes|string|required_with:new_dealership_address_line_1',
         ];
     }
 
